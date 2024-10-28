@@ -42,7 +42,7 @@ Click on the assignment heading to hide/reveal content.
 
 <summary>
 
-## Assignment 1
+# Assignment 1
 
 </summary>
 
@@ -188,7 +188,7 @@ This makes the visualization useful for a wide variety of users.
 <details>
 <summary>
 
-## Assignment 3
+# Assignment 3
 
 </summary>
 
@@ -288,4 +288,387 @@ plot(anscombe$x1,anscombe$y1, pch=20)
 ```
 :::
 :::
+</details>
+
+<details>
+<summary>
+
+# Assignment 4
+
+</summary>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Load the necessary libraries and data set
+library(ggplot2)
+library(scales)
+library(dplyr)
+library(tidyr) # For pivot_longer function
+library(gridExtra)
+library(ggthemes) # For additional themes
+library(RColorBrewer) # For color palettes
+data(diamonds)
+
+##### Chart 1 data #####
+carat_price <- diamonds %>%
+  mutate(carat_price = price / carat) %>%  # Calculate carat price
+  group_by(clarity) %>%                     # Group by clarity
+  summarize(
+    avg_price_per_carat = mean(carat_price, na.rm = TRUE),  # Average price per carat
+    avg_size = mean(carat, na.rm = TRUE),                   # Average size
+  )
+
+rounded <- carat_price %>%  
+  mutate(rounded_price_per_carat = round(avg_price_per_carat, 2))
+```
+
+## Chart 1
+
+```{r}
+ggplot(rounded, aes(x = reorder(clarity,avg_size), y = avg_price_per_carat, fill = clarity, width = avg_size)) +
+  geom_col() +  
+  scale_fill_brewer(palette = "Set1") + 
+  scale_y_continuous(labels = comma, limits = c(0, 5000)) +
+  theme_minimal() +
+  labs(
+    title = "Average Diamond Size and Price per Carat by Clarity",
+    x = "Average Size (carats)",
+    y = "Average Price per Carat ($)",
+    fill = "Clarity"  
+  ) 
+```
+
+## Chart 2
+
+```{r}
+# color palette
+
+palette_cut <- brewer.pal(n = 5, name = "Dark2") # 5 colors for 'cut'
+
+
+# Histogram
+
+hist_plot <- ggplot(diamonds, aes(x = price)) +
+  
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "gray80", color = "black") +
+  
+  stat_function(fun = dnorm, args = list(mean = mean(diamonds$price), sd = sd(diamonds$price)), color = "blue", size = 1) +
+  
+  labs(title = "Histogram of Diamond Prices", x = "Price", y = "Density") +
+  
+  theme_minimal(base_size = 5)
+
+
+# Bar Plot
+
+bar_plot <- diamonds %>%
+  
+  group_by(cut) %>%
+  
+  summarise(count = n()) %>%
+  
+  ggplot(aes(x = cut, y = count, fill = cut)) +
+  
+  geom_bar(stat = "identity") +
+  
+  labs(title = "Bar Plot: Count of Diamonds by Cut", x = "Cut", y = "Count") +
+  
+  scale_fill_manual(values = palette_cut) +
+  
+  theme_minimal(base_size = 5)
+
+
+# Box Plot
+
+box_plot <- ggplot(diamonds, aes(x = cut, y = price, fill = cut)) +
+  
+  geom_boxplot() +
+  
+  labs(title = "Box Plot: Price Distribution by Cut", x = "Cut", y = "Price") +
+  
+  scale_fill_manual(values = palette_cut) +
+  
+  theme_minimal(base_size = 5)
+
+
+# Scatter Plot
+
+facet_scatter <- ggplot(diamonds, aes(x = carat, y = price, color = color)) +
+  
+  geom_point(alpha = 0.5, size = 2) +
+  
+  facet_wrap(~ cut) +
+  
+  labs(title = "Faceted Scatter Plot: Carat vs Price by Color", x = "Carat", y = "Price") +
+  
+  scale_color_brewer(palette = "Set1") +
+  
+  theme_minimal(base_size = 5)
+
+
+# Heatmap
+
+heatmap_data <- diamonds %>%
+  
+  group_by(cut, color) %>%
+  
+  summarise(avg_price = mean(price), .groups = "drop") # Avoid warning
+
+
+heatmap <- ggplot(heatmap_data, aes(x = cut, y = color, fill = avg_price)) +
+  
+  geom_tile(color = "white") +
+  
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  
+  labs(title = "Heatmap: Average Price by Cut and Color", x = "Cut", y = "Color") +
+  
+  theme_minimal(base_size = 5)
+
+
+# Pie Chart
+
+pie_data <- diamonds %>%
+  
+  group_by(cut) %>%
+  
+  summarise(count = n()) %>%
+  
+  mutate(percentage = count / sum(count))
+
+
+pie_chart <- ggplot(pie_data, aes(x = "", y = percentage, fill = cut)) +
+  
+  geom_bar(stat = "identity", width = 1) +
+  
+  coord_polar(theta = "y") +
+  
+  labs(title = "Pie Chart of Diamond Cuts") +
+  
+  scale_fill_brewer(palette = "Dark2") +
+  
+  theme_void(base_size = 5)
+
+
+# Arrange all plots in a 2x3 grid layout
+
+grid.arrange(
+  
+  hist_plot, bar_plot,
+  
+  box_plot, facet_scatter,
+  
+  heatmap, pie_chart,
+  
+  ncol = 2 # Arranging in two columns for 2x3 layout
+  
+)
+```
+
+
+## Chart 3
+
+```{r}
+# Define a sequential palette from RColorBrewer package
+blues_palette <- brewer.pal(9, "Blues")
+custom_palette <- blues_palette[5:9] # select particular colors
+
+# Create the horizontal bar chart with facets
+ggplot(data = diamonds, aes(x = clarity, fill = cut)) +
+  geom_bar(color = "black") +
+  facet_wrap(~ cut, nrow = 1) +
+  scale_y_continuous(labels = label_number(scale = 1/1000, suffix = "K")) +
+  coord_flip() +
+  scale_fill_manual(values = custom_palette) +
+  theme_minimal(base_family = "sans") +
+  labs(
+    title = "Number of Diamonds by Clarity Across Cut Levels",
+    x = "Clarity",
+    y = "Number of Diamonds",
+    fill = "Cut"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.text.y = element_text(size = 8),
+    axis.text.x = element_text(size = 8),
+    strip.text = element_text(size = 11),
+    legend.position = "none",
+    text = element_text(family = "sans")
+  )
+```
+
+## Chart 4 (paired)
+
+```{r}
+# Filter the dataset for the required cuts
+filtered_diamonds <- subset(diamonds, cut %in% c("Very Good", "Ideal"))
+
+# Create the plot
+## The key issue was to make the left bars overlap over/on top of the rigt!
+ggplot(filtered_diamonds, aes(x = color)) +
+  geom_bar(data = subset(filtered_diamonds, cut == "Ideal"), 
+           aes(y = after_stat(count), fill = cut), 
+           position = position_nudge(x = 0.15), 
+           width = 0.5, 
+           alpha = 0.7) +  # Right bars (Ideal)
+  geom_bar(data = subset(filtered_diamonds, cut == "Very Good"), 
+           aes(y = after_stat(count), fill = cut), 
+           width = 0.5) +  # Left bars (Very Good) on top
+  scale_y_continuous(labels = scales::unit_format(unit = "k", scale = 1e-3)) +  # Format y-axis labels
+  labs(
+    title = "Number of Diamonds by Color across Selected Cut Quality Levels",
+    x = "Color",
+    y = "Number of Diamonds",
+    fill = "Selected Cut Quality Levels"
+  ) +
+  scale_fill_manual(values = c("Very Good" = "#66c2a5", "Ideal" = "#fc8d62")) +  # Custom colors
+  theme_minimal(base_family = "sans") +
+  theme(
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),  # Centered, bold, and larger title
+    axis.text.y = element_text(size = 10),  # Adjust y-axis text size if needed
+    legend.position = "top"  # Adjust legend position if needed
+  )
+```
+## Chart 4
+```{r}
+
+##### Column Chart #####
+ggplot(diamonds, aes(cut)) +
+  geom_bar(fill = "skyblue", color = "black") +
+  geom_text(stat = 'count',aes(label = after_stat(count)), vjust = -0.5, size = 3) +
+  labs(title = "Bar Chart of Diamond Cuts",
+       x = "Cut",
+       y = "Count") +
+  theme_minimal()
+```
+</details>
+
+
+
+<details>
+<summary>
+
+# Assignment 5
+
+</summary>
+
+## Base R plots
+```{r}
+library(tidyverse)
+library(sysfonts)
+library(showtext)
+font_add_google("Poppins", "poppins")
+showtext_auto()
+
+# Base R Histogram
+par(mfrow = c(1, 1), col.main = "black", col.lab = "black", col.axis = "darkgrey", mar = c(5, 4, 4, 2))
+
+hist(mtcars$mpg, 
+     main = "Distribution of Miles Per Gallon (mpg)", 
+     xlab = "Miles Per Gallon", 
+     col = "slateblue", 
+     border = "slateblue4", 
+     breaks = 10)
+
+# Base R Vertical Bar Chart
+car_count <- table(mtcars$cyl)
+
+barplot(car_count, 
+        main = "Number of Cars by Cylinder Count", 
+        xlab = "Number of Cylinders", 
+        ylab = "Count of Cars", 
+        col = "lightgreen", 
+        border = "darkgreen")
+
+# Base R Horizontal Bar Chart
+barplot(car_count, 
+        main = "Number of Cars by Cylinder Count", 
+        xlab = "Count of Cars", 
+        ylab = "Number of Cylinders", 
+        col = "violetred", 
+        border = "darkred", 
+        horiz = TRUE)
+
+# Base R Pie Chart
+pie(car_count, 
+    main = "Proportion of Cars by Cylinder Count", 
+    col = c("slateblue", "violetred", "lightgreen"))
+
+
+# Base R Boxplot
+boxplot(mpg ~ cyl, data = mtcars, 
+        main = "Boxplot of MPG by Cylinder Count", 
+        xlab = "Number of Cylinders", 
+        ylab = "Miles Per Gallon", 
+        col = c("slateblue", "violetred", "lightgreen"), 
+        border = "black")
+
+plot(mtcars$wt, mtcars$mpg, 
+     main = "Scatterplot of MPG vs Weight", 
+     xlab = "Weight (1000 lbs)", 
+     ylab = "Miles Per Gallon", 
+     pch = 16, 
+     col = "violetred")
+```
+## GGplots
+``` {r}
+library(sysfonts)
+font_add_google("Poppins", "poppins")
+
+my_theme <- theme(
+    text = element_text(family = "poppins"),  
+    plot.title = element_text(color = "grey29", size = 16, face = "bold"),
+    axis.title = element_text(color = "grey29", size = 14),
+    axis.text = element_text(color = "grey29", size = 12),
+    panel.background = element_rect(fill = "white", color = NA), 
+    plot.background = element_rect(fill = "white", color = NA),   
+    panel.grid.major = element_line(color = "grey90"),           
+    panel.grid.minor = element_line(color = "grey95"),          
+    panel.border = element_rect(color = "black", fill = NA),     
+    legend.background = element_rect(fill = "white", color = NA)  
+  )
+
+
+ggplot(mtcars, aes(x = mpg)) +
+  geom_histogram(binwidth = 2, fill = "slateblue", color = "slateblue4") +
+  labs(title = "Distribution of Miles Per Gallon (mpg)", x = "Miles Per Gallon", y = "Count") +
+  my_theme
+
+##### i. Vertical Bar Chart
+ggplot(mtcars, aes(x = factor(cyl))) +
+  geom_bar(fill = "slateblue", color = "slateblue4") +
+  labs(title = "Number of Cars by Cylinder Count", x = "Number of Cylinders", y = "Count of Cars") +
+  my_theme
+
+##### ii. Horizontal Bar Chart
+ggplot(mtcars, aes(x = factor(cyl))) +
+  geom_bar(fill = "violetred", color = "darkred") +
+  coord_flip() +
+  labs(title = "Number of Cars by Cylinder Count", x = "Count of Cars", y = "Number of Cylinders") +
+  my_theme
+
+#### c. Pie Chart
+car_count_df <- as.data.frame(car_count)
+ggplot(car_count_df, aes(x = "", y = Freq, fill = Var1)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y", start = 0) +
+  labs(title = "Proportion of Cars by Cylinder Count") +
+  scale_fill_manual(values = c("slateblue", "violetred", "lightgreen")) +
+  my_theme
+
+#### d. Boxplot
+ggplot(mtcars, aes(x = factor(cyl), y = mpg, fill = factor(cyl))) +
+  geom_boxplot(color = "grey29") +
+  labs(title = "Boxplot of MPG by Cylinder Count", x = "Number of Cylinders", y = "Miles Per Gallon") +
+  scale_fill_manual(values = c("violetred", "slateblue", "lightgreen")) +
+  my_theme
+
+#### e. Scatterplot
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point(color = "slateblue", size = 3) +
+  labs(title = "Scatterplot of MPG vs Weight", x = "Weight (1000 lbs)", y = "Miles Per Gallon") +
+  my_theme
+```
+
 </details>

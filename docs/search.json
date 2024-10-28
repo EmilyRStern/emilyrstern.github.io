@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Emily Stern",
-    "section": "",
-    "text": "Hello! This is where I’m keeping my projects.\nClick on “menu” to the top right to check out some of my stuff!"
-  },
-  {
     "objectID": "UFOs.html",
     "href": "UFOs.html",
     "title": "A Century of Sightings: UFO’s in America since 1925",
@@ -40,5 +33,110 @@
     "title": "Data Visualization Assignments",
     "section": "Assignment 1",
     "text": "Assignment 1"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "CV",
+    "section": "",
+    "text": "CV will go here~"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Emily Stern",
+    "section": "",
+    "text": "Hello! This is where I’m keeping my projects.\nClick on “menu” to the top right to check out some of my stuff!"
+  },
+  {
+    "objectID": "datavis.html#assignment-3",
+    "href": "datavis.html#assignment-3",
+    "title": "Data Visualization Assignments",
+    "section": "Assignment 3",
+    "text": "Assignment 3"
+  },
+  {
+    "objectID": "datavis.html#murrell-explaination",
+    "href": "datavis.html#murrell-explaination",
+    "title": "Data Visualization Assignments",
+    "section": "1. Murrell Explaination",
+    "text": "1. Murrell Explaination\n\n\nShow the code\n# Piechart w/ explaination \n## Create Dataset ##\npar(mar=c(0, 2, 1, 2), xpd=FALSE, cex=0.5)\n## Add list of pie sale values\npie.sales &lt;- c(0.12, 0.3, 0.26, 0.16, 0.04, 0.12)\n## Create Category Names\nnames(pie.sales) &lt;- c(\"Blueberry\", \"Cherry\",\n                      \"Apple\", \"Boston Cream\", \"Other\", \"Vanilla\")\n## Generate Graph ##\npie(pie.sales, col = gray(seq(0.3,1.0,length=6)))"
+  },
+  {
+    "objectID": "datavis.html#anscombe-explaination",
+    "href": "datavis.html#anscombe-explaination",
+    "title": "Data Visualization Assignments",
+    "section": "2. Anscombe Explaination",
+    "text": "2. Anscombe Explaination\n\n\nShow the code\ndata(anscombe)\n\n## Simple version\nplot(anscombe$x1,anscombe$y1)\nsummary(anscombe)\n\n\n       x1             x2             x3             x4           y1        \n Min.   : 4.0   Min.   : 4.0   Min.   : 4.0   Min.   : 8   Min.   : 4.260  \n 1st Qu.: 6.5   1st Qu.: 6.5   1st Qu.: 6.5   1st Qu.: 8   1st Qu.: 6.315  \n Median : 9.0   Median : 9.0   Median : 9.0   Median : 8   Median : 7.580  \n Mean   : 9.0   Mean   : 9.0   Mean   : 9.0   Mean   : 9   Mean   : 7.501  \n 3rd Qu.:11.5   3rd Qu.:11.5   3rd Qu.:11.5   3rd Qu.: 8   3rd Qu.: 8.570  \n Max.   :14.0   Max.   :14.0   Max.   :14.0   Max.   :19   Max.   :10.840  \n       y2              y3              y4        \n Min.   :3.100   Min.   : 5.39   Min.   : 5.250  \n 1st Qu.:6.695   1st Qu.: 6.25   1st Qu.: 6.170  \n Median :8.140   Median : 7.11   Median : 7.040  \n Mean   :7.501   Mean   : 7.50   Mean   : 7.501  \n 3rd Qu.:8.950   3rd Qu.: 7.98   3rd Qu.: 8.190  \n Max.   :9.260   Max.   :12.74   Max.   :12.500  \n\n\nShow the code\n# Create four model objects\nlm1 &lt;- lm(y1 ~ x1, data=anscombe)\nsummary(lm1)\n\n\n\nCall:\nlm(formula = y1 ~ x1, data = anscombe)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-1.92127 -0.45577 -0.04136  0.70941  1.83882 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)   \n(Intercept)   3.0001     1.1247   2.667  0.02573 * \nx1            0.5001     0.1179   4.241  0.00217 **\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.237 on 9 degrees of freedom\nMultiple R-squared:  0.6665,    Adjusted R-squared:  0.6295 \nF-statistic: 17.99 on 1 and 9 DF,  p-value: 0.00217\n\n\nShow the code\nlm2 &lt;- lm(y2 ~ x2, data=anscombe)\nsummary(lm2)\n\n\n\nCall:\nlm(formula = y2 ~ x2, data = anscombe)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-1.9009 -0.7609  0.1291  0.9491  1.2691 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)   \n(Intercept)    3.001      1.125   2.667  0.02576 * \nx2             0.500      0.118   4.239  0.00218 **\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.237 on 9 degrees of freedom\nMultiple R-squared:  0.6662,    Adjusted R-squared:  0.6292 \nF-statistic: 17.97 on 1 and 9 DF,  p-value: 0.002179\n\n\nShow the code\nlm3 &lt;- lm(y3 ~ x3, data=anscombe)\nsummary(lm3)\n\n\n\nCall:\nlm(formula = y3 ~ x3, data = anscombe)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-1.1586 -0.6146 -0.2303  0.1540  3.2411 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)   \n(Intercept)   3.0025     1.1245   2.670  0.02562 * \nx3            0.4997     0.1179   4.239  0.00218 **\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.236 on 9 degrees of freedom\nMultiple R-squared:  0.6663,    Adjusted R-squared:  0.6292 \nF-statistic: 17.97 on 1 and 9 DF,  p-value: 0.002176\n\n\nShow the code\nlm4 &lt;- lm(y4 ~ x4, data=anscombe)\nsummary(lm4)\n\n\n\nCall:\nlm(formula = y4 ~ x4, data = anscombe)\n\nResiduals:\n   Min     1Q Median     3Q    Max \n-1.751 -0.831  0.000  0.809  1.839 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)   \n(Intercept)   3.0017     1.1239   2.671  0.02559 * \nx4            0.4999     0.1178   4.243  0.00216 **\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 1.236 on 9 degrees of freedom\nMultiple R-squared:  0.6667,    Adjusted R-squared:  0.6297 \nF-statistic:    18 on 1 and 9 DF,  p-value: 0.002165\n\n\nShow the code\nplot(anscombe$x1,anscombe$y1)\nabline(coefficients(lm1))\n\n\n\n\n\n\n\n\n\nShow the code\nplot(anscombe$x2,anscombe$y2)\nabline(coefficients(lm2))\n\n\n\n\n\n\n\n\n\nShow the code\nplot(anscombe$x3,anscombe$y3)\nabline(coefficients(lm3))\n\n\n\n\n\n\n\n\n\nShow the code\nplot(anscombe$x4,anscombe$y4)\nabline(coefficients(lm4))\n\n\n\n\n\n\n\n\n\n\n\nShow the code\n## Fancy version (per help file)\n\nff &lt;- y ~ x\nmods &lt;- setNames(as.list(1:4), paste0(\"lm\", 1:4))\n\n# Plot using for loop\nfor(i in 1:4) {\n  ff[2:3] &lt;- lapply(paste0(c(\"y\",\"x\"), i), as.name)\n  ## or   ff[[2]] &lt;- as.name(paste0(\"y\", i))\n  ##      ff[[3]] &lt;- as.name(paste0(\"x\", i))\n  mods[[i]] &lt;- lmi &lt;- lm(ff, data = anscombe)\n  print(anova(lmi))\n}\n\n\nAnalysis of Variance Table\n\nResponse: y1\n          Df Sum Sq Mean Sq F value  Pr(&gt;F)   \nx1         1 27.510 27.5100   17.99 0.00217 **\nResiduals  9 13.763  1.5292                   \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\nAnalysis of Variance Table\n\nResponse: y2\n          Df Sum Sq Mean Sq F value   Pr(&gt;F)   \nx2         1 27.500 27.5000  17.966 0.002179 **\nResiduals  9 13.776  1.5307                    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\nAnalysis of Variance Table\n\nResponse: y3\n          Df Sum Sq Mean Sq F value   Pr(&gt;F)   \nx3         1 27.470 27.4700  17.972 0.002176 **\nResiduals  9 13.756  1.5285                    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\nAnalysis of Variance Table\n\nResponse: y4\n          Df Sum Sq Mean Sq F value   Pr(&gt;F)   \nx4         1 27.490 27.4900  18.003 0.002165 **\nResiduals  9 13.742  1.5269                    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\nShow the code\nsapply(mods, coef)  # Note the use of this function\n\n\n                  lm1      lm2       lm3       lm4\n(Intercept) 3.0000909 3.000909 3.0024545 3.0017273\nx1          0.5000909 0.500000 0.4997273 0.4999091\n\n\nShow the code\nlapply(mods, function(fm) coef(summary(fm)))\n\n\n$lm1\n             Estimate Std. Error  t value    Pr(&gt;|t|)\n(Intercept) 3.0000909  1.1247468 2.667348 0.025734051\nx1          0.5000909  0.1179055 4.241455 0.002169629\n\n$lm2\n            Estimate Std. Error  t value    Pr(&gt;|t|)\n(Intercept) 3.000909  1.1253024 2.666758 0.025758941\nx2          0.500000  0.1179637 4.238590 0.002178816\n\n$lm3\n             Estimate Std. Error  t value    Pr(&gt;|t|)\n(Intercept) 3.0024545  1.1244812 2.670080 0.025619109\nx3          0.4997273  0.1178777 4.239372 0.002176305\n\n$lm4\n             Estimate Std. Error  t value    Pr(&gt;|t|)\n(Intercept) 3.0017273  1.1239211 2.670763 0.025590425\nx4          0.4999091  0.1178189 4.243028 0.002164602\n\n\nShow the code\n# Preparing for the plots\nop &lt;- par(mfrow = c(2, 2), mar = 0.1+c(4,4,1,1), oma =  c(0, 0, 2, 0))\n\n# Plot charts using for loop\nfor(i in 1:4) {\n  ff[2:3] &lt;- lapply(paste0(c(\"y\",\"x\"), i), as.name)\n  plot(ff, data = anscombe, col = \"red\", pch = 21, bg = \"orange\", cex = 1.2,\n       xlim = c(3, 19), ylim = c(3, 13))\n  abline(mods[[i]], col = \"blue\")\n}\nmtext(\"Anscombe's 4 Regression data sets\", outer = TRUE, cex = 1.5)\n\n\n\n\n\n\n\n\n\nShow the code\npar(op)"
+  },
+  {
+    "objectID": "datavis.html#anscombe-variations",
+    "href": "datavis.html#anscombe-variations",
+    "title": "Data Visualization Assignments",
+    "section": "3. Anscombe Variations",
+    "text": "3. Anscombe Variations\n\n\n\nShow the code\nplot(anscombe$x1,anscombe$y1, family=\"serif\")\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nplot(anscombe$x1,anscombe$y1, col=\"red\")\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow the code\nplot(anscombe$x1,anscombe$y1, pch=20)\n\n\n\n\n\n\n\n\n\n\n:::"
+  },
+  {
+    "objectID": "datavis.html#assignment-4",
+    "href": "datavis.html#assignment-4",
+    "title": "Data Visualization Assignments",
+    "section": "Assignment 4",
+    "text": "Assignment 4"
+  },
+  {
+    "objectID": "datavis.html#chart-1",
+    "href": "datavis.html#chart-1",
+    "title": "Data Visualization Assignments",
+    "section": "Chart 1",
+    "text": "Chart 1\n\n\nShow the code\nggplot(rounded, aes(x = reorder(clarity,avg_size), y = avg_price_per_carat, fill = clarity, width = avg_size)) +\n  geom_col() +  \n  scale_fill_brewer(palette = \"Set1\") + \n  scale_y_continuous(labels = comma, limits = c(0, 5000)) +\n  theme_minimal() +\n  labs(\n    title = \"Average Diamond Size and Price per Carat by Clarity\",\n    x = \"Average Size (carats)\",\n    y = \"Average Price per Carat ($)\",\n    fill = \"Clarity\"  \n  ) \n\n\nWarning: `position_stack()` requires non-overlapping x intervals."
+  },
+  {
+    "objectID": "datavis.html#chart-2",
+    "href": "datavis.html#chart-2",
+    "title": "Data Visualization Assignments",
+    "section": "Chart 2",
+    "text": "Chart 2\n\n\nShow the code\n# color palette\n\npalette_cut &lt;- brewer.pal(n = 5, name = \"Dark2\") # 5 colors for 'cut'\n\n\n# Histogram\n\nhist_plot &lt;- ggplot(diamonds, aes(x = price)) +\n  \n  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = \"gray80\", color = \"black\") +\n  \n  stat_function(fun = dnorm, args = list(mean = mean(diamonds$price), sd = sd(diamonds$price)), color = \"blue\", size = 1) +\n  \n  labs(title = \"Histogram of Diamond Prices\", x = \"Price\", y = \"Density\") +\n  \n  theme_minimal(base_size = 5)\n\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\n\nShow the code\n# Bar Plot\n\nbar_plot &lt;- diamonds %&gt;%\n  \n  group_by(cut) %&gt;%\n  \n  summarise(count = n()) %&gt;%\n  \n  ggplot(aes(x = cut, y = count, fill = cut)) +\n  \n  geom_bar(stat = \"identity\") +\n  \n  labs(title = \"Bar Plot: Count of Diamonds by Cut\", x = \"Cut\", y = \"Count\") +\n  \n  scale_fill_manual(values = palette_cut) +\n  \n  theme_minimal(base_size = 5)\n\n\n# Box Plot\n\nbox_plot &lt;- ggplot(diamonds, aes(x = cut, y = price, fill = cut)) +\n  \n  geom_boxplot() +\n  \n  labs(title = \"Box Plot: Price Distribution by Cut\", x = \"Cut\", y = \"Price\") +\n  \n  scale_fill_manual(values = palette_cut) +\n  \n  theme_minimal(base_size = 5)\n\n\n# Scatter Plot\n\nfacet_scatter &lt;- ggplot(diamonds, aes(x = carat, y = price, color = color)) +\n  \n  geom_point(alpha = 0.5, size = 2) +\n  \n  facet_wrap(~ cut) +\n  \n  labs(title = \"Faceted Scatter Plot: Carat vs Price by Color\", x = \"Carat\", y = \"Price\") +\n  \n  scale_color_brewer(palette = \"Set1\") +\n  \n  theme_minimal(base_size = 5)\n\n\n# Heatmap\n\nheatmap_data &lt;- diamonds %&gt;%\n  \n  group_by(cut, color) %&gt;%\n  \n  summarise(avg_price = mean(price), .groups = \"drop\") # Avoid warning\n\n\nheatmap &lt;- ggplot(heatmap_data, aes(x = cut, y = color, fill = avg_price)) +\n  \n  geom_tile(color = \"white\") +\n  \n  scale_fill_gradient(low = \"lightblue\", high = \"darkblue\") +\n  \n  labs(title = \"Heatmap: Average Price by Cut and Color\", x = \"Cut\", y = \"Color\") +\n  \n  theme_minimal(base_size = 5)\n\n\n# Pie Chart\n\npie_data &lt;- diamonds %&gt;%\n  \n  group_by(cut) %&gt;%\n  \n  summarise(count = n()) %&gt;%\n  \n  mutate(percentage = count / sum(count))\n\n\npie_chart &lt;- ggplot(pie_data, aes(x = \"\", y = percentage, fill = cut)) +\n  \n  geom_bar(stat = \"identity\", width = 1) +\n  \n  coord_polar(theta = \"y\") +\n  \n  labs(title = \"Pie Chart of Diamond Cuts\") +\n  \n  scale_fill_brewer(palette = \"Dark2\") +\n  \n  theme_void(base_size = 5)\n\n\n# Arrange all plots in a 2x3 grid layout\n\ngrid.arrange(\n  \n  hist_plot, bar_plot,\n  \n  box_plot, facet_scatter,\n  \n  heatmap, pie_chart,\n  \n  ncol = 2 # Arranging in two columns for 2x3 layout\n  \n)"
+  },
+  {
+    "objectID": "datavis.html#chart-3",
+    "href": "datavis.html#chart-3",
+    "title": "Data Visualization Assignments",
+    "section": "Chart 3",
+    "text": "Chart 3\n\n\nShow the code\n# Define a sequential palette from RColorBrewer package\nblues_palette &lt;- brewer.pal(9, \"Blues\")\ncustom_palette &lt;- blues_palette[5:9] # select particular colors\n\n# Create the horizontal bar chart with facets\nggplot(data = diamonds, aes(x = clarity, fill = cut)) +\n  geom_bar(color = \"black\") +\n  facet_wrap(~ cut, nrow = 1) +\n  scale_y_continuous(labels = label_number(scale = 1/1000, suffix = \"K\")) +\n  coord_flip() +\n  scale_fill_manual(values = custom_palette) +\n  theme_minimal(base_family = \"sans\") +\n  labs(\n    title = \"Number of Diamonds by Clarity Across Cut Levels\",\n    x = \"Clarity\",\n    y = \"Number of Diamonds\",\n    fill = \"Cut\"\n  ) +\n  theme(\n    plot.title = element_text(hjust = 0.5, face = \"bold\", size = 14),\n    axis.text.y = element_text(size = 8),\n    axis.text.x = element_text(size = 8),\n    strip.text = element_text(size = 11),\n    legend.position = \"none\",\n    text = element_text(family = \"sans\")\n  )"
+  },
+  {
+    "objectID": "datavis.html#chart-4-paired",
+    "href": "datavis.html#chart-4-paired",
+    "title": "Data Visualization Assignments",
+    "section": "Chart 4 (paired)",
+    "text": "Chart 4 (paired)\n\n\nShow the code\n# Filter the dataset for the required cuts\nfiltered_diamonds &lt;- subset(diamonds, cut %in% c(\"Very Good\", \"Ideal\"))\n\n# Create the plot\n## The key issue was to make the left bars overlap over/on top of the rigt!\nggplot(filtered_diamonds, aes(x = color)) +\n  geom_bar(data = subset(filtered_diamonds, cut == \"Ideal\"), \n           aes(y = after_stat(count), fill = cut), \n           position = position_nudge(x = 0.15), \n           width = 0.5, \n           alpha = 0.7) +  # Right bars (Ideal)\n  geom_bar(data = subset(filtered_diamonds, cut == \"Very Good\"), \n           aes(y = after_stat(count), fill = cut), \n           width = 0.5) +  # Left bars (Very Good) on top\n  scale_y_continuous(labels = scales::unit_format(unit = \"k\", scale = 1e-3)) +  # Format y-axis labels\n  labs(\n    title = \"Number of Diamonds by Color across Selected Cut Quality Levels\",\n    x = \"Color\",\n    y = \"Number of Diamonds\",\n    fill = \"Selected Cut Quality Levels\"\n  ) +\n  scale_fill_manual(values = c(\"Very Good\" = \"#66c2a5\", \"Ideal\" = \"#fc8d62\")) +  # Custom colors\n  theme_minimal(base_family = \"sans\") +\n  theme(\n    plot.title = element_text(face = \"bold\", size = 14, hjust = 0.5),  # Centered, bold, and larger title\n    axis.text.y = element_text(size = 10),  # Adjust y-axis text size if needed\n    legend.position = \"top\"  # Adjust legend position if needed\n  )"
+  },
+  {
+    "objectID": "datavis.html#chart-4",
+    "href": "datavis.html#chart-4",
+    "title": "Data Visualization Assignments",
+    "section": "Chart 4",
+    "text": "Chart 4\n\n\nShow the code\n##### Column Chart #####\nggplot(diamonds, aes(cut)) +\n  geom_bar(fill = \"skyblue\", color = \"black\") +\n  geom_text(stat = 'count',aes(label = after_stat(count)), vjust = -0.5, size = 3) +\n  labs(title = \"Bar Chart of Diamond Cuts\",\n       x = \"Cut\",\n       y = \"Count\") +\n  theme_minimal()"
+  },
+  {
+    "objectID": "datavis.html#assignment-5",
+    "href": "datavis.html#assignment-5",
+    "title": "Data Visualization Assignments",
+    "section": "Assignment 5",
+    "text": "Assignment 5"
+  },
+  {
+    "objectID": "datavis.html#base-r-plots",
+    "href": "datavis.html#base-r-plots",
+    "title": "Data Visualization Assignments",
+    "section": "Base R plots",
+    "text": "Base R plots\n\n\nShow the code\nlibrary(tidyverse)\nlibrary(sysfonts)\nlibrary(showtext)\n\n\nLoading required package: showtextdb\n\n\nShow the code\nfont_add_google(\"Poppins\", \"poppins\")\nshowtext_auto()\n\n# Base R Histogram\npar(mfrow = c(1, 1), col.main = \"black\", col.lab = \"black\", col.axis = \"darkgrey\", mar = c(5, 4, 4, 2))\n\nhist(mtcars$mpg, \n     main = \"Distribution of Miles Per Gallon (mpg)\", \n     xlab = \"Miles Per Gallon\", \n     col = \"slateblue\", \n     border = \"slateblue4\", \n     breaks = 10)\n\n\n\n\n\n\n\n\n\nShow the code\n# Base R Vertical Bar Chart\ncar_count &lt;- table(mtcars$cyl)\n\nbarplot(car_count, \n        main = \"Number of Cars by Cylinder Count\", \n        xlab = \"Number of Cylinders\", \n        ylab = \"Count of Cars\", \n        col = \"lightgreen\", \n        border = \"darkgreen\")\n\n\n\n\n\n\n\n\n\nShow the code\n# Base R Horizontal Bar Chart\nbarplot(car_count, \n        main = \"Number of Cars by Cylinder Count\", \n        xlab = \"Count of Cars\", \n        ylab = \"Number of Cylinders\", \n        col = \"violetred\", \n        border = \"darkred\", \n        horiz = TRUE)\n\n\n\n\n\n\n\n\n\nShow the code\n# Base R Pie Chart\npie(car_count, \n    main = \"Proportion of Cars by Cylinder Count\", \n    col = c(\"slateblue\", \"violetred\", \"lightgreen\"))\n\n\n\n\n\n\n\n\n\nShow the code\n# Base R Boxplot\nboxplot(mpg ~ cyl, data = mtcars, \n        main = \"Boxplot of MPG by Cylinder Count\", \n        xlab = \"Number of Cylinders\", \n        ylab = \"Miles Per Gallon\", \n        col = c(\"slateblue\", \"violetred\", \"lightgreen\"), \n        border = \"black\")\n\n\n\n\n\n\n\n\n\nShow the code\nplot(mtcars$wt, mtcars$mpg, \n     main = \"Scatterplot of MPG vs Weight\", \n     xlab = \"Weight (1000 lbs)\", \n     ylab = \"Miles Per Gallon\", \n     pch = 16, \n     col = \"violetred\")"
+  },
+  {
+    "objectID": "datavis.html#ggplots",
+    "href": "datavis.html#ggplots",
+    "title": "Data Visualization Assignments",
+    "section": "GGplots",
+    "text": "GGplots\n\n\nShow the code\nlibrary(sysfonts)\nfont_add_google(\"Poppins\", \"poppins\")\n\nmy_theme &lt;- theme(\n    text = element_text(family = \"poppins\"),  \n    plot.title = element_text(color = \"grey29\", size = 16, face = \"bold\"),\n    axis.title = element_text(color = \"grey29\", size = 14),\n    axis.text = element_text(color = \"grey29\", size = 12),\n    panel.background = element_rect(fill = \"white\", color = NA), \n    plot.background = element_rect(fill = \"white\", color = NA),   \n    panel.grid.major = element_line(color = \"grey90\"),           \n    panel.grid.minor = element_line(color = \"grey95\"),          \n    panel.border = element_rect(color = \"black\", fill = NA),     \n    legend.background = element_rect(fill = \"white\", color = NA)  \n  )\n\n\nggplot(mtcars, aes(x = mpg)) +\n  geom_histogram(binwidth = 2, fill = \"slateblue\", color = \"slateblue4\") +\n  labs(title = \"Distribution of Miles Per Gallon (mpg)\", x = \"Miles Per Gallon\", y = \"Count\") +\n  my_theme\n\n\n\n\n\n\n\n\n\nShow the code\n##### i. Vertical Bar Chart\nggplot(mtcars, aes(x = factor(cyl))) +\n  geom_bar(fill = \"slateblue\", color = \"slateblue4\") +\n  labs(title = \"Number of Cars by Cylinder Count\", x = \"Number of Cylinders\", y = \"Count of Cars\") +\n  my_theme\n\n\n\n\n\n\n\n\n\nShow the code\n##### ii. Horizontal Bar Chart\nggplot(mtcars, aes(x = factor(cyl))) +\n  geom_bar(fill = \"violetred\", color = \"darkred\") +\n  coord_flip() +\n  labs(title = \"Number of Cars by Cylinder Count\", x = \"Count of Cars\", y = \"Number of Cylinders\") +\n  my_theme\n\n\n\n\n\n\n\n\n\nShow the code\n#### c. Pie Chart\ncar_count_df &lt;- as.data.frame(car_count)\nggplot(car_count_df, aes(x = \"\", y = Freq, fill = Var1)) +\n  geom_bar(stat = \"identity\", width = 1, color = \"white\") +\n  coord_polar(\"y\", start = 0) +\n  labs(title = \"Proportion of Cars by Cylinder Count\") +\n  scale_fill_manual(values = c(\"slateblue\", \"violetred\", \"lightgreen\")) +\n  my_theme\n\n\n\n\n\n\n\n\n\nShow the code\n#### d. Boxplot\nggplot(mtcars, aes(x = factor(cyl), y = mpg, fill = factor(cyl))) +\n  geom_boxplot(color = \"grey29\") +\n  labs(title = \"Boxplot of MPG by Cylinder Count\", x = \"Number of Cylinders\", y = \"Miles Per Gallon\") +\n  scale_fill_manual(values = c(\"violetred\", \"slateblue\", \"lightgreen\")) +\n  my_theme\n\n\n\n\n\n\n\n\n\nShow the code\n#### e. Scatterplot\nggplot(mtcars, aes(x = wt, y = mpg)) +\n  geom_point(color = \"slateblue\", size = 3) +\n  labs(title = \"Scatterplot of MPG vs Weight\", x = \"Weight (1000 lbs)\", y = \"Miles Per Gallon\") +\n  my_theme"
   }
 ]
