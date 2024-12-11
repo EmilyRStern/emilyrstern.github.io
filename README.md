@@ -1,2 +1,2 @@
 # EmilySternWebsite
- A professional website for myself, Emily Stern
+ A professional website for myself.
