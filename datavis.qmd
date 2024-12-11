@@ -672,3 +672,41 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 ```
 
 </details>
+
+<details>
+<summary>
+
+# Assignment 6
+</summary>
+
+</details>
+
+
+<details>
+<summary>
+
+# Assignment 7
+</summary>
+
+</details>
+
+<details>
+<summary>
+
+<details>
+<summary>
+
+# Assignment 8
+</summary>
+
+</details>
+
+# Final Project
+
+</summary>
+
+``` {=html}
+<iframe src="https://urlx0z-emily0stern.shinyapps.io/stern_data_vis_final/" width="1000" height="500"></iframe> 
+```
+
+</details>
