@@ -678,7 +678,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 # Assignment 6
 </summary>
-
+Content
 </details>
 
 
@@ -687,7 +687,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 # Assignment 7
 </summary>
-
+Content
 </details>
 
 <details>
@@ -698,7 +698,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 # Assignment 8
 </summary>
-
+Content
 </details>
 
 # Final Project
