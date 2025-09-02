@@ -29,8 +29,8 @@ website:
               text: "UFO Sightings Project"
               href: UFOs.html 
             - icon: bar-chart-fill
-              text: "Data Visualization"
-              href: datavis.html 
+              text: "Data Collection and Production"
+              href: DCP.html 
             - icon: github
               text: "Github"
               href: "https://github.com/EmilyRStern/"
