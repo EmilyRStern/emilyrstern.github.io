@@ -1,7 +1,6 @@
 ---
 title: "Emily Stern"
 format: html
-theme: Flatly
 ---
 
 Hello! This is where I'm keeping my projects.

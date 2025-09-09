@@ -24,13 +24,13 @@ website:
               href: index.html
             - icon: card-text
               text: "CV"
-              href: about.html
+              href: "Emily Stern Research CV.PDF"
             - icon: pin-map-fill
               text: "UFO Sightings Project"
               href: UFOs.html 
             - icon: bar-chart-fill
               text: "Data Collection and Production"
-              href: DCP.html 
+              href: assignment 01.qmd
             - icon: github
               text: "Github"
               href: "https://github.com/EmilyRStern/"

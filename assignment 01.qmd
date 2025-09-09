@@ -1,0 +1,6 @@
+---
+title: "assignment 01"
+format: html
+---
+
+This website was created using Quarto. The Cosmos theme was used for a professional look. Also included is my research CV, and my project from the 2024 Coding Camp.  
