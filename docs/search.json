@@ -39,14 +39,14 @@
     "href": "about.html",
     "title": "About Emily Stern",
     "section": "",
-    "text": "Data Analyst | Child Poverty Action Lab | Aug 2025 - Present\nJunior Data Analyst | Child Poverty Action Lab | Oct 2024 - Aug 2025 - Co-developed the DICE Report dashboard\nProject Intern | VolunteerNow | Sep 2024 - Feb 2025\nData Analytics Intern | Child Poverty Action Lab | May 2024 - Aug 2024\nImpact Data Assistant | Girls Inc. of Metropolitan Dallas | Jan 2024 - Aug 2024\nNSF REU Fellow | National Science Foundation | Aug 2023 - Aug 2024\nCrisis Advocate | Hope’s Door New Beginning Center | Jan 2023 - Dec 2023"
+    "text": "Data Analyst | Child Poverty Action Lab | Aug 2025 - Present\nJunior Data Analyst | Child Poverty Action Lab | Oct 2024 - Aug 2025\nProject Intern | VolunteerNow | Sep 2024 - Feb 2025\nData Analytics Intern | Child Poverty Action Lab | May 2024 - Aug 2024\nImpact Data Assistant | Girls Inc. of Metropolitan Dallas | Jan 2024 - Aug 2024\nNSF REU Fellow | National Science Foundation | Aug 2023 - Aug 2024\nCrisis Advocate | Hope’s Door New Beginning Center | Jan 2023 - Dec 2023"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Emily Stern - Data Analytics and Research",
     "section": "",
-    "text": "Working to find good answers for difficult problems.\n\n\n\nEmily Stern\nEmily Stern is a Data Analyst at the Child Poverty Action Lab (CPAL), a nonprofit committed to cutting child poverty in Dallas in half within 20 years. Born and raised in the Dallas area, she’s excited to apply her analytical skills to generating insights to drive progress towards this goal in her hometown.\nEmily brings three years of experience working with children and families. Her diverse roles in direct service, program evaluation, and academic research have given her a well-rounded understanding of what it takes to help community-based programs be successful, both in practice and in theory. She earned her undergraduate degree in Psychology and is currently completing her Master’s in Social Data Analytics and Research at the University of Texas at Dallas."
+    "text": "Working to find good answers for difficult problems.\n\n\n\nEmily Stern\nEmily Stern is a Data Analyst at the Child Poverty Action Lab (CPAL), a nonprofit committed to cutting child poverty in Dallas in half within 20 years. Born and raised in the Dallas area, she’s excited to apply her analytical skills to generating insights to drive progress towards this goal in her hometown.\nEmily brings three years of experience working with children and families. Her diverse roles in direct service, program evaluation, and academic research have given her a well-rounded understanding of what it takes to help community-based programs be successful, both in practice and in theory. She earned her undergraduate degree in Psychology and is currently completing her Master’s in Social Data Analytics and Research at the University of Texas at Dallas.\nAbout Me • GitHub"
   },
   {
     "objectID": "datavis.html#assignment-3",
@@ -142,9 +142,9 @@
   {
     "objectID": "assignment 01.html",
     "href": "assignment 01.html",
-    "title": "assignment 01",
+    "title": "Data Collection and Production",
     "section": "",
-    "text": "This website was created using Quarto. The Cosmos theme was used for a professional look. Also included is my research CV, and my project from the 2024 Coding Camp."
+    "text": "Assignment 01\n\nThis website was created using Quarto. I started by creating the contents with a basic cosmos theme. However to create custom CSS, I utilized Claude.\nTo do this I configured Python-based API integration, that establishes a local server bridge between Claude and my RStudio IDE. Claude’s first attempt at CSS was rather ugly though, so it required some significant adjustments to get right.\nI have included my bio on the home page, as well as links to main projects. My CV is currently being developed, but is present in the menu as well. There’s also a bit of my work around this site, as well as links to my other professional social medias."
   },
   {
     "objectID": "index.html#data-analyst-research-portfolio",
@@ -228,7 +228,7 @@
     "href": "about.html#experience",
     "title": "About Emily Stern",
     "section": "",
-    "text": "Data Analyst | Child Poverty Action Lab | Aug 2025 - Present\nJunior Data Analyst | Child Poverty Action Lab | Oct 2024 - Aug 2025 - Co-developed the DICE Report dashboard\nProject Intern | VolunteerNow | Sep 2024 - Feb 2025\nData Analytics Intern | Child Poverty Action Lab | May 2024 - Aug 2024\nImpact Data Assistant | Girls Inc. of Metropolitan Dallas | Jan 2024 - Aug 2024\nNSF REU Fellow | National Science Foundation | Aug 2023 - Aug 2024\nCrisis Advocate | Hope’s Door New Beginning Center | Jan 2023 - Dec 2023"
+    "text": "Data Analyst | Child Poverty Action Lab | Aug 2025 - Present\nJunior Data Analyst | Child Poverty Action Lab | Oct 2024 - Aug 2025\nProject Intern | VolunteerNow | Sep 2024 - Feb 2025\nData Analytics Intern | Child Poverty Action Lab | May 2024 - Aug 2024\nImpact Data Assistant | Girls Inc. of Metropolitan Dallas | Jan 2024 - Aug 2024\nNSF REU Fellow | National Science Foundation | Aug 2023 - Aug 2024\nCrisis Advocate | Hope’s Door New Beginning Center | Jan 2023 - Dec 2023"
   },
   {
     "objectID": "about.html#projects",
@@ -249,7 +249,7 @@
     "href": "about.html#resources",
     "title": "About Emily Stern",
     "section": "Resources",
-    "text": "Resources\n\nResearch CV (PDF)\nGitHub Portfolio"
+    "text": "Resources\n\nResearch CV (PDF)\nGitHub Portfolio\nLinkedin"
   },
   {
     "objectID": "index.html#data-analyst-researcher",
@@ -263,14 +263,14 @@
     "href": "index.html#projects",
     "title": "Emily Stern - Data Analytics and Research",
     "section": "Projects",
-    "text": "Projects\n\n🎯 DICE Report\nData Informed Community Engagement Dashboard at Child Poverty Action Lab. My 2024 Summer Internship Project.\n\n\n🛸 UFO Sightings Analysis\nInteractive mapping of UFO sightings in the US over time, for EPPS 2024 Coding Bootcamp."
+    "text": "Projects\n\nDICE Report\nData Informed Community Engagement Dashboard at Child Poverty Action Lab. My 2024 Summer Internship Project.\n\n\nUFO Sightings Analysis\nInteractive mapping of UFO sightings in the US over time, for EPPS 2024 Coding Bootcamp."
   },
   {
     "objectID": "index.html#class-assignments",
     "href": "index.html#class-assignments",
     "title": "Emily Stern - Data Analytics and Research",
     "section": "Class Assignments",
-    "text": "Class Assignments\n\n📊 Methods of Data Collection and Production\nAssignments for EPPS 6302.\n\nAbout Me • GitHub"
+    "text": "Class Assignments\n\nMethods of Data Collection and Production\nAssignments for EPPS 6302."
   },
   {
     "objectID": "about.html#data-analyst",

@@ -13,20 +13,21 @@ Emily Stern is a Data Analyst at the Child Poverty Action Lab (CPAL), a nonprofi
 
 Emily brings three years of experience working with children and families. Her diverse roles in direct service, program evaluation, and academic research have given her a well-rounded understanding of what it takes to help community-based programs be successful, both in practice and in theory. She earned her undergraduate degree in Psychology and is currently completing her Master's in Social Data Analytics and Research at the University of Texas at Dallas.
 
-
+::: {.homepage-intro}
 ## Projects
 
-### 🎯 [DICE Report](https://github.com/childpovertyactionlab/dice-report)
+### [DICE Report](https://github.com/childpovertyactionlab/dice-report)
 Data Informed Community Engagement Dashboard at Child Poverty Action Lab. My 2024 Summer Internship Project. 
 
-### 🛸 [UFO Sightings Analysis](UFOs.html)
+### [UFO Sightings Analysis](UFOs.html)
 Interactive mapping of UFO sightings in the US over time, for EPPS 2024 Coding Bootcamp.
 
 ## Class Assignments 
 
-### 📊 [Methods of Data Collection and Production](assignment 01.html)
+### [Methods of Data Collection and Production](assignment 01.html)
 Assignments for EPPS 6302.
 
+:::
 ---
 
 **[About Me](about.html)** • **[GitHub](https://github.com/EmilyRStern/)**

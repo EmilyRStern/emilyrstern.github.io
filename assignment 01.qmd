@@ -1,9 +1,15 @@
 ---
-title: "assignment 01"
+title: "Data Collection and Production"
 format: html
 ---
+
+<details>
+  <summary>Assignment 01</summary>
 
 This website was created using Quarto. I started by creating the contents with a basic cosmos theme. However to create custom CSS, I utilized Claude.
 
 To do this I configured Python-based API integration, that establishes a local server bridge between Claude and my RStudio IDE. Claude's first attempt at CSS was rather ugly though, so it required some significant adjustments to get right. 
 
+I have included my bio on the home page, as well as links to main projects. My CV is currently being developed, but is present in the menu as well. There's also a bit of my work around this site, as well as links to my other professional social medias. 
+
+</details>
