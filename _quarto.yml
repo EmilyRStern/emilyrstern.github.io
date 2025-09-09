@@ -1,3 +1,4 @@
+
 project:
   type: website
   output-dir: docs
@@ -17,20 +18,23 @@ website:
       search: TRUE
       collapse: false
       right:
-        - text: "<b>Menu<b>"
+        - text: "<b>Menu</b>"
           menu:
             - icon: house-door-fill
               text: "Home"
               href: index.html
             - icon: card-text
-              text: "CV"
-              href: "Emily Stern Research CV.PDF"
+              text: "About / CV"
+              href: about.html
             - icon: pin-map-fill
               text: "UFO Sightings Project"
               href: UFOs.html 
             - icon: bar-chart-fill
               text: "Data Collection and Production"
-              href: assignment 01.qmd
+              href: "assignment 01.html"
             - icon: github
               text: "Github"
               href: "https://github.com/EmilyRStern/"
+            - icon: linkedin
+              text: "Linkedin"
+              href: "https://www.linkedin.com/in/emily-stern-83479b154/"

@@ -1,0 +1,40 @@
+---
+title: "About Emily Stern"
+format: html
+---
+## Experience
+
+**Data Analyst** | Child Poverty Action Lab | Aug 2025 - Present
+
+**Junior Data Analyst** | Child Poverty Action Lab | Oct 2024 - Aug 2025
+
+**Project Intern** | VolunteerNow | Sep 2024 - Feb 2025
+
+**Data Analytics Intern** | Child Poverty Action Lab | May 2024 - Aug 2024
+
+**Impact Data Assistant** | Girls Inc. of Metropolitan Dallas | Jan 2024 - Aug 2024
+
+**NSF REU Fellow** | National Science Foundation | Aug 2023 - Aug 2024
+
+**Crisis Advocate** | Hope's Door New Beginning Center | Jan 2023 - Dec 2023
+
+## Education
+
+**Master's in Social Data Analytics and Research** | University of Texas at Dallas | *In Progress*
+
+**Bachelor's in Psychology** | University of Texas at Dallas
+
+## Skills
+
+<span class="skill-tag">R</span>
+<span class="skill-tag">Quarto</span>
+<span class="skill-tag">Data Analysis</span>
+<span class="skill-tag">Program Evaluation</span>
+<span class="skill-tag">Research</span>
+
+## Resources
+
+- [Research CV (PDF)](Emily Stern Research CV.pdf)
+- [GitHub Portfolio](https://github.com/EmilyRStern/)
+- [Linkedin](https://www.linkedin.com/in/emily-stern-83479b154/)
+

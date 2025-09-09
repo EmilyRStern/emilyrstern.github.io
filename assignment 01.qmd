@@ -3,4 +3,7 @@ title: "assignment 01"
 format: html
 ---
 
-This website was created using Quarto. The Cosmos theme was used for a professional look. Also included is my research CV, and my project from the 2024 Coding Camp.  
+This website was created using Quarto. I started by creating the contents with a basic cosmos theme. However to create custom CSS, I utilized Claude.
+
+To do this I configured Python-based API integration, that establishes a local server bridge between Claude and my RStudio IDE. Claude's first attempt at CSS was rather ugly though, so it required some significant adjustments to get right. 
+
