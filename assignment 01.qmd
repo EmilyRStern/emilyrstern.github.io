@@ -4,12 +4,324 @@ format: html
 ---
 
 <details>
-  <summary>Assignment 01</summary>
+  <summary> Assignment 01</summary>
 
 This website was created using Quarto. I started by creating the contents with a basic cosmos theme. However to create custom CSS, I utilized Claude.
 
 To do this I configured Python-based API integration, that establishes a local server bridge between Claude and my RStudio IDE. Claude's first attempt at CSS was rather ugly though, so it required some significant adjustments to get right. 
 
 I have included my bio on the home page, as well as links to main projects. My CV is currently being developed, but is present in the menu as well. There's also a bit of my work around this site, as well as links to my other professional social medias. 
+
+</details>
+
+<details>
+  <summary> Assignment 02</summary>
+
+The manual download method is straightforward - just point, click, and download from the Google Trends website. It's fine for quick one-off analyses when you don't need to repeat the process. But it's time-consuming if you're working with multiple queries, impossible to automate, and not reproducible without detailed documentation.
+
+The gtrendsR package approach requires some R knowledge upfront, but it's much more efficient for anything beyond a single exploratory analysis. Everything is scripted, so your methodology is transparent and reproducible. You can batch multiple queries, automate recurring data collection, and the data comes back as clean R data frames ready for analysis - no manual formatting needed.
+
+For research projects or any analysis you'll need to update regularly, the programmatic method is the clear choice. The initial learning curve pays off quickly in time saved and better documentation.
+
+
+```{r}
+#| echo: false
+#| warning: false
+library(knitr)
+library(gtrendsR)
+library(tidyverse)
+library(scales)
+
+mydata<- read.csv("data/multiTimeline.csv")
+plot(mydata$Donald.Trump)
+plot(mydata$Kamala.Harris)
+plot(mydata$Election)
+
+```
+
+</details>
+
+<details>
+  <summary> Assignment 03</summary>
+  
+```{r}
+# Load packages
+library(tidycensus)
+library(tidyverse)
+library(sf)
+
+# Examine variables to find codes
+acsb <- load_variables(2023, "acs5", cache = TRUE)
+acss <- load_variables(2023, "acs5/subject", cache = TRUE)
+
+# Import demographic variables from TidyCensus
+acs_var <- c(
+  med_inc = "B19013_001",    # median household income
+  med_rent = "B25031_001",   # median monthly housing costs
+  soc_hisp = "B03002_012"    # Hispanic/Latino population (if you need this for filtering)
+)
+
+# Get Texas county data
+county_data <- get_acs(
+  geography = "county", 
+  state = "TX",
+  variables = acs_var,
+  year = 2023, 
+  survey = "acs5", 
+  output = "wide",
+  geometry = TRUE
+) 
+
+# Create map
+texas_map <- ggplot() +
+  geom_sf(data = county_data, 
+          aes(fill = med_incE),  # Changed to use actual variable
+          color = "white", 
+          linewidth = 0.2) +
+  scale_fill_viridis_c(option = "magma") +  # Added color scale
+  theme_minimal() +
+  labs(fill = "Median Income")
+
+texas_map
+```
+
+</details>
+
+<details>
+  <summary> Assignment 04</summary>
+
+  
+
+Setup
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(stringr)
+library(knitr)
+```
+
+Part 1: Scrape Foreign Exchange Reserves from Wikipedia
+
+
+```{r}
+# Target URL
+url <- 'https://en.wikipedia.org/wiki/List_of_countries_by_foreign-exchange_reserves'
+
+# Read HTML
+wikiforreserve <- read_html(url)
+
+# Extract table using XPath
+foreignreserve <- wikiforreserve %>%
+  html_nodes(xpath='//*[@id="mw-content-text"]/div[1]/table[1]') %>%
+  html_table()
+
+# Convert to dataframe
+fores <- foreignreserve[[1]]
+
+# Assign clean column names
+names(fores) <- c("Rank", "Country", "Forexres", "Date", "Change", "Sources")
+
+# Display first 10 countries
+head(fores, 10) %>% kable()
+```
+
+Clean the Data
+
+ Fix Date Variable
+
+```{r}
+# Remove citation brackets from Date column
+fores$newdate <- str_split_fixed(fores$Date, "\\[", n = 2)[, 1]
+fores$newdate <- trimws(fores$newdate)
+
+# Convert to proper date format
+fores$clean_date <- as.Date(fores$newdate, format = "%d %B %Y")
+
+# Show before/after
+fores %>%
+  select(Country, Date, newdate, clean_date) %>%
+  head(5) %>%
+  kable()
+```
+
+Remove Unneeded Rows and Columns
+
+```{r}
+# First, check what column names you actually have
+print(colnames(fores))
+
+if(ncol(fores) >= 6) {
+  names(fores)[1:6] <- c("Rank", "Country", "Forexres", "Date", "Change", "Sources")
+  # If there are extra columns, name them too
+  if(ncol(fores) > 6) {
+    names(fores)[7:ncol(fores)] <- paste0("Extra", 1:(ncol(fores)-6))
+  }
+}
+
+# NOW do your cleaning
+fores_clean <- fores %>%
+  slice(-c(1, 2)) %>%                  # Skip first 2 rows
+  filter(Rank != "Rank") %>%           # Remove repeated headers
+  filter(!is.na(Country)) %>%          # Remove empty rows
+  select(Rank, Country, Forexres, Date) 
+
+# Convert Rank to numeric
+fores_clean$Rank <- as.numeric(fores_clean$Rank)
+
+# Display cleaned data
+head(fores_clean, 10) %>% kable()
+```
+
+ Summary Statistics
+
+```{r}
+cat("Total countries/entities:", nrow(fores_clean), "\n")
+cat("Date range:", min(fores_clean$Date, na.rm = TRUE), "to", 
+    max(fores_clean$Date, na.rm = TRUE), "\n")
+```
+
+ Save Cleaned Data
+
+```{r}
+# write.csv(fores_clean, "foreign_reserves_clean.csv", row.names = FALSE)
+```
+
+Part 2: Scrape Another Wikipedia Table
+
+```{r}
+# Different Wikipedia table
+gdp_url <- 'https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)'
+
+# Read HTML
+gdp_html <- read_html(gdp_url)
+
+# Extract ALL tables first to see what's available
+all_tables <- gdp_html %>%
+  html_table(fill = TRUE)
+
+# Check how many tables were found
+cat("Number of tables found:", length(all_tables), "\n")
+
+# Usually the main GDP table is one of the first few
+# Try different table numbers to find the right one
+gdp_data <- all_tables[[3]]  # Adjust this number based on what you find
+
+# OR use class selector instead of XPath
+gdp_table <- gdp_html %>%
+  html_nodes("table.wikitable") %>%
+  html_table(fill = TRUE)
+
+# Take the first wikitable
+if(length(gdp_table) > 0) {
+  gdp_data <- gdp_table[[1]]
+} else {
+  stop("No GDP table found")
+}
+
+# Clean column names
+names(gdp_data) <- names(gdp_data)[1:ncol(gdp_data)]  # Keep existing names for now
+
+# Display to see structure
+head(gdp_data) %>% kable()
+```
+
+Part 3: Data Collection Plan for Research
+
+ Proposed Research Question
+**How do economic indicators (GDP, foreign reserves) relate to housing stability and child poverty outcomes in different countries?**
+
+ Data Acquisition Plan
+
+ 1. **Economic Data Sources (Web Scraping)**
+
+**Wikipedia Tables (using rvest):**
+- Foreign exchange reserves (already completed)
+- GDP by country
+- Public debt levels
+- Government spending on social programs
+
+**World Bank Data Portal:**
+- Use API or web scraping for poverty rates
+- Social protection indicators
+- Housing affordability metrics
+
+2. **Data Collection Strategy**
+
+```{r eval=FALSE}
+# Automated collection function
+scrape_wiki_economic_data <- function(url, table_num, col_names) {
+  page <- read_html(url)
+  
+  table <- page %>%
+    html_nodes(xpath = paste0('//*[@id="mw-content-text"]/div[1]/table[', 
+                              table_num, ']')) %>%
+    html_table()
+  
+  df <- table[[1]]
+  names(df) <- col_names
+  
+  return(df)
+}
+
+# Example usage - collect multiple tables
+urls <- c(
+  reserves = "https://en.wikipedia.org/wiki/List_of_countries_by_foreign-exchange_reserves",
+  gdp = "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)",
+  debt = "https://en.wikipedia.org/wiki/List_of_countries_by_public_debt"
+)
+
+# Loop through and collect all tables
+all_economic_data <- map(urls, ~{
+  read_html(.x) %>%
+    html_table() %>%
+    pluck(1)
+})
+```
+
+3. **Data Processing Pipeline**
+
+**Steps:**
+1. Scrape data weekly to track changes
+2. Standardize country names across tables
+3. Convert all monetary values to USD
+4. Handle missing data and citations
+5. Merge tables by country name
+6. Export to clean CSV files
+
+**Quality Checks:**
+- Validate date formats
+- Check for duplicate entries
+- Flag outliers
+- Document data sources
+
+ Conclusion
+
+Web scraping with rvest provides efficient access to tabular data from Wikipedia and similar sources. Key lessons:
+
+1. **XPath selection** accurately targets specific tables
+2. **Data cleaning** is essential - dates, citations, and formatting need attention
+3. **Reproducible workflows** allow regular data updates
+4. **Responsible scraping** respects website terms and server load
+
+For research purposes, combining web scraping with official APIs creates comprehensive datasets while maintaining data quality and ethical standards.
+
+
+</details>
+
+<details>
+  <summary>Assignment 05</summary>
+
+  
+Scraped data, as retrieved, tells us little about the full content of the text without using advanced analysis. The meta data is more immediately useful, if there are questions regarding the number of hearings on a day, and what the hearing is about. 
+  
+Improving this is possible with ETL designed based on the use case. To broadly improve the  applications of the data set, we would create new variables by parsing out the content of the text strings. For example, creating a variable by matching words in the title to a list of known countries. If an individual is interested in only one topic within public affairs, they could filter only titles related to this topic. If we want to know what congress is talking about broadly, we can use text mining to understand what topics have been occurring within a given date range. 
+
+</details>
+
+<details>
+  <summary>Assignment 06</summary>
+
+
 
 </details>
