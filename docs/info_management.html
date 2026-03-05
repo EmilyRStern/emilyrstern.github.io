@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>EPPS 6354: Information Management</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+          <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bmenub" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text"><b>Menu</b></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bmenub">    
+        <li>
+    <a class="dropdown-item" href="./index.html"><i class="bi bi-house-door-fill" role="img">
+</i> 
+ <span class="dropdown-text">Home</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./about.html"><i class="bi bi-card-text" role="img">
+</i> 
+ <span class="dropdown-text">About / CV</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./UFOs.html"><i class="bi bi-pin-map-fill" role="img">
+</i> 
+ <span class="dropdown-text">UFO Sightings Project</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./assignment 01.html"><i class="bi bi-bar-chart-fill" role="img">
+</i> 
+ <span class="dropdown-text">Data Collection and Production</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./knowledge_mining.html"><i class="bi bi-cpu-fill" role="img">
+</i> 
+ <span class="dropdown-text">EPPS 6323: Knowledge Mining</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./info_management.html"><i class="bi bi-database-fill" role="img">
+</i> 
+ <span class="dropdown-text">EPPS 6354: Information Management</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/EmilyRStern/"><i class="bi bi-github" role="img">
+</i> 
+ <span class="dropdown-text">Github</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.linkedin.com/in/emily-stern-83479b154/"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="dropdown-text">Linkedin</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          <div class="quarto-navbar-tools">
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">EPPS 6354: Information Management</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<details>
+<summary>
+Assignment 01: Introduction to Database Systems
+</summary>
+<section id="question-1-three-applications-using-database-systems" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-three-applications-using-database-systems">Question 1: Three Applications Using Database Systems</h3>
+<p>At work, I use Databricks as a cloud data platform to store and analyze large datasets. These datasets are stored in structured tables within a data lakehouse architecture and accessed using SQL queries and data pipelines written in R and Python.</p>
+<p>A second example is Google Search, which stores and indexes vast amounts of information from websites across the internet. When a user enters a query, Google retrieves relevant results from its indexed database of web pages. The system relies on large-scale databases to store page content, metadata, and ranking signals, making it a clear example of a database-driven application.</p>
+<p>Finally, I frequently use Google Sheets to store and manage structured data for collaborative projects. Information is stored in rows and columns and can be accessed through formulas, filters, and queries. Because the data persist over time, can be updated by multiple users, and can be searched or analyzed through structured queries, Google Sheets functions as a lightweight database-driven application.</p>
+</section>
+<section id="question-2-domain-project-proposals" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-domain-project-proposals">Question 2: Domain Project Proposals</h3>
+<p><em>[To be completed: Propose three applications in domain projects. For each, include:]</em></p>
+<p><strong>Application 1: Community Risk Mapping</strong></p>
+<ul>
+<li><em>Purpose:</em> Help policymakers identify neighborhoods where targeted interventions could improve community outcomes.</li>
+<li><em>Functions:</em> Store data on crime, evictions, and demographic indicators; allow filtering by location and time; generate maps and summary statistics.</li>
+<li><em>Simple interface design:</em> An interactive map dashboard with a sidebar for selecting indicators and date ranges, with charts updating automatically.</li>
+</ul>
+<p><strong>Application 2: Federal Grant Opportunity Tracker</strong></p>
+<ul>
+<li><em>Purpose:</em> Track federal grant opportunities and record changes or removals over time.</li>
+<li><em>Functions:</em> Store grant details (agency, funding amount, deadlines); allow searching and filtering; track historical changes to opportunities.</li>
+<li><em>Simple interface design:</em> A searchable table of grants with filters and a detail page showing grant information and change history.</li>
+</ul>
+<p><strong>Application 3: School–Eviction Impact Tool</strong></p>
+<ul>
+<li><em>Purpose:</em> Analyze how eviction filings relate to student attendance and outcomes.</li>
+<li><em>Functions:</em> Link eviction and student data, identify high-impact apartment complexes, and generate summary statistics.</li>
+<li><em>Simple interface design:</em> A dashboard with charts and tables showing eviction-related indicators by school and neighborhood.</li>
+</ul>
+</section>
+<section id="question-4-why-did-nosql-systems-emerge" class="level3">
+<h3 class="anchored" data-anchor-id="question-4-why-did-nosql-systems-emerge">Question 4: Why Did NoSQL Systems Emerge?</h3>
+<p>NoSQL systems emerged in the 2000s driven by the explosive growth of web-scale applications (Google, Amazon, Facebook) that required handling massive volumes of unstructured and semi-structured data with high availability and horizontal scalability. Traditional relational databases enforced rigid schemas and ACID transactions that created bottlenecks at scale.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 52%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Relational (SQL)</th>
+<th>NoSQL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Schema</strong></td>
+<td>Fixed, predefined schema</td>
+<td>Flexible, schema-less</td>
+</tr>
+<tr class="even">
+<td><strong>Scaling</strong></td>
+<td>Vertical (bigger hardware)</td>
+<td>Horizontal (add more nodes)</td>
+</tr>
+<tr class="odd">
+<td><strong>Data model</strong></td>
+<td>Tables with rows and columns</td>
+<td>Document, key-value, graph, or column-family</td>
+</tr>
+<tr class="even">
+<td><strong>Transactions</strong></td>
+<td>ACID compliance</td>
+<td>BASE (eventual consistency)</td>
+</tr>
+<tr class="odd">
+<td><strong>Query language</strong></td>
+<td>Standardized SQL</td>
+<td>Varies by system</td>
+</tr>
+<tr class="even">
+<td><strong>Best for</strong></td>
+<td>Complex queries, joins, integrity</td>
+<td>High volume, rapid iteration, distributed data</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="question-6-social-media-database-tables" class="level3">
+<h3 class="anchored" data-anchor-id="question-6-social-media-database-tables">Question 6: Social Media Database Tables</h3>
+<p>For a social media platform like Reddit, at least three core tables would be needed:</p>
+<p><strong>1. Users</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>user_id (PK)</td>
+<td>INT</td>
+<td>Auto-increment</td>
+</tr>
+<tr class="even">
+<td>username</td>
+<td>VARCHAR</td>
+<td>Unique</td>
+</tr>
+<tr class="odd">
+<td>email</td>
+<td>VARCHAR</td>
+<td>Unique</td>
+</tr>
+<tr class="even">
+<td>created_at</td>
+<td>DATETIME</td>
+<td>Registration timestamp</td>
+</tr>
+<tr class="odd">
+<td>karma_score</td>
+<td>INT</td>
+<td>Derived from post/comment votes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. Posts</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>post_id (PK)</td>
+<td>INT</td>
+<td>Auto-increment</td>
+</tr>
+<tr class="even">
+<td>user_id (FK)</td>
+<td>INT</td>
+<td>References Users</td>
+</tr>
+<tr class="odd">
+<td>subreddit_id (FK)</td>
+<td>INT</td>
+<td>References Subreddits</td>
+</tr>
+<tr class="even">
+<td>title</td>
+<td>VARCHAR</td>
+<td>Post title</td>
+</tr>
+<tr class="odd">
+<td>body</td>
+<td>TEXT</td>
+<td>Post content</td>
+</tr>
+<tr class="even">
+<td>created_at</td>
+<td>DATETIME</td>
+<td>Post timestamp</td>
+</tr>
+<tr class="odd">
+<td>score</td>
+<td>INT</td>
+<td>Upvotes minus downvotes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3. Comments</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 38%">
+<col style="width: 28%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>comment_id (PK)</td>
+<td>INT</td>
+<td>Auto-increment</td>
+</tr>
+<tr class="even">
+<td>post_id (FK)</td>
+<td>INT</td>
+<td>References Posts</td>
+</tr>
+<tr class="odd">
+<td>user_id (FK)</td>
+<td>INT</td>
+<td>References Users</td>
+</tr>
+<tr class="even">
+<td>parent_comment_id (FK)</td>
+<td>INT</td>
+<td>NULL if top-level; self-referencing for threads</td>
+</tr>
+<tr class="odd">
+<td>body</td>
+<td>TEXT</td>
+<td>Comment content</td>
+</tr>
+<tr class="even">
+<td>created_at</td>
+<td>DATETIME</td>
+<td>Comment timestamp</td>
+</tr>
+<tr class="odd">
+<td>score</td>
+<td>INT</td>
+<td>Upvotes minus downvotes</td>
+</tr>
+</tbody>
+</table>
+<p>The self-referencing foreign key in Comments (<code>parent_comment_id</code>) enables Reddit’s nested thread structure, where a comment can be a reply to another comment rather than directly to the post.</p>
+</section></details>
+<details>
+<summary>
+Assignment 02: The Relational Model
+</summary>
+
+<section id="question-1-schema-relation-and-instance" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-schema-relation-and-instance">Question 1: Schema, Relation, and Instance</h3>
+<ul>
+<li><p><strong>Relation schema</strong> defines the structure — the name of the relation and its attributes with their domains. It is like a blueprint. Example: <code>instructor(ID, name, dept_name, salary)</code></p></li>
+<li><p><strong>Relation</strong> is a table that conforms to a given schema. It is the named structure itself, persisting across changes in the data.</p></li>
+<li><p><strong>Instance</strong> is a specific snapshot of the data in a relation at a given point in time — the actual set of tuples (rows). For example, the instructor relation might currently contain 50 rows; next semester after hiring, it might contain 53.</p></li>
+</ul>
+<p><strong>University database example:</strong> The schema <code>student(ID, name, dept_name, tot_cred)</code> defines what a student record looks like. The <em>relation</em> <code>student</code> is the logical table. The <em>instance</em> is the current set of enrolled students with their actual IDs, names, departments, and credits.</p>
+</section>
+<section id="question-2-bank-database-schema-diagram" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-bank-database-schema-diagram">Question 2: Bank Database Schema Diagram</h3>
+<p>Given the bank database:</p>
+<pre><code>branch(branch_name, branch_city, assets)
+customer(ID, customer_name, customer_street, customer_city)
+loan(loan_number, branch_name, amount)
+borrower(ID, loan_number)
+account(account_number, branch_name, balance)
+depositor(ID, account_number)</code></pre>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    branch {
+        string branch_name PK
+        string branch_city
+        decimal assets
+    }
+    customer {
+        int ID PK
+        string customer_name
+        string customer_street
+        string customer_city
+    }
+    loan {
+        int loan_number PK
+        string branch_name FK
+        decimal amount
+    }
+    borrower {
+        int ID FK
+        int loan_number FK
+    }
+    account {
+        int account_number PK
+        string branch_name FK
+        decimal balance
+    }
+    depositor {
+        int ID FK
+        int account_number FK
+    }
+    branch ||--o{ loan : "issues"
+    branch ||--o{ account : "holds"
+    customer ||--o{ borrower : "borrows"
+    loan ||--o{ borrower : "borrowed_by"
+    customer ||--o{ depositor : "deposits"
+    account ||--o{ depositor : "held_by"
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="question-3-primary-and-foreign-keys" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-primary-and-foreign-keys">Question 3: Primary and Foreign Keys</h3>
+<p><strong>Primary Keys</strong> (underlined in diagram above):</p>
+<ul>
+<li><code>branch</code>: <strong>branch_name</strong></li>
+<li><code>customer</code>: <strong>ID</strong> (though customer_name is also unique)</li>
+<li><code>loan</code>: <strong>loan_number</strong></li>
+<li><code>borrower</code>: <strong>(ID, loan_number)</strong> — composite, since loans can be associated with multiple customers</li>
+<li><code>account</code>: <strong>account_number</strong></li>
+<li><code>depositor</code>: <strong>(ID, account_number)</strong> — composite, since accounts can be associated with multiple customers</li>
+</ul>
+<p><strong>Foreign Keys:</strong></p>
+<ul>
+<li><code>loan.branch_name</code> → <code>branch.branch_name</code></li>
+<li><code>borrower.ID</code> → <code>customer.ID</code></li>
+<li><code>borrower.loan_number</code> → <code>loan.loan_number</code></li>
+<li><code>account.branch_name</code> → <code>branch.branch_name</code></li>
+<li><code>depositor.ID</code> → <code>customer.ID</code></li>
+<li><code>depositor.account_number</code> → <code>account.account_number</code></li>
+</ul>
+</section>
+<section id="question-4-ai-llm-applications-in-database-management" class="level3">
+<h3 class="anchored" data-anchor-id="question-4-ai-llm-applications-in-database-management">Question 4: AI / LLM Applications in Database Management</h3>
+<p><strong>Natural Language to SQL Translation:</strong> LLMs can convert plain-English questions (e.g., “Which customers have loans over $10,000?”) into executable SQL queries, reducing the barrier to entry for non-technical users. Traditional approaches require users to know SQL syntax, but an LLM-powered interface lets analysts query data conversationally, improving both speed and accessibility.</p>
+<p><strong>Automated Schema Optimization and Anomaly Detection:</strong> AI models can analyze query logs and data distributions to recommend indexing strategies, detect normalization violations, or flag anomalous data patterns. Where a traditional DBA would manually review performance metrics, an AI system continuously monitors and suggests optimizations — catching issues like missing indexes or unusual INSERT patterns that might indicate data quality problems.</p>
+</section></details>
+<details>
+<summary>
+Assignment 03: SQL Queries (University Database)
+</summary>
+<p>All queries run against the <a href="https://www.db-book.com/university-lab-dir/sqljs.html">Online SQL Interpreter</a> for the university database.</p>
+
+<section id="question-2-basic-listings" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-basic-listings">Question 2: Basic Listings</h3>
+<p><strong>i. Student IDs (from the takes relation):</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="kw">ID</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> takes;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>ii. Instructors:</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> instructor;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>iii. Departments:</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> department;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="question-3-sql-queries" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-sql-queries">Question 3: SQL Queries</h3>
+<p><strong>i. ID and name of each student who has taken at least one Comp. Sci. course (no duplicates):</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> student.<span class="kw">ID</span>, student.name</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> student</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> takes <span class="kw">ON</span> student.<span class="kw">ID</span> <span class="op">=</span> takes.<span class="kw">ID</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> course <span class="kw">ON</span> takes.course_id <span class="op">=</span> course.course_id</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> course.dept_name <span class="op">=</span> <span class="st">'Comp. Sci.'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>ii. Add grades to the list:</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> student.<span class="kw">ID</span>, student.name, takes.grade</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> student</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> takes <span class="kw">ON</span> student.<span class="kw">ID</span> <span class="op">=</span> takes.<span class="kw">ID</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> course <span class="kw">ON</span> takes.course_id <span class="op">=</span> course.course_id</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> course.dept_name <span class="op">=</span> <span class="st">'Comp. Sci.'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>iii. Students who have not taken any course offered before 2017:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">ID</span>, name</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> student</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">ID</span> <span class="kw">NOT</span> <span class="kw">IN</span> (</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="kw">ID</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> takes</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> <span class="dt">year</span> <span class="op">&lt;</span> <span class="dv">2017</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>iv. Maximum salary of instructors per department:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> dept_name, <span class="fu">MAX</span>(salary) <span class="kw">AS</span> max_salary</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> instructor</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> dept_name;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>v. Lowest of the per-department maximum salaries:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">MIN</span>(max_salary)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> dept_name, <span class="fu">MAX</span>(salary) <span class="kw">AS</span> max_salary</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> instructor</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">GROUP</span> <span class="kw">BY</span> dept_name</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>vi. Add names (department with the lowest max salary):</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> dept_name, max_salary</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> (</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> dept_name, <span class="fu">MAX</span>(salary) <span class="kw">AS</span> max_salary</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> instructor</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">GROUP</span> <span class="kw">BY</span> dept_name</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> max_salary <span class="op">=</span> (</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="fu">MIN</span>(max_salary)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> (</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span> <span class="fu">MAX</span>(salary) <span class="kw">AS</span> max_salary</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">FROM</span> instructor</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">GROUP</span> <span class="kw">BY</span> dept_name</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="question-5-number-of-students-in-each-section" class="level3">
+<h3 class="anchored" data-anchor-id="question-5-number-of-students-in-each-section">Question 5: Number of Students in Each Section</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> course_id <span class="kw">AS</span> courseid, sec_id <span class="kw">AS</span> secid, <span class="dt">year</span>, semester,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">COUNT</span>(<span class="kw">ID</span>) <span class="kw">AS</span> num</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> takes</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> course_id, sec_id, <span class="dt">year</span>, semester;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section></details>
+<details>
+<summary>
+Assignment 04: E-R Diagrams and Advanced SQL
+</summary>
+
+<section id="question-1-weak-vs.-strong-entity-sets" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-weak-vs.-strong-entity-sets">Question 1: Weak vs.&nbsp;Strong Entity Sets</h3>
+<p>A <strong>strong entity set</strong> has a primary key that uniquely identifies each entity on its own. A <strong>weak entity set</strong> cannot be uniquely identified by its own attributes alone — it depends on a related strong (identifying) entity.</p>
+<p><strong>Example:</strong> Consider a <code>Building</code> entity and a <code>Room</code> entity. Each building has a unique <code>building_id</code>. However, room numbers (like “101”) are only unique <em>within</em> a building — Room 101 in the Science Building is different from Room 101 in the Library. So <code>Room</code> is a weak entity set: its discriminator is <code>room_number</code>, but it requires the <code>building_id</code> from its identifying entity <code>Building</code> to be uniquely identified. The full key is <code>(building_id, room_number)</code>.</p>
+</section>
+<section id="question-2-sports-team-e-r-diagram-soccer" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-sports-team-e-r-diagram-soccer">Question 2: Sports Team E-R Diagram (Soccer)</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    Team {
+        int team_id PK
+        string team_name
+        string city
+        int total_wins "derived"
+        int total_goals_scored "derived"
+    }
+    Player {
+        int player_id PK
+        string name
+        string position
+        int team_id FK
+        int career_goals "derived"
+    }
+    Match {
+        int match_id PK
+        date match_date
+        string venue
+        int home_team_id FK
+        int away_team_id FK
+        int home_score
+        int away_score
+    }
+    Player_Match_Stats {
+        int player_id FK
+        int match_id FK
+        int goals_scored
+        int assists
+        int minutes_played
+        int yellow_cards
+        int red_cards
+    }
+    Team ||--o{ Player : "has"
+    Team ||--o{ Match : "plays_home"
+    Team ||--o{ Match : "plays_away"
+    Player ||--o{ Player_Match_Stats : "records"
+    Match ||--o{ Player_Match_Stats : "includes"
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Derived attributes:</strong></p>
+<ul>
+<li><code>Team.total_wins</code> = COUNT of matches where team’s score &gt; opponent’s score</li>
+<li><code>Team.total_goals_scored</code> = SUM of goals from all Player_Match_Stats for team players</li>
+<li><code>Player.career_goals</code> = SUM of <code>goals_scored</code> across all Player_Match_Stats for that player</li>
+</ul>
+</section>
+<section id="question-3a-natural-join-explanation" class="level3">
+<h3 class="anchored" data-anchor-id="question-3a-natural-join-explanation">Question 3a: Natural Join Explanation</h3>
+<p>Given:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> course_id, semester, <span class="dt">year</span>, sec_id, <span class="fu">avg</span>(tot_cred)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> takes <span class="kw">NATURAL</span> <span class="kw">JOIN</span> student</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="dt">year</span> <span class="op">=</span> <span class="dv">2017</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> course_id, semester, <span class="dt">year</span>, sec_id</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">count</span>(<span class="kw">ID</span>) <span class="op">&gt;=</span> <span class="dv">2</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Appending <code>NATURAL JOIN section</code> would not change the result because the <code>takes</code> relation already contains <code>course_id</code>, <code>sec_id</code>, <code>semester</code>, and <code>year</code> — which are exactly the attributes shared with <code>section</code>. Since every tuple in <code>takes</code> corresponds to an existing section, the natural join with <code>section</code> simply matches on these four attributes without filtering out any rows. No additional columns from <code>section</code> appear in the SELECT or WHERE clauses, so the output is identical.</p>
+</section>
+<section id="question-3b-students-who-never-took-a-course-outer-join" class="level3">
+<h3 class="anchored" data-anchor-id="question-3b-students-who-never-took-a-course-outer-join">Question 3b: Students Who Never Took a Course (Outer Join)</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> student.<span class="kw">ID</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> student</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> takes <span class="kw">ON</span> student.<span class="kw">ID</span> <span class="op">=</span> takes.<span class="kw">ID</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> takes.<span class="kw">ID</span> <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This left outer join preserves all students, including those with no matching rows in <code>takes</code>. The <code>WHERE takes.ID IS NULL</code> filter isolates students who have never enrolled in any course.</p>
+</section></details>
+<details>
+<summary>
+Assignment 05: Advanced E-R Concepts and SQL
+</summary>
+
+<section id="question-1-e-r-diagram-as-a-graph" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-e-r-diagram-as-a-graph">Question 1: E-R Diagram as a Graph</h3>
+<p><strong>a) The graph is disconnected:</strong> A disconnected E-R graph means the enterprise schema contains two or more independent groups of entity sets with no relationships connecting them. This indicates the database models separate, unrelated domains — for example, an HR module and an inventory module that share no entities or relationships. In practice, this may suggest the schema should be split into separate databases, or that a missing relationship needs to be modeled.</p>
+<p><strong>b) The graph has a cycle:</strong> A cycle means there are multiple relationship paths between the same set of entities. This can represent legitimate real-world complexity (e.g., an employee <em>works_in</em> a department and also <em>manages</em> a department, creating a cycle between Employee and Department). However, cycles can also signal redundancy, where the same fact is derivable through different paths. The designer should verify that each relationship in the cycle captures genuinely distinct semantics.</p>
+</section>
+<section id="question-3-why-do-weak-entity-sets-exist" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-why-do-weak-entity-sets-exist">Question 3: Why Do Weak Entity Sets Exist?</h3>
+<p>While we <em>can</em> convert any weak entity set to a strong one by adding the identifying entity’s key as an attribute, weak entity sets exist for important design reasons:</p>
+<ol type="1">
+<li><p><strong>Semantic clarity:</strong> A weak entity explicitly models the real-world dependency. A room does not conceptually exist without its building — making <code>Room</code> weak communicates this dependency directly in the schema.</p></li>
+<li><p><strong>Reduced redundancy:</strong> If we made <code>Room</code> strong by adding <code>building_id</code> as a regular attribute, the dependency relationship would be implicit rather than enforced by the schema. The weak entity formalism ensures referential integrity is structurally guaranteed.</p></li>
+<li><p><strong>Simpler discriminators:</strong> Weak entities can use short, natural discriminators (like <code>room_number</code>) without needing globally unique artificial keys, keeping the schema closer to how users naturally think about the data.</p></li>
+</ol>
+</section>
+<section id="question-4a-employee-database-sql" class="level3">
+<h3 class="anchored" data-anchor-id="question-4a-employee-database-sql">Question 4a: Employee Database SQL</h3>
+<p>Schema:</p>
+<pre><code>employee(ID, person_name, street, city)
+works(ID, company_name, salary)
+company(company_name, city)
+manages(ID, manager_id)</code></pre>
+<p><strong>i. Employees living in the same city as their company:</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> e.<span class="kw">ID</span>, e.person_name</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employee e, works w, company c</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> e.<span class="kw">ID</span> <span class="op">=</span> w.<span class="kw">ID</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> w.company_name <span class="op">=</span> c.company_name</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> e.city <span class="op">=</span> c.city;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>ii. Employees living in the same city and street as their manager:</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> e.<span class="kw">ID</span>, e.person_name</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employee e, manages m, employee mgr</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> e.<span class="kw">ID</span> <span class="op">=</span> m.<span class="kw">ID</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> m.manager_id <span class="op">=</span> mgr.<span class="kw">ID</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> e.city <span class="op">=</span> mgr.city</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> e.street <span class="op">=</span> mgr.street;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>iii. Employees earning more than the average salary at their company:</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> e.<span class="kw">ID</span>, e.person_name</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employee e, works w</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> e.<span class="kw">ID</span> <span class="op">=</span> w.<span class="kw">ID</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> w.salary <span class="op">&gt;</span> (</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">SELECT</span> <span class="fu">AVG</span>(w2.salary)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span> works w2</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">WHERE</span> w2.company_name <span class="op">=</span> w.company_name</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="question-4b-spring-2017-natural-join-issue" class="level3">
+<h3 class="anchored" data-anchor-id="question-4b-spring-2017-natural-join-issue">Question 4b: Spring 2017 Natural Join Issue</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> name, title</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> instructor <span class="kw">NATURAL</span> <span class="kw">JOIN</span> teaches <span class="kw">NATURAL</span> <span class="kw">JOIN</span> section <span class="kw">NATURAL</span> <span class="kw">JOIN</span> course</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> semester <span class="op">=</span> <span class="st">'Spring'</span> <span class="kw">AND</span> <span class="dt">year</span> <span class="op">=</span> <span class="dv">2017</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The problem is that <code>NATURAL JOIN</code> matches on <strong>all</strong> shared column names. Both <code>instructor</code> and <code>course</code> have a <code>dept_name</code> attribute, so the natural join chain inadvertently requires that the instructor’s department matches the course’s department. This filters out any instructor teaching a course outside their own department — a valid and common scenario (e.g., a Math professor teaching a Statistics course). The fix is to use explicit <code>JOIN ... ON</code> or <code>JOIN ... USING</code> to control which columns are matched.</p>
+</section></details>
+
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

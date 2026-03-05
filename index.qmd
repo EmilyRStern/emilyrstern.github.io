@@ -27,6 +27,12 @@ Interactive mapping of UFO sightings in the US over time, for EPPS 2024 Coding B
 ### [Methods of Data Collection and Production](assignment 01.html)
 Assignments for EPPS 6302.
 
+### [Knowledge Mining](knowledge_mining.html)
+Assignments for EPPS 6323.
+
+### [Information Management](info_management.html)
+Assignments for EPPS 6354.
+
 :::
 ---
 

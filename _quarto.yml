@@ -7,10 +7,7 @@ format:
   html:
     theme: cosmo
     css: styles.css
-    toc-title: Contents
-    toc: true
-    toc-depth: 3
-    toc-location: right
+    toc: false
 
 website:
   navbar:
@@ -32,6 +29,12 @@ website:
             - icon: bar-chart-fill
               text: "Data Collection and Production"
               href: "assignment 01.html"
+            - icon: cpu-fill
+              text: "EPPS 6323: Knowledge Mining"
+              href: knowledge_mining.html
+            - icon: database-fill
+              text: "EPPS 6354: Information Management"
+              href: info_management.html
             - icon: github
               text: "Github"
               href: "https://github.com/EmilyRStern/"

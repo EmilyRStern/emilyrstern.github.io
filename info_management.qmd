@@ -1,0 +1,457 @@
+---
+title: "EPPS 6354: Information Management"
+format: html
+---
+
+<details>
+  <summary> Assignment 01: Introduction to Database Systems</summary>
+
+### Question 1: Three Applications Using Database Systems
+
+At work, I use Databricks as a cloud data platform to store and analyze large datasets. These datasets are stored in structured tables within a data lakehouse architecture and accessed using SQL queries and data pipelines written in R and Python. 
+
+A second example is Google Search, which stores and indexes vast amounts of information from websites across the internet. When a user enters a query, Google retrieves relevant results from its indexed database of web pages. The system relies on large-scale databases to store page content, metadata, and ranking signals, making it a clear example of a database-driven application.
+
+Finally, I frequently use Google Sheets to store and manage structured data for collaborative projects. Information is stored in rows and columns and can be accessed through formulas, filters, and queries. Because the data persist over time, can be updated by multiple users, and can be searched or analyzed through structured queries, Google Sheets functions as a lightweight database-driven application.
+
+### Question 2: Domain Project Proposals
+
+**Application 1: Community Risk Mapping**
+
+- *Purpose:* Help policymakers identify neighborhoods where targeted interventions could improve community outcomes.
+- *Functions:* Store data on crime, evictions, and demographic indicators; allow filtering by location and time; generate maps and summary statistics.
+- *Simple interface design:* An interactive map dashboard with a sidebar for selecting indicators and date ranges, with charts updating automatically.
+
+**Application 2: Federal Grant Opportunity Tracker**
+
+- *Purpose:* Track federal grant opportunities and record changes or removals over time.
+- *Functions:* Store grant details (agency, funding amount, deadlines); allow searching and filtering; track historical changes to opportunities.
+- *Simple interface design:* A searchable table of grants with filters and a detail page showing grant information and change history.
+
+**Application 3: School–Eviction Impact Tool**
+
+- *Purpose:* Analyze how eviction filings relate to student attendance and outcomes.
+- *Functions:* Link eviction and student data, identify high-impact apartment complexes, and generate summary statistics.
+- *Simple interface design:* A dashboard with charts and tables showing eviction-related indicators by school and neighborhood.
+
+### Question 4: Why Did NoSQL Systems Emerge?
+
+NoSQL systems emerged in the 2000s driven by the explosive growth of web-scale applications (Google, Amazon, Facebook) that required handling massive volumes of unstructured and semi-structured data with high availability and horizontal scalability. Traditional relational databases enforced rigid schemas and ACID transactions that created bottlenecks at scale.
+
+| Feature | Relational (SQL) | NoSQL |
+|---------|------------------|-------|
+| **Schema** | Fixed, predefined schema | Flexible, schema-less |
+| **Scaling** | Vertical (bigger hardware) | Horizontal (add more nodes) |
+| **Data model** | Tables with rows and columns | Document, key-value, graph, or column-family |
+| **Transactions** | ACID compliance | BASE (eventual consistency) |
+| **Query language** | Standardized SQL | Varies by system |
+| **Best for** | Complex queries, joins, integrity | High volume, rapid iteration, distributed data |
+
+### Question 6: Social Media Database Tables
+
+For a social media platform like Reddit, at least three core tables would be needed:
+
+**1. Users**
+
+| Column | Type | Notes |
+|--------|------|-------|
+| user_id (PK) | INT | Auto-increment |
+| username | VARCHAR | Unique |
+| email | VARCHAR | Unique |
+| created_at | DATETIME | Registration timestamp |
+| karma_score | INT | Derived from post/comment votes |
+
+**2. Posts**
+
+| Column | Type | Notes |
+|--------|------|-------|
+| post_id (PK) | INT | Auto-increment |
+| user_id (FK) | INT | References Users |
+| subreddit_id (FK) | INT | References Subreddits |
+| title | VARCHAR | Post title |
+| body | TEXT | Post content |
+| created_at | DATETIME | Post timestamp |
+| score | INT | Upvotes minus downvotes |
+
+**3. Comments**
+
+| Column | Type | Notes |
+|--------|------|-------|
+| comment_id (PK) | INT | Auto-increment |
+| post_id (FK) | INT | References Posts |
+| user_id (FK) | INT | References Users |
+| parent_comment_id (FK) | INT | NULL if top-level; self-referencing for threads |
+| body | TEXT | Comment content |
+| created_at | DATETIME | Comment timestamp |
+| score | INT | Upvotes minus downvotes |
+
+The self-referencing foreign key in Comments (`parent_comment_id`) enables Reddit's nested thread structure, where a comment can be a reply to another comment rather than directly to the post.
+
+</details>
+
+<details>
+  <summary> Assignment 02: The Relational Model</summary>
+
+### Question 1: Schema, Relation, and Instance
+
+- **Relation schema** defines the structure — the name of the relation and its attributes with their domains. It is like a blueprint. Example: `instructor(ID, name, dept_name, salary)`
+
+- **Relation** is a table that conforms to a given schema. It is the named structure itself, persisting across changes in the data.
+
+- **Instance** is a specific snapshot of the data in a relation at a given point in time — the actual set of tuples (rows). For example, the instructor relation might currently contain 50 rows; next semester after hiring, it might contain 53.
+
+**University database example:** The schema `student(ID, name, dept_name, tot_cred)` defines what a student record looks like. The *relation* `student` is the logical table. The *instance* is the current set of enrolled students with their actual IDs, names, departments, and credits.
+
+### Question 2: Bank Database Schema Diagram
+
+Given the bank database:
+
+```
+branch(branch_name, branch_city, assets)
+customer(ID, customer_name, customer_street, customer_city)
+loan(loan_number, branch_name, amount)
+borrower(ID, loan_number)
+account(account_number, branch_name, balance)
+depositor(ID, account_number)
+```
+
+```{mermaid}
+erDiagram
+    branch {
+        string branch_name PK
+        string branch_city
+        decimal assets
+    }
+    customer {
+        int ID PK
+        string customer_name
+        string customer_street
+        string customer_city
+    }
+    loan {
+        int loan_number PK
+        string branch_name FK
+        decimal amount
+    }
+    borrower {
+        int ID FK
+        int loan_number FK
+    }
+    account {
+        int account_number PK
+        string branch_name FK
+        decimal balance
+    }
+    depositor {
+        int ID FK
+        int account_number FK
+    }
+    branch ||--o{ loan : "issues"
+    branch ||--o{ account : "holds"
+    customer ||--o{ borrower : "borrows"
+    loan ||--o{ borrower : "borrowed_by"
+    customer ||--o{ depositor : "deposits"
+    account ||--o{ depositor : "held_by"
+```
+
+### Question 3: Primary and Foreign Keys
+
+**Primary Keys** (underlined in diagram above):
+
+- `branch`: **branch_name**
+- `customer`: **ID** (though customer_name is also unique)
+- `loan`: **loan_number**
+- `borrower`: **(ID, loan_number)** — composite, since loans can be associated with multiple customers
+- `account`: **account_number**
+- `depositor`: **(ID, account_number)** — composite, since accounts can be associated with multiple customers
+
+**Foreign Keys:**
+
+- `loan.branch_name` → `branch.branch_name`
+- `borrower.ID` → `customer.ID`
+- `borrower.loan_number` → `loan.loan_number`
+- `account.branch_name` → `branch.branch_name`
+- `depositor.ID` → `customer.ID`
+- `depositor.account_number` → `account.account_number`
+
+### Question 4: AI / LLM Applications in Database Management
+
+**Natural Language to SQL Translation:** LLMs can convert plain-English questions (e.g., "Which customers have loans over $10,000?") into executable SQL queries, reducing the barrier to entry for non-technical users. Traditional approaches require users to know SQL syntax, but an LLM-powered interface lets analysts query data conversationally, improving both speed and accessibility.
+
+**Automated Schema Optimization and Anomaly Detection:** AI models can analyze query logs and data distributions to recommend indexing strategies, detect normalization violations, or flag anomalous data patterns. Where a traditional DBA would manually review performance metrics, an AI system continuously monitors and suggests optimizations — catching issues like missing indexes or unusual INSERT patterns that might indicate data quality problems.
+
+</details>
+
+<details>
+  <summary> Assignment 03: SQL Queries (University Database)</summary>
+
+All queries run against the [Online SQL Interpreter](https://www.db-book.com/university-lab-dir/sqljs.html) for the university database.
+
+### Question 2: Basic Listings
+
+**i. Student IDs (from the takes relation):**
+
+```sql
+SELECT DISTINCT ID
+FROM takes;
+```
+
+**ii. Instructors:**
+
+```sql
+SELECT *
+FROM instructor;
+```
+
+**iii. Departments:**
+
+```sql
+SELECT *
+FROM department;
+```
+
+### Question 3: SQL Queries
+
+**i. ID and name of each student who has taken at least one Comp. Sci. course (no duplicates):**
+
+```sql
+SELECT DISTINCT student.ID, student.name
+FROM student
+JOIN takes ON student.ID = takes.ID
+JOIN course ON takes.course_id = course.course_id
+WHERE course.dept_name = 'Comp. Sci.';
+```
+
+**ii. Add grades to the list:**
+
+```sql
+SELECT student.ID, student.name, takes.grade
+FROM student
+JOIN takes ON student.ID = takes.ID
+JOIN course ON takes.course_id = course.course_id
+WHERE course.dept_name = 'Comp. Sci.';
+```
+
+**iii. Students who have not taken any course offered before 2017:**
+
+```sql
+SELECT ID, name
+FROM student
+WHERE ID NOT IN (
+    SELECT DISTINCT ID
+    FROM takes
+    WHERE year < 2017
+);
+```
+
+**iv. Maximum salary of instructors per department:**
+
+```sql
+SELECT dept_name, MAX(salary) AS max_salary
+FROM instructor
+GROUP BY dept_name;
+```
+
+**v. Lowest of the per-department maximum salaries:**
+
+```sql
+SELECT MIN(max_salary)
+FROM (
+    SELECT dept_name, MAX(salary) AS max_salary
+    FROM instructor
+    GROUP BY dept_name
+);
+```
+
+**vi. Add names (department with the lowest max salary):**
+
+```sql
+SELECT dept_name, max_salary
+FROM (
+    SELECT dept_name, MAX(salary) AS max_salary
+    FROM instructor
+    GROUP BY dept_name
+)
+WHERE max_salary = (
+    SELECT MIN(max_salary)
+    FROM (
+        SELECT MAX(salary) AS max_salary
+        FROM instructor
+        GROUP BY dept_name
+    )
+);
+```
+
+### Question 5: Number of Students in Each Section
+
+```sql
+SELECT course_id AS courseid, sec_id AS secid, year, semester,
+       COUNT(ID) AS num
+FROM takes
+GROUP BY course_id, sec_id, year, semester;
+```
+
+</details>
+
+<details>
+  <summary> Assignment 04: E-R Diagrams and Advanced SQL</summary>
+
+### Question 1: Weak vs. Strong Entity Sets
+
+A **strong entity set** has a primary key that uniquely identifies each entity on its own. A **weak entity set** cannot be uniquely identified by its own attributes alone — it depends on a related strong (identifying) entity.
+
+**Example:** Consider a `Building` entity and a `Room` entity. Each building has a unique `building_id`. However, room numbers (like "101") are only unique *within* a building — Room 101 in the Science Building is different from Room 101 in the Library. So `Room` is a weak entity set: its discriminator is `room_number`, but it requires the `building_id` from its identifying entity `Building` to be uniquely identified. The full key is `(building_id, room_number)`.
+
+### Question 2: Sports Team E-R Diagram (Soccer)
+
+```{mermaid}
+erDiagram
+    Team {
+        int team_id PK
+        string team_name
+        string city
+        int total_wins "derived"
+        int total_goals_scored "derived"
+    }
+    Player {
+        int player_id PK
+        string name
+        string position
+        int team_id FK
+        int career_goals "derived"
+    }
+    Match {
+        int match_id PK
+        date match_date
+        string venue
+        int home_team_id FK
+        int away_team_id FK
+        int home_score
+        int away_score
+    }
+    Player_Match_Stats {
+        int player_id FK
+        int match_id FK
+        int goals_scored
+        int assists
+        int minutes_played
+        int yellow_cards
+        int red_cards
+    }
+    Team ||--o{ Player : "has"
+    Team ||--o{ Match : "plays_home"
+    Team ||--o{ Match : "plays_away"
+    Player ||--o{ Player_Match_Stats : "records"
+    Match ||--o{ Player_Match_Stats : "includes"
+```
+
+**Derived attributes:**
+
+- `Team.total_wins` = COUNT of matches where team's score > opponent's score
+- `Team.total_goals_scored` = SUM of goals from all Player_Match_Stats for team players
+- `Player.career_goals` = SUM of `goals_scored` across all Player_Match_Stats for that player
+
+### Question 3a: Natural Join Explanation
+
+Given:
+
+```sql
+SELECT course_id, semester, year, sec_id, avg(tot_cred)
+FROM takes NATURAL JOIN student
+WHERE year = 2017
+GROUP BY course_id, semester, year, sec_id
+HAVING count(ID) >= 2;
+```
+
+Appending `NATURAL JOIN section` would not change the result because the `takes` relation already contains `course_id`, `sec_id`, `semester`, and `year` — which are exactly the attributes shared with `section`. Since every tuple in `takes` corresponds to an existing section, the natural join with `section` simply matches on these four attributes without filtering out any rows. No additional columns from `section` appear in the SELECT or WHERE clauses, so the output is identical.
+
+### Question 3b: Students Who Never Took a Course (Outer Join)
+
+```sql
+SELECT student.ID
+FROM student
+LEFT OUTER JOIN takes ON student.ID = takes.ID
+WHERE takes.ID IS NULL;
+```
+
+This left outer join preserves all students, including those with no matching rows in `takes`. The `WHERE takes.ID IS NULL` filter isolates students who have never enrolled in any course.
+
+</details>
+
+<details>
+  <summary> Assignment 05: Advanced E-R Concepts and SQL</summary>
+
+### Question 1: E-R Diagram as a Graph
+
+**a) The graph is disconnected:**
+A disconnected E-R graph means the enterprise schema contains two or more independent groups of entity sets with no relationships connecting them. This indicates the database models separate, unrelated domains — for example, an HR module and an inventory module that share no entities or relationships. In practice, this may suggest the schema should be split into separate databases, or that a missing relationship needs to be modeled.
+
+**b) The graph has a cycle:**
+A cycle means there are multiple relationship paths between the same set of entities. This can represent legitimate real-world complexity (e.g., an employee *works_in* a department and also *manages* a department, creating a cycle between Employee and Department). However, cycles can also signal redundancy, where the same fact is derivable through different paths. The designer should verify that each relationship in the cycle captures genuinely distinct semantics.
+
+### Question 3: Why Do Weak Entity Sets Exist?
+
+While we *can* convert any weak entity set to a strong one by adding the identifying entity's key as an attribute, weak entity sets exist for important design reasons:
+
+1. **Semantic clarity:** A weak entity explicitly models the real-world dependency. A room does not conceptually exist without its building — making `Room` weak communicates this dependency directly in the schema.
+
+2. **Reduced redundancy:** If we made `Room` strong by adding `building_id` as a regular attribute, the dependency relationship would be implicit rather than enforced by the schema. The weak entity formalism ensures referential integrity is structurally guaranteed.
+
+3. **Simpler discriminators:** Weak entities can use short, natural discriminators (like `room_number`) without needing globally unique artificial keys, keeping the schema closer to how users naturally think about the data.
+
+### Question 4a: Employee Database SQL
+
+Schema:
+
+```
+employee(ID, person_name, street, city)
+works(ID, company_name, salary)
+company(company_name, city)
+manages(ID, manager_id)
+```
+
+**i. Employees living in the same city as their company:**
+
+```sql
+SELECT e.ID, e.person_name
+FROM employee e, works w, company c
+WHERE e.ID = w.ID
+  AND w.company_name = c.company_name
+  AND e.city = c.city;
+```
+
+**ii. Employees living in the same city and street as their manager:**
+
+```sql
+SELECT e.ID, e.person_name
+FROM employee e, manages m, employee mgr
+WHERE e.ID = m.ID
+  AND m.manager_id = mgr.ID
+  AND e.city = mgr.city
+  AND e.street = mgr.street;
+```
+
+**iii. Employees earning more than the average salary at their company:**
+
+```sql
+SELECT e.ID, e.person_name
+FROM employee e, works w
+WHERE e.ID = w.ID
+  AND w.salary > (
+      SELECT AVG(w2.salary)
+      FROM works w2
+      WHERE w2.company_name = w.company_name
+  );
+```
+
+### Question 4b: Spring 2017 Natural Join Issue
+
+```sql
+SELECT name, title
+FROM instructor NATURAL JOIN teaches NATURAL JOIN section NATURAL JOIN course
+WHERE semester = 'Spring' AND year = 2017
+```
+
+The problem is that `NATURAL JOIN` matches on **all** shared column names. Both `instructor` and `course` have a `dept_name` attribute, so the natural join chain inadvertently requires that the instructor's department matches the course's department. This filters out any instructor teaching a course outside their own department — a valid and common scenario (e.g., a Math professor teaching a Statistics course). The fix is to use explicit `JOIN ... ON` or `JOIN ... USING` to control which columns are matched.
+
+</details>
