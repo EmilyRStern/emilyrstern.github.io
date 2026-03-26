@@ -2,6 +2,110 @@
 title: "EPPS 6354: Information Management"
 format: html
 ---
+<details>
+  <summary> Progress 01: SQL Code and Scraping </summary>
+# Grants Pipeline
+
+## Bronze Stream
+
+```sql
+CREATE OR REFRESH STREAMING TABLE bronze_grants_stream
+AS SELECT 
+  *,
+  extraction_date as snapshot_date
+FROM STREAM(READ_FILES('bronze.national.grants_gov_extract_*'));
+```
+
+---
+
+## Master Table (SCD Type 2)
+
+```sql
+CREATE OR REFRESH STREAMING TABLE grants_master_table
+(
+  CONSTRAINT valid_opportunity_id EXPECT (OpportunityID IS NOT NULL)
+)
+AS
+  APPLY CHANGES INTO silver.national.grants_master_table
+  FROM STREAM(bronze_grants_stream)
+  KEYS (OpportunityID)
+  SEQUENCE BY snapshot_date
+  COLUMNS * EXCEPT (datemodified)
+  STORED AS SCD TYPE 2;
+```
+
+---
+
+## Views
+
+### Tab 1 — Active Grants
+
+```sql
+CREATE OR REPLACE VIEW silver.national.grants_active_current
+AS SELECT * 
+FROM silver.national.grants_master_table
+WHERE __CURRENT = true;
+```
+
+### Tab 2 — Changes with Previous Values
+
+```sql
+CREATE OR REPLACE VIEW silver.national.grants_changes_with_previous
+AS 
+WITH numbered_versions AS (
+  SELECT 
+    OpportunityID,
+    OpportunityTitle,
+    AgencyName,
+    CloseDate,
+    PostDate,
+    ArchiveDate,
+    AwardCeiling,
+    EstimatedTotalProgramFunding,
+    __START_AT as change_date,
+    __END_AT as superseded_date,
+    __CURRENT as is_current,
+    ROW_NUMBER() OVER (PARTITION BY OpportunityID ORDER BY __START_AT) as version_number
+  FROM silver.national.grants_master_table
+)
+SELECT 
+  curr.OpportunityID,
+  curr.OpportunityTitle,
+  curr.AgencyName,
+  
+  -- Current values
+  curr.CloseDate,
+  curr.PostDate,
+  curr.ArchiveDate,
+  curr.AwardCeiling,
+  curr.EstimatedTotalProgramFunding,
+  
+  -- Previous values (NULL for new grants)
+  prev.CloseDate                        as prev_CloseDate,
+  prev.PostDate                         as prev_PostDate,
+  prev.ArchiveDate                      as prev_ArchiveDate,
+  prev.AwardCeiling                     as prev_AwardCeiling,
+  prev.EstimatedTotalProgramFunding     as prev_EstimatedTotalProgramFunding,
+  
+  -- Metadata
+  curr.change_date,
+  curr.superseded_date,
+  curr.is_current,
+  curr.version_number,
+  
+  -- Change type
+  CASE 
+    WHEN prev.OpportunityID IS NULL THEN 'NEW'
+    WHEN curr.is_current = false    THEN 'MODIFIED'
+    ELSE                                 'CURRENT'
+  END as change_type
+  
+FROM numbered_versions curr
+LEFT JOIN numbered_versions prev 
+  ON curr.OpportunityID  = prev.OpportunityID 
+ AND curr.version_number = prev.version_number + 1;
+```
+</details>
 
 <details>
   <summary> Assignment 01: Introduction to Database Systems</summary>
