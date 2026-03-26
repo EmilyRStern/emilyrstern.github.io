@@ -6,7 +6,7 @@ format: html
 ::: {.homepage-intro}
 **Working to find good answers for difficult problems.** 
 
-![Emily Stern](Emily Stern Headshot.jpg){width=200 style="float: right; margin-left: 2rem; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"}
+![Emily Stern](docs/poster pic.jpeg){width=200 style="float: right; margin-left: 2rem; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"}
 :::
 
 Emily Stern is a Data Analyst at the Child Poverty Action Lab (CPAL), a nonprofit committed to cutting child poverty in Dallas in half within 20 years. Born and raised in the Dallas area, she's excited to apply her analytical skills to generating insights to drive progress towards this goal in her hometown.
