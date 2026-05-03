@@ -1,0 +1,576 @@
+/* ============================================================
+   EMILY STERN — ROUND TWO BRIEF · STYLES
+   ============================================================
+   Fonts loaded via Google Fonts CDN from the HTML head.
+   ============================================================ */
+
+/* ---- pandoc defaults ---- */
+code { white-space: pre-wrap; }
+span.smallcaps { font-variant: small-caps; }
+span.underline { text-decoration: underline; }
+div.column { display: inline-block; vertical-align: top; width: 50%; }
+div.hanging-indent { margin-left: 1.5em; text-indent: -1.5em; }
+ul.task-list { list-style: none; }
+.display.math { display: block; text-align: center; margin: 0.5rem auto; }
+
+/* ---- design tokens (Stern) ---- */
+:root {
+  /* Backgrounds & neutrals */
+  --bg-primary:    #FBF8F1;  /* stern_bg_primary    -- page bg, brighter cream */
+  --bg-secondary:  #F2EDDF;  /* stern_bg_secondary  -- sidebars, card headers */
+  --bg-surface:    #FFFFFF;  /* stern_bg_surface    -- plot panel / inputs */
+
+  /* Text */
+  --text-primary:  #2B2A1F;  /* stern_text_primary  -- headlines, numerals */
+  --text-body:     #4A4632;  /* stern_text_body     -- body copy, axis labels */
+  --text-muted:    #6E6A55;  /* stern_text_muted    -- captions, source notes */
+
+  /* Brand / accents
+     Stern has no teal -- olive is the primary brand color and sage is its
+     lighter complement. Mustard is the canonical highlight/focal color. */
+  --teal:          #5A6B3A;  /* stern_palette$olive   (was teal) */
+  --teal-light:    #8A9572;  /* stern_palette$sage    (was teal-light) */
+  --gold:          #C99B2A;  /* stern_palette$mustard (was gold) */
+  --gold-light:    #E5DEC2;  /* stern_border_soft -- closest light-warm tone;
+                                no true gold-light exists in Stern */
+
+  /* Borders */
+  --border:        #C9C0A4;  /* stern_border        -- panel borders, rules */
+  --border-strong: #2B2A1F;  /* stern_text_primary doubles as strong border */
+
+  /* Typography
+     Stern uses Source Serif 4 for both display and body -- no Playfair. */
+  --font-display:  'Source Serif 4', Georgia, serif;
+  --font-body:     'Source Serif 4', Charter, serif;
+  --font-label:    'Source Sans 3', 'Gill Sans', sans-serif;
+  --font-mono:     'Source Code Pro', Menlo, monospace;
+}
+
+/* ---- base ---- */
+html {
+  /* Dark warm tone backdrop fills the viewport behind the page */
+  background: #ECE4D0;
+}
+body {
+  /* Body becomes the "page" — minimal: true strips quarto wrappers, so
+     the constraint has to live here. */
+  background: var(--bg-primary) !important;
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 1500px;
+  margin: 40px auto;
+  padding: 80px 96px 96px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(43, 42, 31, 0.06);
+}
+.main-container,
+.container-fluid,
+div.main-container {
+  /* Legacy — only used if minimal:true is removed and quarto re-wraps */
+  max-width: 820px !important;
+  margin: 40px auto !important;
+  padding: 80px 96px 96px !important;
+  background: var(--bg-primary) !important;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(43, 42, 31, 0.06);
+}
+
+h1.title, h1.title.toc-ignore, .author, .date { display: none; }
+p { margin: 0 0 14px; }
+p strong { color: var(--text-primary); font-weight: 600; }
+a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+a:hover { color: var(--text-primary); }
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--bg-secondary);
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  color: var(--text-primary);
+}
+
+/* ---- header eyebrow ---- */
+.eyebrow {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+}
+.eyebrow span:first-child { color: var(--teal); font-weight: 600; }
+
+/* ---- title block ---- */
+.brief-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.3rem;
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+.deck {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--text-body);
+  margin: 0 0 8px;
+  max-width: 640px;
+}
+.byline {
+  font-family: var(--font-label);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+.byline strong { color: var(--text-primary); font-weight: 600; }
+
+/* ---- table of contents (jump links under byline) ---- */
+.toc {
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 16px 0;
+  margin: 0 0 56px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.toc p { margin: 0; }
+.toc a {
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0 4px;
+  transition: color 0.15s ease;
+}
+.toc a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---- sections ---- */
+.brief-section {
+  margin-bottom: 56px;
+}
+.section-num {
+  font-family: var(--font-label);
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--teal);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.brief-section h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.7rem;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin: 0 0 18px;
+  letter-spacing: -0.01em;
+  border: none;
+  padding: 0;
+}
+.brief-section h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin: 28px 0 8px;
+  border: none;
+  padding: 0;
+}
+
+/* ---- role-recap dl ---- */
+.role-recap {
+  background: var(--bg-secondary);
+  border-left: 3px solid var(--teal);
+  padding: 24px 28px;
+  margin: 24px 0;
+}
+.role-recap dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 10px 24px; }
+.role-recap dt {
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  font-weight: 600;
+  align-self: start;
+  padding-top: 4px;
+  white-space: nowrap;
+}
+.role-recap dd { margin: 0; color: var(--text-primary); font-size: 0.98rem; }
+
+/* ---- stat block ---- */
+.stat {
+  border: 2px solid var(--border-strong);
+  padding: 20px 24px;
+  margin: 24px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  color: var(--text-primary);
+  line-height: 1;
+  font-weight: 700;
+}
+.stat-text {
+  font-family: var(--font-label);
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ---- case study ---- */
+.case {
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  padding: 22px 24px;
+  margin-top: 14px;
+}
+.case-tag {
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Lede / intro paragraph (Section 01) */
+.intro {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+.intro p { margin: 0; }
+.case h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.35rem;
+}
+.case p { margin: 0 0 10px; }
+.case ul { margin: 0 0 10px; padding-left: 20px; }
+.case ul li { margin-bottom: 4px; }
+.case .repo {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--teal);
+  background: var(--bg-primary);
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+}
+
+/* Side-by-side case pair (renv + AI scaffolding) */
+.case-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 14px;
+}
+.case-pair > .case { margin-top: 0; }
+
+/* ---- ascii architecture block ---- */
+.arch {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 22px 24px;
+  margin: 16px 0 6px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-body);
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+}
+.arch .label { color: var(--text-muted); font-style: italic; }
+.arch .accent { color: var(--teal); font-weight: 600; }
+
+/* ---- decisions list ---- */
+.decisions {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  counter-reset: dec;
+}
+.decisions li {
+  counter-increment: dec;
+  padding: 26px 0 26px 60px;
+  border-top: 1px solid var(--border);
+  position: relative;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+.decisions li:last-child { border-bottom: 1px solid var(--border); }
+.decisions li::before {
+  content: counter(dec, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 26px;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: var(--gold);
+  line-height: 1;
+}
+.decisions .head {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-primary);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* ---- pipeline diagram + decisions side-by-side ---- */
+.pipeline-layout {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+  margin: 16px 0 6px;
+}
+.pipeline-chart {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+}
+.pipeline-chart p { margin: 0; }
+.pipeline-chart svg,
+.pipeline-chart img {
+  display: block;
+  width: auto;
+  height: clamp(520px, 90vh, 1000px);
+  max-width: 100%;
+  max-height: 100%;
+}
+/* Wide-variant override: horizontal flow chart fills the column instead */
+.pipeline-chart-wide svg,
+.pipeline-chart-wide img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+}
+.pipeline-decisions h3 { margin-top: 0; }
+.pipeline-decisions .decisions { margin-top: 10px; }
+
+/* Wide variant — horizontal flow chart (used in Databricks case) */
+.pipeline-chart-wide {
+  width: 100%;
+  max-width: clamp(480px, 95%, 720px);
+  margin: 16px auto 6px;
+}
+
+/* ---- phase blocks (section 5) ---- */
+.phase {
+  border-left: 3px solid var(--teal);
+  background: var(--bg-secondary);
+  padding: 18px 22px;
+  margin: 0;
+}
+.phase .when {
+  font-family: var(--font-label);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2px;
+}
+.phase h3 { margin: 0 0 8px; font-size: 1.2rem; }
+.phase p { margin: 0 0 8px; font-size: 0.95rem; }
+.phase ul { margin: 0 0 8px; padding-left: 18px; }
+.phase ul li { font-size: 0.95rem; margin-bottom: 2px; }
+
+/* 2x2 grid of phases (section 5) */
+.phase-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+/* ---- editor note ---- */
+.editor-note {
+  border: 1px dashed var(--border);
+  padding: 14px 18px;
+  margin: 14px 0 0;
+  font-family: var(--font-label);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  background: transparent;
+}
+.editor-note strong { color: var(--text-primary); font-weight: 600; }
+
+/* ---- link cards ---- */
+.links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 18px;
+}
+.link-card {
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  padding: 20px 22px;
+  text-decoration: none;
+  color: var(--text-primary);
+  display: block;
+  transition: border-color 0.15s ease;
+}
+.link-card:hover { border-color: var(--text-primary); color: var(--text-primary); text-decoration: none; }
+.link-card .kind {
+  font-family: var(--font-label);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--teal);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+.link-card .title-line {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.link-card .meta {
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ---- iframe slot (section 6) ---- */
+.iframe-slot {
+  margin-top: 18px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+.iframe-slot-head {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.iframe-slot-head .left {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.iframe-slot-head .right {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--teal);
+}
+.iframe-placeholder {
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+  font-family: var(--font-label);
+  font-size: 0.88rem;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--bg-surface),
+    var(--bg-surface) 10px,
+    var(--bg-secondary) 10px,
+    var(--bg-secondary) 11px
+  );
+}
+.iframe-placeholder strong {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  display: block;
+  margin-bottom: 6px;
+  font-style: normal;
+}
+.iframe-placeholder em {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-style: normal;
+  color: var(--teal);
+  display: block;
+  margin-top: 10px;
+}
+
+/* ---- footer ---- */
+.brief-footer {
+  margin-top: 80px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 760px) {
+  .pipeline-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .main-container, div.main-container { padding: 48px 24px 64px !important; }
+  .brief-title { font-size: 2rem; }
+  .brief-section h2 { font-size: 1.35rem; }
+  .links { grid-template-columns: 1fr; }
+  .role-recap dl { grid-template-columns: 1fr; gap: 4px; }
+  .role-recap dt { padding-top: 6px; }
+  .stat { flex-direction: column; gap: 6px; }
+}
+@media print {
+  body { background: white !important; }
+  .main-container, div.main-container { padding: 24px !important; }
+  .iframe-slot { display: none; }
+}

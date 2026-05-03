@@ -1,40 +1,97 @@
 ---
-title: "About Emily Stern"
+title: ""
 format: html
 ---
-## Experience
 
-**Data Analyst** | Child Poverty Action Lab | Aug 2025 - Present
+::: {.eyebrow}
+[About / CV]{}
+[Emily Stern]{}
+:::
 
-**Junior Data Analyst** | Child Poverty Action Lab | Oct 2024 - Aug 2025
+<h1 class="brief-title">About Emily Stern</h1>
 
-**Project Intern** | VolunteerNow | Sep 2024 - Feb 2025
+<p class="deck">Three years of work with children and families, now applied to the data systems that make community-based programs measurable.</p>
 
-**Data Analytics Intern** | Child Poverty Action Lab | May 2024 - Aug 2024
+::: {.brief-section}
 
-**Impact Data Assistant** | Girls Inc. of Metropolitan Dallas | Jan 2024 - Aug 2024
+[01 — Experience]{.section-num}
 
-**NSF REU Fellow** | National Science Foundation | Aug 2023 - Aug 2024
+## Roles
 
-**Crisis Advocate** | Hope's Door New Beginning Center | Jan 2023 - Dec 2023
+**Data Analyst** — Child Poverty Action Lab — Aug 2025 – Present
 
-## Education
+**Junior Data Analyst** — Child Poverty Action Lab — Oct 2024 – Aug 2025
 
-**Master's in Social Data Analytics and Research** | University of Texas at Dallas | *In Progress*
+**Project Intern** — VolunteerNow — Sep 2024 – Feb 2025
 
-**Bachelor's in Psychology** | University of Texas at Dallas
+**Data Analytics Intern** — Child Poverty Action Lab — May 2024 – Aug 2024
 
-## Skills
+**Impact Data Assistant** — Girls Inc. of Metropolitan Dallas — Jan 2024 – Aug 2024
 
-<span class="skill-tag">R</span>
-<span class="skill-tag">Quarto</span>
-<span class="skill-tag">Data Analysis</span>
-<span class="skill-tag">Program Evaluation</span>
-<span class="skill-tag">Research</span>
+**NSF REU Fellow** — National Science Foundation — Aug 2023 – Aug 2024
 
-## Resources
+**Crisis Advocate** — Hope's Door New Beginning Center — Jan 2023 – Dec 2023
 
-- [Research CV (PDF)](Emily Stern Research CV.pdf)
-- [GitHub Portfolio](https://github.com/EmilyRStern/)
-- [Linkedin](https://www.linkedin.com/in/emily-stern-83479b154/)
+:::
 
+::: {.brief-section}
+
+[02 — Education]{.section-num}
+
+## Degrees
+
+**Master's in Social Data Analytics and Research** — University of Texas at Dallas — *In Progress*
+
+**Bachelor's in Psychology** — University of Texas at Dallas
+
+:::
+
+::: {.brief-section}
+
+[03 — Skills]{.section-num}
+
+## Toolkit
+
+[R]{.skill-tag}
+[Quarto]{.skill-tag}
+[Shiny]{.skill-tag}
+[SQL]{.skill-tag}
+[Databricks]{.skill-tag}
+[Data Analysis]{.skill-tag}
+[Program Evaluation]{.skill-tag}
+[Research Design]{.skill-tag}
+
+:::
+
+::: {.brief-section}
+
+[04 — Resources]{.section-num}
+
+## Where to look
+
+```{=html}
+<div class="links">
+<a class="link-card" href="cv/emily-stern-research-cv.pdf">
+<span class="kind">PDF</span>
+<div class="title-line">Research CV</div>
+<div class="meta">Full CV with publications, presentations, and project details.</div>
+</a>
+<a class="link-card" href="https://github.com/EmilyRStern/" target="_blank" rel="noopener">
+<span class="kind">Code</span>
+<div class="title-line">GitHub</div>
+<div class="meta">Personal repos plus contributions to CPAL.</div>
+</a>
+<a class="link-card" href="https://www.linkedin.com/in/emily-stern-83479b154/" target="_blank" rel="noopener">
+<span class="kind">Profile</span>
+<div class="title-line">LinkedIn</div>
+<div class="meta">Professional history and connections.</div>
+</a>
+</div>
+```
+
+:::
+
+::: {.brief-footer}
+[Emily Stern · stern.emily06@gmail.com]{}
+[Updated May 2026]{}
+:::

@@ -1,42 +1,89 @@
 ---
-title: "Emily Stern - Data Analytics and Research"
+title: ""
 format: html
 ---
 
-::: {.homepage-intro}
-**Working to find good answers for difficult problems.** 
-
-![Emily Stern](docs/poster pic.jpeg){width=200 style="float: right; margin-left: 2rem; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"}
+::: {.eyebrow}
+[Data Analyst · Dallas, TX]{}
+[Portfolio · 2026]{}
 :::
 
-Emily Stern is a Data Analyst at the Child Poverty Action Lab (CPAL), a nonprofit committed to cutting child poverty in Dallas in half within 20 years. Born and raised in the Dallas area, she's excited to apply her analytical skills to generating insights to drive progress towards this goal in her hometown.
+![Emily Stern](assets/img/emily-stern-headshot.jpg){.hero-portrait fig-alt="Headshot of Emily Stern"}
 
-Emily brings three years of experience working with children and families. Her diverse roles in direct service, program evaluation, and academic research have given her a well-rounded understanding of what it takes to help community-based programs be successful, both in practice and in theory. She earned her undergraduate degree in Psychology and is currently completing her Master's in Social Data Analytics and Research at the University of Texas at Dallas.
+<h1 class="brief-title">Emily Stern</h1>
 
-::: {.homepage-intro}
-## Projects
+<p class="deck">Working to find good answers for difficult problems.</p>
 
-### [DICE Report](https://github.com/childpovertyactionlab/dice-report)
-Data Informed Community Engagement Dashboard at Child Poverty Action Lab. My 2024 Summer Internship Project. 
+<p class="byline"><strong>Data Analyst</strong> &nbsp;·&nbsp; Child Poverty Action Lab &nbsp;·&nbsp; M.S. Social Data Analytics and Research, UT Dallas</p>
 
-### [UFO Sightings Analysis](UFOs.html)
-Interactive mapping of UFO sightings in the US over time, for EPPS 2024 Coding Bootcamp.
+::: {.brief-section}
 
-## Class Assignments 
+[01 — About]{.section-num}
 
-### [Methods of Data Collection and Production](assignment 01.html)
-Assignments for EPPS 6302.
+## Background
 
-### [Knowledge Mining](knowledge_mining.html)
-Assignments for EPPS 6323.
+I'm a data analyst that specializes in program evaluation, geospatial methods, and stakeholder-facing tools. I currently work at the Child Poverty Action Lab in Dallas, where I build pipelines, dashboards, and analyses that turn messy public-sector data into something decision-makers can act on.
 
-### [Information Management](info_management.html)
-Assignments for EPPS 6354.
+My work has covered education, eviction, maternal health, and many other municipal data sources. I'm completing my M.S. in Social Data Analytics and Research at UT Dallas in May 2026, and I work primarily in R, Python, and SQL.
+:::
 
-[Progress Update](info_management/progress_update.html)
+::: {.brief-section}
+
+[02 — Selected projects]{.section-num}
+
+## Things I've built
+
+```{=html}
+<div class="links">
+<a class="link-card" href="https://github.com/childpovertyactionlab/dice-report" target="_blank" rel="noopener">
+<span class="kind">Dashboard · CPAL</span>
+<div class="title-line">DICE Report</div>
+<div class="meta">Data Informed Community Engagement dashboard. My 2024 Summer Internship project at Child Poverty Action Lab.</div>
+</a>
+<a class="link-card" href="https://github.com/EmilyRStern/stern" target="_blank" rel="noopener">
+<span class="kind">Design system · R package</span>
+<div class="title-line">stern</div>
+<div class="meta">Editorial design system for civic-data work in R — ggplot themes, color scales, Shiny components, Highcharter palettes. The visual language powering this site.</div>
+</a>
+</div>
+```
 
 :::
----
 
-**[About Me](about.html)** • **[GitHub](https://github.com/EmilyRStern/)**
+::: {.brief-section}
 
+[03 — Class assignments]{.section-num}
+
+## Coursework, organized by class
+
+```{=html}
+<div class="links">
+<a class="link-card" href="data-collection.html">
+<span class="kind">EPPS 6302</span>
+<div class="title-line">Methods of Data Collection &amp; Production</div>
+<div class="meta">Assignments on data collection methodology, instrument design, and reproducible production workflows.</div>
+</a>
+<a class="link-card" href="knowledge_mining.html">
+<span class="kind">EPPS 6323</span>
+<div class="title-line">Knowledge Mining</div>
+<div class="meta">R programming, exploratory analysis, prompt engineering for systematic literature review, and TEDS 2016 election data.</div>
+</a>
+<a class="link-card" href="info_management.html">
+<span class="kind">EPPS 6354</span>
+<div class="title-line">Information Management</div>
+<div class="meta">Database design, SQL, E-R modeling, and the relational model — coursework plus an applied final project.</div>
+</a>
+<div class="link-card link-card--coming-soon">
+<span class="kind">EPPS 6354 · Project</span>
+<div class="title-line">Final Project</div>
+<div class="meta">Coming soon.</div>
+</div>
+</div>
+```
+
+:::
+
+::: {.brief-footer}
+[Emily Stern · stern.emily06@gmail.com]{}
+[[About / CV](about.html) · [GitHub](https://github.com/EmilyRStern/) · [LinkedIn](https://www.linkedin.com/in/emily-stern-83479b154/)]{}
+:::

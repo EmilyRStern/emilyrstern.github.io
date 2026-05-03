@@ -1,508 +1,650 @@
 # =============================================================================
-# app.R  –  Federal Grant Volatility Tracker
-# EPPS 6354 Information Management – Emily Stern – Spring 2026
+# app.R  —  NSF Grant Disruption Tracker
+# EPPS 6354 Information Management · Spring 2026 · Emily Stern
 #
-# Shiny application that queries a local DuckDB database to visualize
-# federal grant opportunity disappearances and cross-reference them against
-# USASpending.gov award records.
+# Reads from Neon Postgres (NEON_DB_URL) and renders a civic-data-design
+# styled Shiny dashboard. Three tabs: Overview, Trends, Resilience.
 #
-# Run with: shiny::runApp("path/to/shiny/")
+# Run locally:    shiny::runApp("shiny/")
+# Deploy:         rsconnect::deployApp("shiny/", appName = "nsf-disruption")
 # =============================================================================
 
-# ── Packages ──────────────────────────────────────────────────────────────────
-required_pkgs <- c("shiny", "bslib", "DBI", "duckdb", "DT",
-                   "dplyr", "ggplot2", "plotly", "scales", "lubridate")
-missing_pkgs  <- required_pkgs[!sapply(required_pkgs, requireNamespace, quietly = TRUE)]
-if (length(missing_pkgs) > 0) install.packages(missing_pkgs)
+# ── Packages ─────────────────────────────────────────────────────────────────
+required <- c("shiny", "bslib", "DBI", "RPostgres", "pool", "DT", "dplyr",
+              "ggplot2", "scales", "showtext")
+missing <- required[!sapply(required, requireNamespace, quietly = TRUE)]
+if (length(missing) > 0) install.packages(missing)
 
-library(shiny)
-library(bslib)
-library(DBI)
-library(duckdb)
-library(DT)
-library(dplyr)
-library(ggplot2)
-library(plotly)
-library(scales)
-library(lubridate)
+suppressPackageStartupMessages({
+  library(shiny);   library(bslib);  library(DBI);     library(RPostgres)
+  library(pool);    library(DT);     library(dplyr);   library(ggplot2)
+  library(scales);  library(showtext)
+})
 
-# ── Database path ─────────────────────────────────────────────────────────────
-# Adjust this path if needed. Default assumes shiny/ and data/ are siblings.
-# Resolve path to the DuckDB file.
-# The app expects: shiny/app.R and data/grants_volatility.duckdb as siblings one level up.
-# Override explicitly if needed:
-# DB_PATH <- "C:/Users/Emily/Documents/final_project/data/grants_volatility.duckdb"
-DB_PATH <- tryCatch(
-  normalizePath(
-    file.path(dirname(rstudioapi::getSourceEditorContext()$path),
-              "..", "data", "grants_volatility.duckdb"),
-    mustWork = FALSE),
-  error = function(e) {
-    # Fallback when launched via shiny::runApp("shiny/") from the project root
-    normalizePath(file.path("data", "grants_volatility.duckdb"), mustWork = FALSE)
-  }
+# ── Fonts (civic-data-design) ────────────────────────────────────────────────
+tryCatch({
+  font_add_google("Playfair Display", "playfair")
+  font_add_google("Source Serif 4",   "sourceserif")
+  font_add_google("Source Sans 3",    "sourcesans")
+  showtext_auto()
+  showtext_opts(dpi = 100)
+}, error = function(e) message("Google fonts unavailable; falling back to system serifs"))
+
+# ── Civic palette ────────────────────────────────────────────────────────────
+PAL <- list(
+  bg_primary    = "#F5F0E8",
+  bg_secondary  = "#EDE8DC",
+  bg_surface    = "#FFFFFF",
+  text_primary  = "#1C2B2B",
+  text_body     = "#3A4A45",
+  text_muted    = "#7A8C85",
+  teal          = "#2D6A5F",
+  teal_light    = "#6BAF9E",
+  gold          = "#D4A843",
+  gold_light    = "#E8C97A",
+  border        = "#C8BFA8",
+  border_strong = "#1C2B2B",
+  seq           = c("#D9EDE8", "#8EC9BC", "#4A9E8E", "#2D6A5F", "#0F3830"),
+  cat           = c("#2D6A5F", "#D4A843", "#6BAF9E", "#E8C97A", "#0F3830", "#C8BFA8",
+                    "#A98D2F", "#4A7AA0", "#8C3A35", "#52606D", "#3D437B")
 )
 
-# ── DB helper: open a read-only connection ────────────────────────────────────
-get_con <- function() {
-  dbConnect(duckdb(), dbdir = DB_PATH, read_only = TRUE)
+# Stable directorate → color mapping (used everywhere, so a directorate keeps
+# the same color across charts).
+DIR_COLORS <- c(
+  "MPS"   = PAL$cat[1], "EDU"   = PAL$cat[2], "CISE"  = PAL$cat[3],
+  "ENG"   = PAL$cat[4], "GEO"   = PAL$cat[5], "BIO"   = PAL$cat[6],
+  "TIP"   = PAL$cat[7], "SBE"   = PAL$cat[8], "OIA"   = PAL$cat[9],
+  "OD"    = PAL$cat[10], "OPP"  = PAL$cat[11], "OTHER" = "#C8BFA8"
+)
+
+# ── theme_civic ggplot helper ────────────────────────────────────────────────
+theme_civic <- function(base_size = 11) {
+  theme_minimal(base_size = base_size) %+replace%
+    theme(
+      plot.background  = element_rect(fill = PAL$bg_primary, color = NA),
+      panel.background = element_rect(fill = PAL$bg_surface,  color = NA),
+      panel.grid.major = element_line(color = PAL$border, linewidth = 0.35),
+      panel.grid.minor = element_blank(),
+      panel.border     = element_rect(fill = NA, color = PAL$border, linewidth = 0.5),
+      plot.title       = element_text(family = "playfair", size = base_size * 1.4,
+                                      color = PAL$text_primary, face = "bold",
+                                      margin = margin(b = 6), hjust = 0),
+      plot.subtitle    = element_text(family = "sourceserif", size = base_size * 0.95,
+                                      color = PAL$text_body, margin = margin(b = 12), hjust = 0),
+      plot.caption     = element_text(family = "sourcesans", size = base_size * 0.72,
+                                      color = PAL$text_muted, hjust = 0,
+                                      margin = margin(t = 8)),
+      axis.title       = element_text(family = "sourcesans", size = base_size * 0.78,
+                                      color = PAL$text_muted),
+      axis.text        = element_text(family = "sourcesans", size = base_size * 0.75,
+                                      color = PAL$text_body),
+      axis.ticks       = element_line(color = PAL$border),
+      legend.background = element_rect(fill = PAL$bg_primary, color = NA),
+      legend.title      = element_text(family = "sourcesans", size = base_size * 0.78,
+                                       color = PAL$text_muted),
+      legend.text       = element_text(family = "sourcesans", size = base_size * 0.75,
+                                       color = PAL$text_body),
+      legend.key        = element_rect(fill = PAL$bg_primary, color = NA),
+      strip.background  = element_rect(fill = PAL$bg_secondary, color = PAL$border),
+      strip.text        = element_text(family = "sourcesans", size = base_size * 0.78,
+                                       color = PAL$text_primary),
+      plot.margin       = margin(16, 16, 16, 16)
+    )
 }
 
-# ── UI ────────────────────────────────────────────────────────────────────────
-ui <- page_sidebar(
-  title = "Federal Grant Volatility Tracker",
-  theme = bs_theme(
-    bootswatch = "flatly",
-    primary    = "#2E5FA3",
-    base_font  = font_google("Source Sans Pro")
-  ),
+# ── DB pool (read NEON_DB_URL from .Renviron) ────────────────────────────────
+parse_pg_url <- function(url) {
+  m <- regmatches(url, regexec(
+    "^postgres(?:ql)?://([^:]+):([^@]+)@([^:/]+)(?::(\\d+))?/([^?]+)(?:\\?(.*))?$", url))[[1]]
+  list(user = m[2], password = m[3], host = m[4],
+       port = if (nzchar(m[5])) as.integer(m[5]) else 5432L, dbname = m[6])
+}
+# Try project-local .Renviron (won't override an already-set env var)
+proj_renv <- file.path(dirname(getwd()), ".Renviron")
+if (file.exists(proj_renv)) readRenviron(proj_renv)
+# also try one more level up (when running shiny/ as the wd)
+proj_renv2 <- file.path(getwd(), "..", ".Renviron")
+if (file.exists(proj_renv2)) readRenviron(proj_renv2)
 
-  # ── Sidebar ────────────────────────────────────────────────────────────────
-  sidebar = sidebar(
-    width = 280,
-    title = "Filters",
+NEON_URL <- Sys.getenv("NEON_DB_URL")
+if (!nzchar(NEON_URL)) stop("NEON_DB_URL not set. Add it to .Renviron at the project root.")
+P <- parse_pg_url(NEON_URL)
 
-    # Date range
-    dateRangeInput(
-      "date_range",
-      "Removal Date Range",
-      start = Sys.Date() - 90,
-      end   = Sys.Date(),
-      min   = "2025-01-01"
-    ),
+pool <- dbPool(
+  drv     = Postgres(),
+  host    = P$host,  port = P$port, dbname = P$dbname,
+  user    = P$user,  password = P$password,
+  sslmode = "require",
+  minSize = 1, maxSize = 4, idleTimeout = 60000
+)
+onStop(function() poolClose(pool))
 
-    hr(),
+# ── bslib civic theme ────────────────────────────────────────────────────────
+civic_theme <- bs_theme(
+  version      = 5,
+  bg           = PAL$bg_primary,
+  fg           = PAL$text_primary,
+  primary      = PAL$teal,
+  secondary    = PAL$teal_light,
+  warning      = PAL$gold,
+  base_font    = font_google("Source Serif 4"),
+  heading_font = font_google("Playfair Display"),
+  font_scale   = 1.0,
+  bootswatch   = NULL
+) |>
+  bs_add_rules(sprintf("
+    .card                { border-radius: 0 !important; border-color: %s; background: %s; }
+    .well                { background: %s; border-radius: 0; border-color: %s; }
+    .sidebar             { background: %s !important; }
+    .navbar              { border-bottom: 1px solid %s; }
+    .nav-link.active     { color: %s !important; border-color: %s !important; }
+    label                { font-family: 'Source Sans 3', sans-serif; font-size: 0.78rem;
+                           text-transform: uppercase; letter-spacing: 0.08em; color: %s; }
+    h1, h2, h3, .h1, .h2, .h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      color: %s; font-weight: 700;
+    }
+    .value-box           { border-radius: 0 !important; }
+    .selectize-input,
+    .form-control        { border-radius: 0 !important; border-color: %s; }
+    .btn-primary         { background: %s; border-color: %s; border-radius: 0; }
+    .nav-tabs .nav-link  { border-radius: 0; }
+    body                 { background: %s; color: %s; }
+    .dataTables_wrapper  { font-family: 'Source Sans 3', sans-serif; }
+    table.dataTable thead th {
+      font-family: 'Source Sans 3', sans-serif; font-size: 0.78rem;
+      text-transform: uppercase; letter-spacing: 0.06em; color: %s !important;
+      border-bottom: 2px solid %s !important;
+    }
+    .stat-callout {
+      border-left: 3px solid %s; background: %s; padding: 18px 20px; margin-bottom: 0;
+    }
+    .stat-callout .label {
+      font-family: 'Source Sans 3', sans-serif; font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.08em; color: %s;
+    }
+    .stat-callout .value {
+      font-family: 'Playfair Display', Georgia, serif; font-size: 2.1rem;
+      color: %s; line-height: 1.1; margin-top: 4px;
+    }
+    .stat-callout .sub {
+      font-family: 'Source Sans 3', sans-serif; font-size: 0.78rem;
+      color: %s; margin-top: 4px;
+    }
+  ",
+  PAL$border, PAL$bg_primary,
+  PAL$bg_secondary, PAL$border,
+  PAL$bg_secondary, PAL$border,
+  PAL$teal, PAL$teal,
+  PAL$text_muted, PAL$text_primary,
+  PAL$border, PAL$teal, PAL$teal,
+  PAL$bg_primary, PAL$text_body,
+  PAL$text_muted, PAL$border,
+  PAL$teal, PAL$bg_secondary,
+  PAL$text_muted, PAL$text_primary, PAL$text_body))
 
-    # Agency filter (populated dynamically)
-    selectizeInput(
-      "agency_filter",
-      "Agency",
-      choices  = NULL,  # filled in server
-      multiple = TRUE,
-      options  = list(placeholder = "All agencies")
-    ),
+# ── helper: stat callout (used in headline row) ──────────────────────────────
+stat_callout <- function(label, value, sub = NULL) {
+  div(class = "stat-callout",
+      div(class = "label", label),
+      div(class = "value", value),
+      if (!is.null(sub)) div(class = "sub", sub) else NULL)
+}
 
-    # Category filter
-    selectizeInput(
-      "category_filter",
-      "Funding Category",
-      choices  = NULL,
-      multiple = TRUE,
-      options  = list(placeholder = "All categories")
-    ),
+# ── UI ───────────────────────────────────────────────────────────────────────
+ui <- page_navbar(
+  title = "NSF Grant Disruption Tracker",
+  theme = civic_theme,
+  bg    = PAL$bg_primary,
+  fillable = FALSE,
 
-    hr(),
+  # ── Tab 1: Overview ────────────────────────────────────────────────────────
+  nav_panel(
+    "Overview",
+    div(style = sprintf("padding: 24px 32px; max-width: 1280px; margin: 0 auto;
+                         color: %s;", PAL$text_body),
+      h2("How NSF funding has been disrupted",
+         style = sprintf("font-family: 'Playfair Display'; color: %s;
+                          margin-top: 0; margin-bottom: 4px;", PAL$text_primary)),
+      p(style = sprintf("font-family: 'Source Serif 4'; color: %s; font-size: 1.05rem;
+                         max-width: 780px; margin-bottom: 24px;", PAL$text_body),
+        "Since the January 2025 administration change, NSF first-half-of-fiscal-year grant
+        activity has declined in two phases: a moderate ~25% drop in FY25 H1 alongside the
+        admin transition, then a deeper drop to roughly 30% of the FY24 baseline in FY26 H1.
+        The chart below holds seasonality constant by stacking the same six-month window
+        across three fiscal years — so the disruption can't be confused with NSF's normal
+        August-spike, October-trough rhythm."),
 
-    # Award status filter (for Missing Grants tab)
-    checkboxGroupInput(
-      "award_status",
-      "Show opportunities:",
-      choices  = c("Confirmed rescissions (no award)" = "no_award",
-                   "Possibly awarded (CFDA match found)" = "has_award"),
-      selected = "no_award"
-    ),
+      # Headline metrics
+      uiOutput("stat_row"),
 
-    hr(),
-    actionButton("refresh_btn", "Refresh Data",
-                 icon = icon("rotate"), class = "btn-primary w-100"),
-    br(), br(),
-    tags$small(
-      class = "text-muted",
-      "Data: Grants.gov API + USASpending.gov API",
       br(),
-      paste("Last updated:", format(Sys.Date(), "%B %d, %Y"))
+
+      # Hero chart: FY24/FY25/FY26 first-half head-to-head
+      card(
+        card_header(span("Same six months, three fiscal years",
+                         style = sprintf("font-family: 'Source Sans 3'; font-size: 0.78rem;
+                                          text-transform: uppercase; letter-spacing: 0.08em;
+                                          color: %s;", PAL$text_muted))),
+        card_body(plotOutput("fy_comparison_chart", height = "440px"))
+      ),
+
+      br(),
+
+      # Action-type breakdown
+      card(
+        card_header(span("New awards, continuations, and revisions over time",
+                         style = sprintf("font-family: 'Source Sans 3'; font-size: 0.78rem;
+                                          text-transform: uppercase; letter-spacing: 0.08em;
+                                          color: %s;", PAL$text_muted))),
+        card_body(plotOutput("action_type_chart", height = "360px"))
+      )
     )
   ),
 
-  # ── Main panel with tabs ───────────────────────────────────────────────────
-  navset_card_underline(
-
-    # ── Tab 1: Missing Grants (primary view) ─────────────────────────────────
-    nav_panel(
-      "Missing Grants",
-      icon = icon("circle-xmark"),
+  # ── Tab 2: Trends ──────────────────────────────────────────────────────────
+  nav_panel(
+    "Trends",
+    div(style = "padding: 24px 32px; max-width: 1280px; margin: 0 auto;",
+      h2("Full timeline & year-over-year detail",
+         style = sprintf("color: %s; margin-top: 0;", PAL$text_primary)),
+      p(style = sprintf("color: %s; font-family: 'Source Serif 4'; max-width: 760px;",
+                        PAL$text_body),
+        "The full-timeline chart below preserves NSF's annual August obligation surge —
+        every fiscal year ends with a budget-clearing crunch, so the August spike is
+        normal and recurring. What's not normal is the magnitude of the FY26 trough.
+        Use the year-over-year tool to slice by directorate or toggle between dollars
+        and transaction counts."),
+      br(),
+      card(
+        card_header(span("Full timeline: gross obligations by month, by directorate",
+                         style = sprintf("font-family: 'Source Sans 3'; font-size: 0.78rem;
+                                          text-transform: uppercase; letter-spacing: 0.08em;
+                                          color: %s;", PAL$text_muted))),
+        card_body(plotOutput("monthly_chart", height = "440px"))
+      ),
+      br(),
       layout_columns(
-        col_widths = c(3, 3, 3, 3),
-        value_box(
-          title = "Removed Opportunities",
-          value = textOutput("total_removed", inline = TRUE),
-          showcase = icon("trash-can"),
-          theme  = "danger"
+        col_widths = c(3, 9),
+        card(
+          card_header(span("Filter", style = "color: #7A8C85;")),
+          card_body(
+            selectInput("yoy_directorate", "Directorate",
+                        choices = c("All directorates" = "ALL"),
+                        selected = "ALL"),
+            radioButtons("yoy_metric", "Metric",
+                         choices = c("Gross obligations ($)" = "gross",
+                                     "Transactions (count)"  = "ntx"),
+                         selected = "gross")
+          )
         ),
-        value_box(
-          title = "Confirmed Rescissions",
-          value = textOutput("confirmed_rescissions", inline = TRUE),
-          showcase = icon("ban"),
-          theme  = "warning"
-        ),
-        value_box(
-          title = "Funding at Risk ($)",
-          value = textOutput("funding_at_risk", inline = TRUE),
-          showcase = icon("dollar-sign"),
-          theme  = "primary"
-        ),
-        value_box(
-          title = "Agencies Affected",
-          value = textOutput("agencies_affected", inline = TRUE),
-          showcase = icon("building-columns"),
-          theme  = "secondary"
+        card(
+          card_header(span("Year-over-year same calendar month",
+                           style = sprintf("font-family: 'Source Sans 3';
+                                            font-size: 0.78rem; text-transform: uppercase;
+                                            letter-spacing: 0.08em; color: %s;", PAL$text_muted))),
+          card_body(plotOutput("yoy_chart", height = "440px"))
         )
+      )
+    )
+  ),
+
+  # ── Tab 3: Resilience ──────────────────────────────────────────────────────
+  nav_panel(
+    "Resilience",
+    div(style = "padding: 24px 32px; max-width: 1280px; margin: 0 auto;",
+      h2("Which directorates kept their funding moving",
+         style = sprintf("color: %s; margin-top: 0;", PAL$text_primary)),
+      p(style = sprintf("color: %s; font-family: 'Source Serif 4'; max-width: 760px;",
+                        PAL$text_body),
+        "Each directorate's resilience score is the share of its FY25 first-half new-award
+        dollars that reappeared in the equivalent FY26 window. Directorates with structural
+        commitments (Polar Programs, STEM Education scholarships) held up best;
+        discretionary new-mission funding (TIP, SBE) collapsed."),
+      br(),
+      card(
+        card_header(span("Open opportunities vs. dollars retained",
+                         style = sprintf("font-family: 'Source Sans 3'; font-size: 0.78rem;
+                                          text-transform: uppercase; letter-spacing: 0.08em;
+                                          color: %s;", PAL$text_muted))),
+        card_body(plotOutput("resilience_scatter", height = "440px"))
       ),
       br(),
       card(
-        card_header("Disappeared Grant Opportunities (no award record found)"),
-        DTOutput("missing_grants_table")
+        card_header(span("Currently-open NSF opportunities",
+                         style = sprintf("font-family: 'Source Sans 3'; font-size: 0.78rem;
+                                          text-transform: uppercase; letter-spacing: 0.08em;
+                                          color: %s;", PAL$text_muted))),
+        card_body(DTOutput("open_opps_table"))
       )
-    ),
+    )
+  ),
 
-    # ── Tab 2: Change Timeline ─────────────────────────────────────────────
-    nav_panel(
-      "Change Timeline",
-      icon = icon("chart-line"),
-      card(
-        card_header("Grant Listing Changes Per Snapshot"),
-        plotlyOutput("timeline_plot", height = "400px")
+  # ── Tab 4: About ───────────────────────────────────────────────────────────
+  nav_panel(
+    "About",
+    div(style = "padding: 32px; max-width: 760px; margin: 0 auto;
+                 font-family: 'Source Serif 4'; line-height: 1.55;",
+      h2("About this dashboard", style = sprintf("color: %s;", PAL$text_primary)),
+      p("This tracker visualizes how NSF grant activity has shifted since the January
+        2025 administration change, drawing on three federal sources joined into a single
+        relational schema:"),
+      tags$ul(
+        tags$li(strong("USAspending.gov"), " — transaction-level federal assistance
+                records (37,108 NSF awards · 57,290 transactions covering FY24–FY26)."),
+        tags$li(strong("Grants.gov full extract"), " — 1,330 NSF opportunity records
+                including currently-open solicitations."),
+        tags$li(strong("NSF terminations dataset"), " — 1,996 terminated awards with
+                deobligation amounts and reinstatement status.")
       ),
-      br(),
-      card(
-        card_header("Removals by Agency (Top 20)"),
-        plotlyOutput("agency_bar_plot", height = "400px")
-      )
-    ),
-
-    # ── Tab 3: Award Lookup ────────────────────────────────────────────────
-    nav_panel(
-      "Award Lookup",
-      icon = icon("magnifying-glass-dollar"),
-      layout_columns(
-        col_widths = c(6, 6),
-        card(
-          card_header("Search by CFDA Number or Agency"),
-          textInput("award_search_cfda", "CFDA Number", placeholder = "e.g. 93.224"),
-          textInput("award_search_agency", "Awarding Agency", placeholder = "partial match"),
-          actionButton("award_search_btn", "Search", class = "btn-primary"),
-          br(), br(),
-          DTOutput("award_results_table")
-        ),
-        card(
-          card_header("Award Amount Distribution"),
-          plotlyOutput("award_histogram", height = "350px")
-        )
-      )
-    ),
-
-    # ── Tab 4: Full Opportunity Browser ────────────────────────────────────
-    nav_panel(
-      "All Opportunities",
-      icon = icon("table"),
-      card(
-        card_header("Browse All Opportunities"),
-        DTOutput("all_opps_table")
-      )
-    ),
-
-    # ── Tab 5: About / Methods ──────────────────────────────────────────────
-    nav_panel(
-      "About",
-      icon = icon("circle-info"),
-      card(
-        card_body(
-          h4("Federal Grant Volatility Tracker"),
-          p("This application tracks changes to federal grant opportunity listings
-            on Grants.gov over time and cross-references disappearances against
-            award records from USASpending.gov."),
-          h5("Key Finding"),
-          p("Grants.gov retains formally closed and awarded opportunities in its
-            public record. An opportunity that simply vanishes — with no closed
-            status and no corresponding award in USASpending.gov — is classified
-            as a ", strong("confirmed rescission"), ": evidence that the funding
-            was administratively withdrawn rather than awarded or completed."),
-          h5("Data Sources"),
-          tags$ul(
-            tags$li(strong("Grants.gov API"), " – Full opportunity listings
-              (posted, forecasted, closed, archived). Snapshotted periodically;
-              changes detected by diffing consecutive snapshots."),
-            tags$li(strong("USASpending.gov API"), " – Federal grant award records
-              including recipient, amount, and date. Linked to Grants.gov via
-              CFDA number.")
-          ),
-          h5("Database"),
-          p("All data is stored in a local DuckDB embedded analytical database
-            (grants_volatility.duckdb). The Shiny app connects in read-only mode
-            for all queries."),
-          h5("Course"),
-          p("EPPS 6354 Information Management – University of Texas at Dallas –
-            Spring 2026 – Instructor: Karl Ho")
-        )
-      )
+      h3("Methodology", style = sprintf("color: %s;", PAL$text_primary)),
+      p(strong("Two-step decline since the 2025 administration change."),
+        " Comparing the same six-month window (Oct–Mar) across three fiscal years
+        controls for NSF's annual August-spike, October-trough cycle. FY24 H1 obligated
+        $1,895M across 3,240 NEW awards. FY25 H1 — overlapping with the January 2025
+        admin transition — dropped 26% to $1,408M and 2,149 NEW awards. FY26 H1 dropped
+        another ~60% from there to $561M and just 590 NEW awards, a cumulative 70%
+        decline from the FY24 baseline."),
+      p(strong("Why same-month, same-FY-position comparisons matter."),
+        " A naive month-over-month chart conflates the disruption with NSF's normal
+        fiscal-year rhythm — every August is a budget-clearing surge, every October
+        is a transition lull. The hero chart on the Overview tab holds that seasonality
+        constant by stacking three Octobers, three Novembers, and so on, side by side.
+        The October 2024 vs October 2025 transaction-count drop (409 → 2) is at
+        equally mature reporting horizons, ruling out lag as an explanation."),
+      p(strong("Outlay NULLs are reporting lag, not zeros."),
+        " The 9% NULL-outlay rate among in-progress awards is treated as ",
+        em("not yet reported"),
+        " rather than $0 — a known quirk of Treasury's ~90-day cash-flow reporting
+        cadence relative to the agency's faster obligation reporting."),
+      h3("Stack", style = sprintf("color: %s;", PAL$text_primary)),
+      p("Data ingestion in R, ETL through DuckDB, persistent storage on Neon Postgres
+        17, dashboard rendered in Shiny with the ", em("civic-data-design"),
+        " visual system (Playfair Display headlines, Source Serif body, warm linen
+        background, teal/gold accents). Source code and ER diagram in the project repo."),
+      p(style = sprintf("color: %s; font-size: 0.85rem;", PAL$text_muted),
+        "EPPS 6354 Information Management · University of Texas at Dallas · Spring 2026 ·
+        Emily Stern · Data current as of April 2026.")
     )
   )
 )
 
-# ── SERVER ────────────────────────────────────────────────────────────────────
+# ── SERVER ───────────────────────────────────────────────────────────────────
 server <- function(input, output, session) {
 
-  # ── Reactive: open DB connection for this session ─────────────────────────
-  con <- get_con()
-  onSessionEnded(function() {
-    tryCatch(dbDisconnect(con, shutdown = FALSE), error = function(e) NULL)
+  # ── Data: cached pulls (poolWithTransaction not needed for read-only) ──────
+  monthly_data <- reactive({
+    dbGetQuery(pool, "
+      SELECT month, directorate, n_transactions, net_obligation,
+             gross_obligated, gross_deobligated
+      FROM v_monthly_obligations
+      WHERE month >= '2023-10-01'
+      ORDER BY month, directorate")
   })
 
-  # ── Populate filter dropdowns ──────────────────────────────────────────────
+  resilience_data <- reactive({
+    dbGetQuery(pool, "
+      SELECT directorate,
+             n_open_opportunities, open_advertised_funding,
+             fy25_new_count, fy26_new_count, pct_count_retained,
+             fy25_new_oblig, fy26_new_oblig, pct_dollar_retained
+      FROM v_directorate_resilience
+      WHERE directorate <> 'OD'  -- noisy with very small N")
+  })
+
+  termination_totals <- reactive({
+    dbGetQuery(pool, "
+      SELECT COUNT(*)                                                  AS n_terms,
+             SUM(CASE WHEN reinstated THEN 1 ELSE 0 END)               AS n_reinst,
+             ABS(COALESCE(SUM(post_termination_deobligation), 0))      AS deob
+      FROM terminations")
+  })
+
+  fy_totals <- reactive({
+    # Apples-to-apples: first 6 months of each FY (Oct–Mar)
+    dbGetQuery(pool, "
+      SELECT
+        SUM(CASE WHEN action_date >= '2023-10-01' AND action_date < '2024-04-01'
+                  AND action_type_description = 'NEW' THEN 1 ELSE 0 END) AS fy24_h1_new,
+        SUM(CASE WHEN action_date >= '2024-10-01' AND action_date < '2025-04-01'
+                  AND action_type_description = 'NEW' THEN 1 ELSE 0 END) AS fy25_h1_new,
+        SUM(CASE WHEN action_date >= '2025-10-01' AND action_date < '2026-04-01'
+                  AND action_type_description = 'NEW' THEN 1 ELSE 0 END) AS fy26_h1_new,
+        SUM(CASE WHEN action_date >= '2023-10-01' AND action_date < '2024-04-01'
+                  AND federal_action_obligation > 0 THEN federal_action_obligation END) AS fy24_h1_oblig,
+        SUM(CASE WHEN action_date >= '2025-10-01' AND action_date < '2026-04-01'
+                  AND federal_action_obligation > 0 THEN federal_action_obligation END) AS fy26_h1_oblig
+      FROM transactions")
+  })
+
+  open_opp_data <- reactive({
+    dbGetQuery(pool, "
+      SELECT directorate,
+             opportunity_number AS opp_num,
+             title,
+             estimated_total_funding AS funding_M,
+             post_date, close_date
+      FROM v_currently_open_opportunities
+      ORDER BY estimated_total_funding DESC NULLS LAST")
+  })
+
+  # ── populate yoy directorate dropdown ──────────────────────────────────────
   observe({
-    agencies <- dbGetQuery(con, "
-      SELECT DISTINCT agency_name FROM opportunities
-      WHERE agency_name IS NOT NULL
-      ORDER BY agency_name
-    ")$agency_name
+    md <- monthly_data()
+    dirs <- sort(unique(md$directorate))
+    updateSelectInput(session, "yoy_directorate",
+                      choices = c("All directorates" = "ALL", setNames(dirs, dirs)))
+  }, priority = 100)
 
-    updateSelectizeInput(session, "agency_filter",
-                         choices = agencies, server = TRUE)
-
-    categories <- dbGetQuery(con, "
-      SELECT category_code || ' – ' || category_name AS label,
-             category_code AS value
-      FROM categories ORDER BY category_name
-    ")
-    cat_choices <- setNames(categories$value, categories$label)
-    updateSelectizeInput(session, "category_filter",
-                         choices = cat_choices, server = TRUE)
-  })
-
-  # ── Reactive: refresh trigger ──────────────────────────────────────────────
-  refresh_trigger <- reactiveVal(0)
-  observeEvent(input$refresh_btn, {
-    refresh_trigger(refresh_trigger() + 1)
-  })
-
-  # ── Reactive: missing grants data ─────────────────────────────────────────
-  missing_data <- reactive({
-    refresh_trigger()
-
-    agency_clause    <- if (length(input$agency_filter) > 0)
-      paste0("AND agency_name IN ('", paste(input$agency_filter, collapse = "','"), "')") else ""
-    category_clause  <- if (length(input$category_filter) > 0)
-      paste0("AND funding_activity_category IN ('",
-             paste(input$category_filter, collapse = "','"), "')") else ""
-    award_clause <- if (length(input$award_status) == 1) {
-      if ("no_award" %in% input$award_status) "AND has_matching_award = FALSE"
-      else "AND has_matching_award = TRUE"
-    } else ""
-
-    query <- sprintf("
-      SELECT
-        opportunity_id     AS 'Opp. ID',
-        opportunity_number AS 'Opp. Number',
-        title              AS 'Title',
-        agency_name        AS 'Agency',
-        funding_activity_category AS 'Category',
-        CAST(removed_date AS VARCHAR)  AS 'Removed Date',
-        PRINTF('$%%,.0f', COALESCE(estimated_total_funding, 0)) AS 'Est. Funding',
-        PRINTF('$%%,.0f', COALESCE(award_ceiling, 0))           AS 'Award Ceiling',
-        cfda_numbers       AS 'CFDA #(s)',
-        CASE WHEN has_matching_award THEN 'Yes' ELSE 'NO ← RESCISSION' END AS 'Award Found?'
-      FROM missing_grants
-      WHERE CAST(removed_date AS DATE) BETWEEN DATE '%s' AND DATE '%s'
-      %s %s %s
-      ORDER BY removed_date DESC
-    ", input$date_range[1], input$date_range[2],
-       agency_clause, category_clause, award_clause)
-
-    tryCatch(dbGetQuery(con, query),
-             error = function(e) { message("missing_data error: ", e$message); data.frame() })
-  })
-
-  # ── Summary KPIs ──────────────────────────────────────────────────────────
-  output$total_removed <- renderText({
-    nrow(missing_data())
-  })
-
-  output$confirmed_rescissions <- renderText({
-    sum(missing_data()$`Award Found?` == "NO ← RESCISSION", na.rm = TRUE)
-  })
-
-  output$funding_at_risk <- renderText({
-    df <- missing_data()
-    df <- df[df$`Award Found?` == "NO ← RESCISSION", ]
-    # Re-query for numeric value
-    n <- nrow(df)
-    if (n == 0) return("$0")
-    dollar(sum(as.numeric(gsub("[^0-9.]", "", df$`Est. Funding`)), na.rm = TRUE))
-  })
-
-  output$agencies_affected <- renderText({
-    length(unique(missing_data()$Agency))
-  })
-
-  # ── Tab 1: Missing grants table ────────────────────────────────────────────
-  output$missing_grants_table <- renderDT({
-    df <- missing_data()
-    if (nrow(df) == 0) {
-      return(datatable(data.frame(Message = "No records match current filters."),
-                       options = list(dom = "t"), rownames = FALSE))
-    }
-    datatable(
-      df,
-      rownames   = FALSE,
-      selection  = "single",
-      extensions = "Buttons",
-      options    = list(
-        dom        = "Bfrtip",
-        buttons    = c("csv", "excel"),
-        pageLength = 25,
-        scrollX    = TRUE,
-        columnDefs = list(
-          list(className = "dt-center", targets = c(5, 9)),
-          # Highlight rescissions in red
-          list(targets = 9,
-               render = JS("function(data, type, row) {
-                 if (type === 'display' && data.includes('RESCISSION')) {
-                   return '<span style=\"color:#c0392b;font-weight:bold\">' + data + '</span>';
-                 }
-                 return data;
-               }"))
-        )
+  # ── headline metrics row ───────────────────────────────────────────────────
+  output$stat_row <- renderUI({
+    tt <- termination_totals(); ft <- fy_totals()
+    drop_pct <- 100 * (1 - ft$fy26_h1_new / ft$fy24_h1_new)
+    obl_drop <- 100 * (1 - ft$fy26_h1_oblig / ft$fy24_h1_oblig)
+    layout_columns(
+      col_widths = c(3, 3, 3, 3),
+      stat_callout(
+        "Awards terminated",
+        format(tt$n_terms, big.mark = ","),
+        sprintf("%s reinstated since", format(tt$n_reinst, big.mark = ","))
+      ),
+      stat_callout(
+        "Deobligated",
+        scales::dollar(tt$deob, scale = 1e-6, suffix = "M"),
+        "Post-termination, after reinstatements"
+      ),
+      stat_callout(
+        "FY26 H1 new awards",
+        format(ft$fy26_h1_new, big.mark = ","),
+        sprintf("vs. %s in FY24 H1 baseline",
+                format(ft$fy24_h1_new, big.mark = ","))
+      ),
+      stat_callout(
+        "Drop vs FY24 baseline",
+        sprintf("%.0f%%", drop_pct),
+        sprintf("(%.0f%% drop in obligation $)", obl_drop)
       )
     )
   })
 
-  # ── Tab 2: Timeline plot ───────────────────────────────────────────────────
-  output$timeline_plot <- renderPlotly({
-    df <- tryCatch(
-      dbGetQuery(con, "SELECT * FROM change_summary ORDER BY snap_date"),
-      error = function(e) data.frame()
-    )
-    if (nrow(df) == 0) return(plotly_empty())
+  # ── HERO chart: three FY first-halves, same six calendar months ────────────
+  fy_comparison_data <- reactive({
+    df <- dbGetQuery(pool, "SELECT fy, fy_month_ord, month_abbrev, n_tx,
+                                   gross_obligated, n_new
+                            FROM v_fy_h1_comparison
+                            ORDER BY fy_month_ord, fy")
+    df$month_label <- factor(df$month_abbrev,
+                             levels = c("Oct","Nov","Dec","Jan","Feb","Mar"))
+    df$gross_M     <- df$gross_obligated / 1e6
+    df
+  })
 
-    p <- ggplot(df, aes(x = as.Date(snap_date), y = n, color = change_type,
-                        group = change_type,
-                        text = paste0(change_type, ": ", n, " on ", snap_date))) +
-      geom_line(linewidth = 1.2) +
-      geom_point(size = 3) +
-      scale_color_manual(values = c(ADDED = "#27ae60", MODIFIED = "#f39c12",
-                                    REMOVED = "#e74c3c")) +
-      scale_x_date(date_labels = "%b %d", date_breaks = "1 week") +
-      labs(x = NULL, y = "Count", color = "Change Type",
-           title = "Grant Listing Changes Per Snapshot") +
-      theme_minimal(base_size = 13) +
+  output$fy_comparison_chart <- renderPlot({
+    df <- fy_comparison_data()
+
+    # Color palette: FY24 + FY25 = baseline (teals), FY26 = the disrupted year (gold)
+    fy_colors <- c("FY24" = PAL$teal_light, "FY25" = PAL$teal, "FY26" = PAL$gold)
+
+    ggplot(df, aes(x = month_label, y = gross_M, fill = fy)) +
+      geom_col(position = position_dodge(width = 0.85), width = 0.78) +
+      geom_text(aes(label = ifelse(is.na(gross_M), "0",
+                                   sprintf("$%.0fM", gross_M))),
+                position = position_dodge(width = 0.85),
+                vjust = -0.4, size = 2.8, family = "sourcesans",
+                color = PAL$text_body) +
+      scale_fill_manual(values = fy_colors, name = "Fiscal year") +
+      scale_y_continuous(labels = label_dollar(suffix = "M"),
+                         name = "Gross obligations",
+                         expand = expansion(mult = c(0, 0.12))) +
+      scale_x_discrete(name = NULL) +
+      labs(title    = "FY26 obligations are 30% of the FY24 baseline",
+           subtitle = "Gross monthly obligations, first six months of three fiscal years (Oct–Mar)",
+           caption  = "Source: USAspending.gov FY24–FY26 Assistance files (pulled Apr 2026).
+FY25 H1 dropped 26% from FY24 baseline; FY26 H1 dropped another ~60% from there.") +
+      theme_civic() +
       theme(legend.position = "top")
+  }, res = 100)
 
-    ggplotly(p, tooltip = "text") |>
-      layout(hovermode = "x unified")
-  })
+  # ── Full-timeline monthly chart (moved to Trends tab) ──────────────────────
+  output$monthly_chart <- renderPlot({
+    md <- monthly_data()
+    md$month <- as.Date(md$month)
+    dir_order <- md |> group_by(directorate) |>
+      summarise(t = sum(gross_obligated, na.rm = TRUE)) |>
+      arrange(desc(t)) |> pull(directorate)
+    md$directorate <- factor(md$directorate, levels = dir_order)
 
-  output$agency_bar_plot <- renderPlotly({
-    df <- tryCatch(
-      dbGetQuery(con, "
-        SELECT agency_name, COUNT(*) AS n
-        FROM missing_grants
-        WHERE has_matching_award = FALSE
-        GROUP BY agency_name
-        ORDER BY n DESC
-        LIMIT 20
-      "),
-      error = function(e) data.frame()
-    )
-    if (nrow(df) == 0) return(plotly_empty())
+    ggplot(md, aes(x = month, y = gross_obligated/1e6, fill = directorate)) +
+      geom_col(position = "stack", width = 28) +
+      scale_fill_manual(values = DIR_COLORS, name = "Directorate") +
+      scale_y_continuous(labels = label_dollar(suffix = "M"), name = NULL) +
+      scale_x_date(date_breaks = "3 months", date_labels = "%b '%y", name = NULL) +
+      geom_vline(xintercept = as.numeric(as.Date("2025-04-15")),
+                 linetype = "dashed", color = PAL$gold, linewidth = 0.5) +
+      annotate("text", x = as.Date("2025-04-15"),
+               y = max(md$gross_obligated/1e6, na.rm = TRUE) * 0.95,
+               label = "Termination wave\nApr–May 2025", hjust = -0.05, vjust = 1,
+               size = 3.0, color = PAL$gold, fontface = "italic", family = "sourcesans") +
+      geom_vline(xintercept = as.numeric(as.Date("2025-10-01")),
+                 linetype = "dashed", color = PAL$teal, linewidth = 0.5) +
+      annotate("text", x = as.Date("2025-10-01"),
+               y = max(md$gross_obligated/1e6, na.rm = TRUE) * 0.95,
+               label = "FY26 begins\nOct 1 2025", hjust = -0.05, vjust = 1,
+               size = 3.0, color = PAL$teal, fontface = "italic", family = "sourcesans") +
+      labs(title    = "Full-timeline view: the August spike is annual, the FY26 trough is not",
+           subtitle = "Gross monthly obligations across all NSF directorates",
+           caption  = "Source: USAspending.gov FY24–FY26 Assistance files (pulled Apr 2026).") +
+      theme_civic()
+  }, res = 100)
 
-    p <- ggplot(df, aes(x = reorder(agency_name, n), y = n,
-                        text = paste0(agency_name, ": ", n, " rescissions"))) +
-      geom_col(fill = "#2E5FA3", alpha = 0.85) +
-      coord_flip() +
-      labs(x = NULL, y = "Confirmed Rescissions", title = "Rescissions by Agency") +
-      theme_minimal(base_size = 12)
+  # ── action-type chart ──────────────────────────────────────────────────────
+  output$action_type_chart <- renderPlot({
+    df <- dbGetQuery(pool, "
+      SELECT date_trunc('month', action_date)::date AS month,
+             COALESCE(action_type_description, 'OTHER') AS action_type,
+             SUM(federal_action_obligation) AS obligation,
+             COUNT(*) AS n_tx
+      FROM transactions
+      WHERE action_date >= '2023-10-01'
+      GROUP BY 1, 2 ORDER BY 1, 2")
+    df$month <- as.Date(df$month)
+    df$action_type <- factor(df$action_type,
+                             levels = c("NEW", "CONTINUATION", "REVISION", "OTHER"))
 
-    ggplotly(p, tooltip = "text")
-  })
+    action_colors <- c(NEW          = PAL$teal,
+                       CONTINUATION = PAL$teal_light,
+                       REVISION     = PAL$gold,
+                       OTHER        = PAL$border)
 
-  # ── Tab 3: Award lookup ────────────────────────────────────────────────────
-  award_results <- eventReactive(input$award_search_btn, {
-    cfda_clause   <- if (nzchar(trimws(input$award_search_cfda)))
-      paste0("AND cfda_number ILIKE '%", trimws(input$award_search_cfda), "%'") else ""
-    agency_clause <- if (nzchar(trimws(input$award_search_agency)))
-      paste0("AND awarding_agency_name ILIKE '%", trimws(input$award_search_agency), "%'") else ""
+    ggplot(df, aes(x = month, y = n_tx, fill = action_type)) +
+      geom_col(position = "stack", width = 28) +
+      scale_fill_manual(values = action_colors, name = "Action type") +
+      scale_x_date(date_breaks = "3 months", date_labels = "%b '%y", name = NULL) +
+      scale_y_continuous(name = "Transactions per month") +
+      geom_vline(xintercept = as.numeric(as.Date("2025-10-01")),
+                 linetype = "dashed", color = PAL$teal, linewidth = 0.4) +
+      labs(title    = "NEW awards and CONTINUATIONS dropped first; REVISIONS continued",
+           subtitle = "Monthly transaction count by USAspending action type",
+           caption  = "REVISIONS are mostly deobligations (negative dollar entries).") +
+      theme_civic()
+  }, res = 100)
 
-    dbGetQuery(con, sprintf("
-      SELECT
-        cfda_number           AS 'CFDA',
-        recipient_name        AS 'Recipient',
-        recipient_state       AS 'State',
-        awarding_agency_name  AS 'Awarding Agency',
-        PRINTF('$%%,.0f', COALESCE(award_amount, 0)) AS 'Amount',
-        CAST(award_date AS VARCHAR) AS 'Award Date',
-        LEFT(description, 80) AS 'Description'
-      FROM awards
-      WHERE 1=1 %s %s
-      ORDER BY award_amount DESC
-      LIMIT 500
-    ", cfda_clause, agency_clause))
-  }, ignoreNULL = FALSE)
+  # ── YoY chart ──────────────────────────────────────────────────────────────
+  output$yoy_chart <- renderPlot({
+    md <- monthly_data()
+    if (input$yoy_directorate != "ALL") md <- md |> filter(directorate == input$yoy_directorate)
 
-  output$award_results_table <- renderDT({
-    df <- award_results()
-    datatable(df, rownames = FALSE, options = list(pageLength = 10, scrollX = TRUE))
-  })
+    md$month <- as.Date(md$month)
+    md <- md |>
+      group_by(month) |>
+      summarise(gross = sum(gross_obligated, na.rm = TRUE),
+                ntx   = sum(n_transactions, na.rm = TRUE), .groups = "drop") |>
+      mutate(year     = lubridate::year(month),
+             cal_mo   = lubridate::month(month, label = TRUE, abbr = TRUE),
+             metric   = if (input$yoy_metric == "gross") gross else ntx)
 
-  output$award_histogram <- renderPlotly({
-    df <- tryCatch(
-      dbGetQuery(con, "SELECT award_amount FROM awards WHERE award_amount > 0 LIMIT 5000"),
-      error = function(e) data.frame()
-    )
-    if (nrow(df) == 0) return(plotly_empty())
+    ggplot(md, aes(x = cal_mo, y = if (input$yoy_metric == "gross") metric/1e6 else metric,
+                   fill = factor(year))) +
+      geom_col(position = position_dodge(width = 0.85), width = 0.78) +
+      scale_fill_manual(values = c("2023" = PAL$cat[6], "2024" = PAL$teal_light,
+                                   "2025" = PAL$teal,    "2026" = PAL$gold),
+                        name = "Calendar year") +
+      scale_y_continuous(
+        name = if (input$yoy_metric == "gross") "Gross obligations ($M)" else "Transactions",
+        labels = if (input$yoy_metric == "gross") label_dollar(suffix = "M") else comma) +
+      labs(x = NULL,
+           title    = if (input$yoy_directorate == "ALL")
+                       "Same calendar month, every year — apples to apples"
+                       else paste(input$yoy_directorate, "— same calendar month YoY"),
+           subtitle = "Removes fiscal-year seasonality so the FY26 collapse is unambiguous",
+           caption  = "Source: USAspending.gov.  Compare Oct'24 to Oct'25 — both are >5 months past reporting deadline.") +
+      theme_civic()
+  }, res = 100)
 
-    p <- ggplot(df, aes(x = award_amount)) +
-      geom_histogram(fill = "#2E5FA3", color = "white", bins = 40, alpha = 0.8) +
-      scale_x_log10(labels = label_dollar(scale_cut = cut_short_scale())) +
-      labs(x = "Award Amount (log scale)", y = "Count",
-           title = "Distribution of Grant Award Amounts") +
-      theme_minimal(base_size = 12)
+  # ── resilience scatter ────────────────────────────────────────────────────
+  output$resilience_scatter <- renderPlot({
+    rd <- resilience_data()
+    rd$open_M <- rd$open_advertised_funding / 1e6
+    rd$pct_dollar_retained[is.na(rd$pct_dollar_retained)] <- 0
 
-    ggplotly(p)
-  })
+    ggplot(rd, aes(x = n_open_opportunities, y = pct_dollar_retained,
+                   color = directorate, size = open_M)) +
+      geom_hline(yintercept = 50, linetype = "dotted", color = PAL$border, linewidth = 0.5) +
+      geom_hline(yintercept = 100, linetype = "dotted", color = PAL$border, linewidth = 0.5) +
+      geom_point(alpha = 0.85) +
+      ggrepel::geom_text_repel(aes(label = directorate), size = 3.4,
+                               family = "sourcesans", color = PAL$text_primary,
+                               box.padding = 0.4, point.padding = 0.3, show.legend = FALSE) +
+      scale_color_manual(values = DIR_COLORS, guide = "none") +
+      scale_size_continuous(range = c(3, 12), name = "Advertised\nfunding ($M)",
+                            labels = label_dollar(suffix = "M")) +
+      scale_y_continuous(name = "% of FY25 first-half new-award $ retained in FY26",
+                         labels = label_percent(scale = 1)) +
+      scale_x_continuous(name = "Currently-open opportunities (count)") +
+      labs(title    = "Polar and STEM Education held up; TIP and SBE collapsed",
+           subtitle = "Each dot is a directorate. Up = funding still flowing, right = many solicitations posted.",
+           caption  = "Sources: USAspending.gov transactions + Grants.gov current opportunities.") +
+      theme_civic()
+  }, res = 100)
 
-  # ── Tab 4: All opportunities table ────────────────────────────────────────
-  output$all_opps_table <- renderDT({
-    agency_clause   <- if (length(input$agency_filter) > 0)
-      paste0("AND agency_name IN ('", paste(input$agency_filter, collapse = "','"), "')") else ""
-    category_clause <- if (length(input$category_filter) > 0)
-      paste0("AND funding_activity_category IN ('",
-             paste(input$category_filter, collapse = "','"), "')") else ""
-
-    df <- tryCatch(
-      dbGetQuery(con, sprintf("
-        SELECT
-          opportunity_id     AS 'Opp. ID',
-          opportunity_number AS 'Number',
-          title              AS 'Title',
-          agency_name        AS 'Agency',
-          opportunity_status AS 'Status',
-          CAST(post_date AS VARCHAR)  AS 'Posted',
-          CAST(close_date AS VARCHAR) AS 'Closes',
-          PRINTF('$%%,.0f', COALESCE(award_ceiling, 0)) AS 'Award Ceiling',
-          cfda_numbers       AS 'CFDA',
-          CASE WHEN is_active THEN 'Active' ELSE 'Removed' END AS 'DB Status'
-        FROM opportunities
-        WHERE 1=1 %s %s
-        ORDER BY post_date DESC
-        LIMIT 2000
-      ", agency_clause, category_clause)),
-      error = function(e) data.frame(Error = conditionMessage(e))
-    )
-
+  # ── currently-open opportunities table ────────────────────────────────────
+  output$open_opps_table <- renderDT({
+    df <- open_opp_data()
+    df$funding_M <- ifelse(is.na(df$funding_M), NA, round(df$funding_M / 1e6, 1))
     datatable(
       df,
-      rownames   = FALSE,
-      filter     = "top",
+      colnames  = c("Directorate", "Opp #", "Title", "Funding ($M)",
+                    "Posted", "Closes"),
+      rownames  = FALSE,
+      filter    = "top",
       extensions = "Buttons",
-      options    = list(
-        dom        = "Bfrtip",
-        buttons    = c("csv"),
-        pageLength = 20,
-        scrollX    = TRUE
-      )
+      options   = list(pageLength = 12, scrollX = TRUE,
+                       dom = "Bfrtip", buttons = c("csv"),
+                       order = list(list(3, "desc"))),
+      class     = "stripe hover compact"
     )
   })
 }
 
-# ── Launch ────────────────────────────────────────────────────────────────────
 shinyApp(ui = ui, server = server)

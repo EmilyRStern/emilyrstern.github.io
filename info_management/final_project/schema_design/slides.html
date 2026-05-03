@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Federal Grant Disruption — Schema Design</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/theme/white.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/plugin/highlight/monokai.css">
+
+  <style>
+    :root {
+      --navy:      #1E2761;
+      --navy-2:    #2E3F8F;
+      --ice:       #CADCFC;
+      --ice-2:     #E8F0FE;
+      --gold:      #F9E795;
+      --ink:       #1f2933;
+      --muted:     #52606d;
+      --rule:      #cbd2d9;
+    }
+
+    .reveal {
+      font-family: "Calibri", "Source Sans Pro", -apple-system, "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      font-size: 26px;
+    }
+    .reveal .slides section { text-align: left; line-height: 1.45; }
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: "Cambria", "Georgia", serif;
+      color: var(--navy);
+      text-transform: none;
+      letter-spacing: -0.01em;
+      font-weight: 700;
+    }
+    .reveal h1 { font-size: 1.8em; margin-bottom: 0.2em; }
+    .reveal h2 { font-size: 1.35em; margin-bottom: 0.5em; }
+    .reveal h3 { font-size: 1.1em; color: var(--navy-2); margin-bottom: 0.4em; }
+
+    .reveal ul, .reveal ol { margin-left: 1.1em; }
+    .reveal li { margin-bottom: 0.35em; }
+    .reveal small { color: var(--muted); font-size: 0.7em; }
+
+    /* Title slide */
+    section.title-slide {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+      color: white;
+      padding: 48px 56px;
+      border-radius: 4px;
+    }
+    section.title-slide h1 {
+      color: white;
+      font-size: 2.2em;
+      margin-bottom: 0.15em;
+      line-height: 1.15;
+    }
+    section.title-slide .subtitle {
+      color: var(--ice);
+      font-size: 1.05em;
+      margin-bottom: 1.3em;
+      font-style: italic;
+    }
+    section.title-slide .meta {
+      color: var(--ice);
+      font-size: 0.75em;
+      letter-spacing: 0.04em;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 16px;
+      margin-top: 24px;
+    }
+
+    /* Research question slide */
+    section.rq-slide {
+      background: var(--navy);
+      color: white;
+      padding: 60px 72px;
+    }
+    section.rq-slide .rq-label {
+      font-family: "Consolas", monospace;
+      color: var(--gold);
+      font-size: 0.7em;
+      letter-spacing: 0.18em;
+      margin-bottom: 1em;
+    }
+    section.rq-slide h1 {
+      color: white;
+      font-size: 1.6em;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+    section.rq-slide .em {
+      color: var(--gold);
+      font-style: italic;
+      font-weight: 700;
+    }
+    section.rq-slide .footer-anchor {
+      margin-top: 48px;
+      color: var(--ice);
+      font-size: 0.75em;
+      letter-spacing: 0.04em;
+    }
+
+    /* Tables */
+    .reveal table {
+      font-size: 0.7em;
+      border-collapse: collapse;
+      width: 100%;
+      margin: 0.6em 0;
+      background: white;
+    }
+    .reveal th {
+      background: var(--navy);
+      color: white;
+      padding: 7px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .reveal td {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--rule);
+      vertical-align: top;
+    }
+    .reveal tr:nth-child(even) td { background: var(--ice-2); }
+
+    /* Code */
+    .reveal pre {
+      box-shadow: none;
+      width: 100%;
+      font-size: 0.55em;
+      line-height: 1.4;
+    }
+    .reveal pre code {
+      padding: 14px 18px;
+      max-height: 540px;
+      border-radius: 4px;
+    }
+    .reveal code.inline {
+      background: var(--ice-2);
+      color: var(--navy);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    /* Lede */
+    .lede {
+      font-size: 1.05em;
+      color: var(--navy);
+      border-left: 4px solid #c9a227;
+      padding: 8px 16px;
+      margin: 0.5em 0 1em;
+      background: #fffce7;
+    }
+
+    /* Entity cards: simple, less wordy */
+    .entity-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 0.6em 0;
+    }
+    .entity-card {
+      background: white;
+      border: 1.5px solid var(--rule);
+      border-radius: 5px;
+      padding: 14px 16px;
+      font-size: 0.78em;
+    }
+    .entity-card .ent-name {
+      font-family: "Consolas", monospace;
+      font-size: 1.1em;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .entity-card .ent-role {
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 6px;
+      font-size: 0.92em;
+    }
+    .entity-card .ent-why {
+      font-size: 0.92em;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+    .entity-card.agencies     { border-left: 5px solid #A0875F; background: #FCFAF5; }
+    .entity-card.recipients   { border-left: 5px solid #4A7AA0; background: #F8FBFE; }
+    .entity-card.opportunities{ border-left: 5px solid #5961A8; background: #FAFAFE; }
+    .entity-card.awards       { border-left: 5px solid #4A8C5F; background: #F8FCF9; }
+    .entity-card.terminations { border-left: 5px solid #B05050; background: #FEFAF9; }
+    .entity-card.change_log   { border-left: 5px solid #888;     background: #FAFAFA; border-style: dashed; }
+
+    /* Sub-question pills */
+    .subq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 16px;
+      margin-top: 0.7em;
+    }
+    .subq {
+      background: white;
+      border: 1px solid var(--rule);
+      padding: 11px 14px;
+      border-radius: 4px;
+      font-size: 0.78em;
+    }
+    .subq .q {
+      color: var(--navy);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .subq .a {
+      color: var(--muted);
+    }
+    .subq .a code {
+      color: var(--navy-2);
+      background: var(--ice-2);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.95em;
+    }
+
+    /* ER diagram slide-specific styling */
+    .er-wrap {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .er-wrap svg { width: 100%; height: auto; }
+
+    .reveal .slide-number {
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+  </style>
+</head>
+
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ========== 1. TITLE ========== -->
+<section class="title-slide">
+  <div style="font-family: 'Consolas', monospace; color: var(--gold); font-size: 0.7em; letter-spacing: 0.18em; margin-bottom: 1em;">
+    EPPS 6354 · INFORMATION MANAGEMENT · SPRING 2026
+  </div>
+  <h1>Tracking Federal Grant<br>Funding Disruption</h1>
+  <div class="subtitle">A Minimal Relational Schema for Rescissions and Terminations</div>
+  <div class="meta">
+    Emily Stern · Final Project Schema Presentation<br>
+    Instructor: Karl Ho · University of Texas at Dallas
+  </div>
+</section>
+
+<!-- ========== 2. RESEARCH QUESTION ========== -->
+<section class="rq-slide">
+  <div class="rq-label">RESEARCH QUESTION</div>
+  <h1>
+    How much federal grant funding has been
+    <span class="em">disrupted</span>
+    since the 2025 administration change &mdash;
+    either
+    <span class="em">rescinded</span>
+    at the opportunity level
+    or
+    <span class="em">terminated</span>
+    at the award level &mdash;
+    and which agencies and recipients are most affected?
+  </h1>
+  <div class="footer-anchor">
+    Every table in the schema that follows earns its place against this question.
+  </div>
+</section>
+
+<!-- ========== 3. SUB-QUESTIONS DRIVE THE SCHEMA ========== -->
+<section>
+  <h2>What the question requires the schema to support</h2>
+  <p>The research question breaks into six sub-questions. Each one points at the table(s) that must exist.</p>
+  <div class="subq-grid">
+    <div class="subq">
+      <div class="q">"Which Grants.gov opportunities disappeared?"</div>
+      <div class="a">Need: <code>opportunities</code> + <code>change_log</code></div>
+    </div>
+    <div class="subq">
+      <div class="q">"Did those opportunities ever get awarded?"</div>
+      <div class="a">Need: <code>opportunities</code> joined to <code>awards</code></div>
+    </div>
+    <div class="subq">
+      <div class="q">"Which awards were terminated?"</div>
+      <div class="a">Need: <code>awards</code> joined to <code>terminations</code></div>
+    </div>
+    <div class="subq">
+      <div class="q">"Which agencies are most affected?"</div>
+      <div class="a">Need: <code>agencies</code> with parent rollup</div>
+    </div>
+    <div class="subq">
+      <div class="q">"Which recipients are most affected?"</div>
+      <div class="a">Need: <code>recipients</code> with parent rollup</div>
+    </div>
+    <div class="subq">
+      <div class="q">"How is disruption changing over time?"</div>
+      <div class="a">Need: <code>change_log</code> + <code>terminations</code> on a shared timeline</div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top: 16px;">Six sub-questions &rarr; six tables. Anything else is bloat.</p>
+</section>
+
+<!-- ========== 4. SOURCES ========== -->
+<section>
+  <h2>The data we need to integrate</h2>
+  <table>
+    <thead>
+      <tr><th>Source</th><th>What's in it</th><th>Volume</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Grants.gov API</td><td>Federal grant opportunity listings</td><td>~50K active</td><td>✓ loaded</td></tr>
+      <tr><td>USA Spending bulk CSV</td><td>Awards (rolled up from millions of transaction rows)</td><td>FY24&ndash;FY26</td><td>Cleaned, not yet relational</td></tr>
+      <tr><td>NSF terminations</td><td>Terminated NSF awards</td><td>~1,800 rows</td><td>Not loaded</td></tr>
+      <tr><td>NIH terminations (v3)</td><td>Terminated NIH awards</td><td>~thousands</td><td>Not loaded</td></tr>
+      <tr><td>EPA / CDC / SAMHSA terminations</td><td>Terminated awards from these three agencies</td><td>Hundreds each</td><td>Not loaded</td></tr>
+    </tbody>
+  </table>
+  <p class="lede" style="margin-top: 12px;">Five termination feeds describe the same kind of event with five different shapes. The schema unifies them into one table.</p>
+</section>
+
+<!-- ========== 5. THE SIX TABLES ========== -->
+<section>
+  <h2>Six tables, each pulling its weight</h2>
+  <div class="entity-row">
+    <div class="entity-card agencies">
+      <div class="ent-name">agencies</div>
+      <div class="ent-role">Federal agencies, with hierarchy</div>
+      <div class="ent-why">Cross-agency comparison (HHS, NSF, NIH&hellip;) with rollup of sub-agencies to their parent department.</div>
+    </div>
+    <div class="entity-card recipients">
+      <div class="ent-name">recipients</div>
+      <div class="ent-role">Organizations receiving awards</div>
+      <div class="ent-why">"Which recipients are most affected" with parent-organization rollup (e.g., UC system).</div>
+    </div>
+    <div class="entity-card opportunities">
+      <div class="ent-name">opportunities</div>
+      <div class="ent-role">Grants.gov listings &mdash; what was promised</div>
+      <div class="ent-why">The rescission half of the question; tracked over time via <code class="inline">change_log</code>.</div>
+    </div>
+  </div>
+  <div class="entity-row" style="margin-top: 12px;">
+    <div class="entity-card awards">
+      <div class="ent-name">awards</div>
+      <div class="ent-role">USA Spending awards &mdash; what got funded</div>
+      <div class="ent-why">Bridges opportunities to terminations; carries obligated and outlayed totals.</div>
+    </div>
+    <div class="entity-card terminations">
+      <div class="ent-name">terminations</div>
+      <div class="ent-role">Unified across the 5 source agencies</div>
+      <div class="ent-why">The dependent variable. <code class="inline">source_agency_id</code> identifies which agency reported it.</div>
+    </div>
+    <div class="entity-card change_log">
+      <div class="ent-name">change_log</div>
+      <div class="ent-role">Audit log of opportunity changes</div>
+      <div class="ent-why">The rescission detection mechanism. Append-only history of <code class="inline">ADDED</code> / <code class="inline">REMOVED</code> / <code class="inline">MODIFIED</code>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 6. ER DIAGRAM ========== -->
+<section>
+  <h2>Entity-relationship diagram</h2>
+  <div class="er-wrap">
+    <svg viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" font-family="Cambria, Georgia, serif">
+      <defs>
+        <pattern id="grid-slide" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#eef0f2" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="1240" height="720" fill="url(#grid-slide)"/>
+
+      <!-- Connecting lines -->
+      <line x1="260" y1="135" x2="340" y2="135" stroke="#666" stroke-width="1.5"/>
+      <line x1="420" y1="135" x2="500" y2="135" stroke="#666" stroke-width="1.5"/>
+      <line x1="700" y1="135" x2="780" y2="135" stroke="#666" stroke-width="1.5"/>
+      <line x1="860" y1="135" x2="940" y2="135" stroke="#666" stroke-width="1.5"/>
+      <line x1="600" y1="220" x2="600" y2="290" stroke="#666" stroke-width="1.5"/>
+      <line x1="600" y1="340" x2="600" y2="410" stroke="#666" stroke-width="1.5"/>
+      <line x1="260" y1="495" x2="340" y2="495" stroke="#666" stroke-width="1.5"/>
+      <line x1="420" y1="495" x2="500" y2="495" stroke="#666" stroke-width="1.5"/>
+      <line x1="700" y1="495" x2="780" y2="495" stroke="#666" stroke-width="1.5"/>
+      <line x1="860" y1="495" x2="940" y2="495" stroke="#666" stroke-width="1.5"/>
+
+      <!-- Self-loops -->
+      <path d="M 100 50 C 100 22, 160 22, 160 50" fill="none" stroke="#999" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="130" y="20" text-anchor="middle" font-size="11" fill="#666" font-style="italic">parent_of</text>
+      <path d="M 100 410 C 100 382, 160 382, 160 410" fill="none" stroke="#999" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="130" y="380" text-anchor="middle" font-size="11" fill="#666" font-style="italic">parent_of</text>
+
+      <!-- agencies -->
+      <g>
+        <rect x="60" y="50" width="200" height="170" rx="6" fill="#F4EBDB" stroke="#A0875F" stroke-width="1.5"/>
+        <text x="160" y="76" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C4720">agencies</text>
+        <line x1="72" y1="86" x2="248" y2="86" stroke="#A0875F" stroke-width="0.8"/>
+        <text x="80" y="110" font-size="13" fill="#2a2a2a"><tspan font-style="italic">agency_id</tspan><tspan font-size="11" fill="#777"> (PK)</tspan></text>
+        <text x="80" y="131" font-size="13" fill="#2a2a2a">agency_code</text>
+        <text x="80" y="152" font-size="13" fill="#2a2a2a">agency_name</text>
+        <text x="80" y="173" font-size="13" fill="#2a2a2a">agency_level</text>
+        <text x="80" y="194" font-size="13" fill="#2a2a2a"><tspan font-style="italic">parent_agency_id</tspan><tspan font-size="11" fill="#777"> (FK)</tspan></text>
+      </g>
+
+      <!-- opportunities -->
+      <g>
+        <rect x="500" y="50" width="200" height="170" rx="6" fill="#E1E2FB" stroke="#5961A8" stroke-width="1.5"/>
+        <text x="600" y="76" text-anchor="middle" font-size="15" font-weight="bold" fill="#3D437B">opportunities</text>
+        <line x1="512" y1="86" x2="688" y2="86" stroke="#5961A8" stroke-width="0.8"/>
+        <text x="520" y="110" font-size="13" fill="#2a2a2a"><tspan font-style="italic">opportunity_id</tspan><tspan font-size="11" fill="#777"> (PK)</tspan></text>
+        <text x="520" y="131" font-size="13" fill="#2a2a2a"><tspan font-style="italic">agency_id</tspan><tspan font-size="11" fill="#777"> (FK)</tspan></text>
+        <text x="520" y="152" font-size="13" fill="#2a2a2a">title</text>
+        <text x="520" y="173" font-size="13" fill="#2a2a2a">cfda_number</text>
+        <text x="520" y="194" font-size="13" fill="#2a2a2a">post_date</text>
+        <text x="520" y="215" font-size="13" fill="#2a2a2a">estimated_total_funding</text>
+      </g>
+
+      <!-- change_log -->
+      <g>
+        <rect x="940" y="50" width="200" height="170" rx="6" fill="#F1F1F1" stroke="#888" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="1040" y="76" text-anchor="middle" font-size="15" font-weight="bold" fill="#3a3a3a">change_log</text>
+        <line x1="952" y1="86" x2="1128" y2="86" stroke="#888" stroke-width="0.8"/>
+        <text x="960" y="110" font-size="13" fill="#2a2a2a"><tspan font-style="italic">change_id</tspan><tspan font-size="11" fill="#777"> (PK)</tspan></text>
+        <text x="960" y="131" font-size="13" fill="#2a2a2a"><tspan font-style="italic">opportunity_id</tspan><tspan font-size="11" fill="#777"> (FK)</tspan></text>
+        <text x="960" y="152" font-size="13" fill="#2a2a2a">snapshot_date</text>
+        <text x="960" y="173" font-size="13" fill="#2a2a2a">change_type</text>
+        <text x="960" y="194" font-size="13" fill="#2a2a2a">field_changed</text>
+        <text x="960" y="215" font-size="13" fill="#2a2a2a">old_value, new_value</text>
+      </g>
+
+      <!-- recipients -->
+      <g>
+        <rect x="60" y="410" width="200" height="170" rx="6" fill="#DCE8F5" stroke="#4A7AA0" stroke-width="1.5"/>
+        <text x="160" y="436" text-anchor="middle" font-size="15" font-weight="bold" fill="#2E5577">recipients</text>
+        <line x1="72" y1="446" x2="248" y2="446" stroke="#4A7AA0" stroke-width="0.8"/>
+        <text x="80" y="470" font-size="13" fill="#2a2a2a"><tspan font-style="italic">recipient_uei</tspan><tspan font-size="11" fill="#777"> (PK)</tspan></text>
+        <text x="80" y="491" font-size="13" fill="#2a2a2a">recipient_name</text>
+        <text x="80" y="512" font-size="13" fill="#2a2a2a"><tspan font-style="italic">parent_uei</tspan><tspan font-size="11" fill="#777"> (FK)</tspan></text>
+        <text x="80" y="533" font-size="13" fill="#2a2a2a">state_code</text>
+        <text x="80" y="554" font-size="13" fill="#2a2a2a">city_name</text>
+      </g>
+
+      <!-- awards -->
+      <g>
+        <rect x="500" y="410" width="200" height="170" rx="6" fill="#D8EDDF" stroke="#4A8C5F" stroke-width="1.5"/>
+        <text x="600" y="436" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D6A48">awards</text>
+        <line x1="512" y1="446" x2="688" y2="446" stroke="#4A8C5F" stroke-width="0.8"/>
+        <text x="520" y="470" font-size="13" fill="#2a2a2a"><tspan font-style="italic">award_unique_key</tspan><tspan font-size="11" fill="#777"> (PK)</tspan></text>
+        <text x="520" y="491" font-size="13" fill="#2a2a2a"><tspan font-style="italic">award_id_fain</tspan><tspan font-size="11" fill="#777"> (UK)</tspan></text>
+        <text x="520" y="512" font-size="13" fill="#2a2a2a"><tspan font-style="italic">recipient_uei</tspan><tspan font-size="11" fill="#777"> (FK)</tspan></text>
+        <text x="520" y="533" font-size="13" fill="#2a2a2a"><tspan font-style="italic">awarding_agency_id</tspan><tspan font-size="11" fill="#777"> (FK)</tspan></text>
+        <text x="520" y="554" font-size="13" fill="#2a2a2a">cfda_number</text>
+        <text x="520" y="575" font-size="13" fill="#2a2a2a">total_obligated_amount</text>
+      </g>
+
+      <!-- terminations -->
+      <g>
+        <rect x="940" y="410" width="200" height="170" rx="6" fill="#FBDBD7" stroke="#B05050" stroke-width="1.5"/>
+        <text x="1040" y="436" text-anchor="middle" font-size="15" font-weight="bold" fill="#8C3A35">terminations</text>
+        <line x1="952" y1="446" x2="1128" y2="446" stroke="#B05050" stroke-width="0.8"/>
+        <text x="960" y="470" font-size="13" fill="#2a2a2a"><tspan font-style="italic">termination_id</tspan><tspan font-size="11" fill="#777"> (PK)</tspan></text>
+        <text x="960" y="491" font-size="13" fill="#2a2a2a"><tspan font-style="italic">source_agency_id</tspan><tspan font-size="11" fill="#777"> (FK)</tspan></text>
+        <text x="960" y="512" font-size="13" fill="#2a2a2a"><tspan font-style="italic">award_id_fain</tspan><tspan font-size="11" fill="#777"> (FK)</tspan></text>
+        <text x="960" y="533" font-size="13" fill="#2a2a2a">current_status</text>
+        <text x="960" y="554" font-size="13" fill="#2a2a2a">latest_termination_date</text>
+        <text x="960" y="575" font-size="13" fill="#2a2a2a">award_value</text>
+      </g>
+
+      <!-- Diamonds -->
+      <g>
+        <polygon points="340,135 380,108 420,135 380,162" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="380" y="139" text-anchor="middle" font-size="11.5" fill="#444" font-style="italic">posts</text>
+      </g>
+      <g>
+        <polygon points="780,135 820,108 860,135 820,162" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="820" y="139" text-anchor="middle" font-size="11.5" fill="#444" font-style="italic">tracks</text>
+      </g>
+      <g>
+        <polygon points="540,315 600,290 660,315 600,340" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="600" y="319" text-anchor="middle" font-size="11.5" fill="#444" font-style="italic">resolves to</text>
+      </g>
+      <g>
+        <polygon points="340,495 380,468 420,495 380,522" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="380" y="499" text-anchor="middle" font-size="11.5" fill="#444" font-style="italic">receives</text>
+      </g>
+      <g>
+        <polygon points="780,495 820,468 860,495 820,522" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="820" y="492" text-anchor="middle" font-size="10.5" fill="#444" font-style="italic">terminated</text>
+        <text x="820" y="505" text-anchor="middle" font-size="10.5" fill="#444" font-style="italic">as</text>
+      </g>
+
+      <text x="620" y="660" text-anchor="middle" font-size="11.5" fill="#666" font-style="italic" font-family="-apple-system, system-ui, sans-serif">
+        agencies also FKs into awards and terminations &mdash; lines omitted for clarity
+      </text>
+    </svg>
+  </div>
+</section>
+
+<!-- ========== 7. WHAT CHANGED FROM THE PROPOSAL ========== -->
+<section>
+  <h2>What changed from the proposal</h2>
+  <table>
+    <thead><tr><th>Original proposal element</th><th>Status</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><code class="inline">agencies</code>, <code class="inline">opportunities</code>, <code class="inline">change_log</code></td><td>Kept</td><td>Still answer parts of the disruption question</td></tr>
+      <tr><td><code class="inline">categories</code>, <code class="inline">opportunity_categories</code></td><td>Dropped</td><td>Funding-category aggregation isn't part of the question anymore</td></tr>
+      <tr><td><code class="inline">snapshots</code></td><td>Folded into <code class="inline">change_log</code></td><td>Only the snapshot date matters; one column instead of one table</td></tr>
+      <tr><td>PostgreSQL</td><td>Switched to DuckDB</td><td>Better fit for the bulk USA Spending CSV scale</td></tr>
+    </tbody>
+  </table>
+  <h3 style="margin-top: 22px;">What was added (not in the proposal)</h3>
+  <table>
+    <thead><tr><th>New table</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><code class="inline">awards</code></td><td>USA Spending integration wasn't in the original plan; awards are the bridge between opportunities and terminations</td></tr>
+      <tr><td><code class="inline">terminations</code></td><td>The five agency termination feeds didn't exist when the proposal was written; this is the dependent variable now</td></tr>
+      <tr><td><code class="inline">recipients</code></td><td>"Which recipients are most affected" is half the research question</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ========== 8. THE HEADLINE QUERY ========== -->
+<section>
+  <h2>The headline query</h2>
+  <p>"Which agencies have lost the most funding, counting both rescissions and terminations?"</p>
+  <pre><code class="language-sql">-- Disruption by agency: rescinded + terminated funding, with HHS sub-agencies
+-- (NIH, CDC, SAMHSA) rolled up to their parent department.
+
+SELECT
+  COALESCE(parent.agency_name, child.agency_name) AS agency,
+  COUNT(DISTINCT cl.opportunity_id)
+       FILTER (WHERE cl.change_type = 'REMOVED')                AS rescinded_count,
+  COUNT(DISTINCT tm.termination_id)
+       FILTER (WHERE tm.has_been_terminated)                    AS terminated_count,
+  SUM(CASE WHEN cl.change_type = 'REMOVED'
+           THEN o.estimated_total_funding END)                  AS rescinded_dollars,
+  SUM(CASE WHEN tm.has_been_terminated
+           THEN tm.award_value END)                             AS terminated_dollars
+FROM   agencies child
+LEFT   JOIN agencies     parent ON parent.agency_id    = child.parent_agency_id
+LEFT   JOIN opportunities o     ON o.agency_id         = child.agency_id
+LEFT   JOIN change_log    cl    ON cl.opportunity_id   = o.opportunity_id
+LEFT   JOIN terminations  tm    ON tm.source_agency_id = child.agency_id
+GROUP  BY agency
+ORDER  BY rescinded_dollars + terminated_dollars DESC;</code></pre>
+  <p><small>Six full queries in <code class="inline">sample_queries.sql</code> &mdash; total disruption, by agency, by recipient, confirmed rescissions, monthly volatility, reinstatement rates.</small></p>
+</section>
+
+<!-- ========== 9. INGESTION ROADMAP ========== -->
+<section>
+  <h2>Loading the data</h2>
+  <ol style="font-size: 0.9em;">
+    <li><strong>Reference layer</strong> &mdash; load <code class="inline">agencies</code> (departments first, then sub-agencies and offices). One-time seed.</li>
+    <li><strong>Recipients</strong> &mdash; deduplicate USA Spending CSVs by UEI; second pass joins parent UEIs.</li>
+    <li><strong>Awards</strong> &mdash; one row per award, with foreign keys to recipients and agencies.</li>
+    <li><strong>Opportunities + change_log</strong> &mdash; continue the existing daily Grants.gov pull; new changes append to <code class="inline">change_log</code>.</li>
+    <li><strong>Terminations</strong> &mdash; load each of the five agency CSVs into the unified shape.</li>
+  </ol>
+  <p class="lede">Existing R scripts already do steps 4 and most of 2–3. Steps 1 and 5 are the new work.</p>
+</section>
+
+<!-- ========== 10. CLOSE ========== -->
+<section class="title-slide">
+  <div style="font-family: 'Consolas', monospace; color: var(--gold); font-size: 0.7em; letter-spacing: 0.18em; margin-bottom: 1em;">
+    SCHEMA · DDL · QUERIES · DIAGRAM · WRITE-UP
+  </div>
+  <h1>Six tables, one question</h1>
+  <div style="font-size: 0.9em; line-height: 1.5;">
+    Every table is in the schema because the research question requires it.
+    <br><br>
+    Disruption gets a single, queryable representation: rescissions in <code style="background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 3px;">change_log</code>, terminations in <code style="background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 3px;">terminations</code>, both joinable to agencies and recipients on the same time axis.
+  </div>
+  <div class="meta">
+    Files: <code style="background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 3px;">schema.sql</code> ·
+    <code style="background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 3px;">sample_queries.sql</code> ·
+    <code style="background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 3px;">er_diagram.html</code> ·
+    <code style="background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 3px;">schema_writeup.md</code>
+  </div>
+</section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'fade',
+    plugins: [ RevealHighlight ],
+    width: 1280,
+    height: 800,
+    margin: 0.04
+  });
+</script>
+</body>
+</html>

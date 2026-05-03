@@ -1,0 +1,419 @@
+/*-- scss:functions --*/
+// (none)
+
+/*-- scss:defaults --*/
+// ============================================================================
+// Stern theme for Quarto
+// Mirrors stern::stern_bs_theme() (R/theme-shiny.R) so the static site
+// inherits the same look as a Shiny app built with stern_app_shell().
+// Source of truth: github.com/EmilyRStern/stern  (R/palettes.R, R/theme-shiny.R)
+// ============================================================================
+
+// ---- Google fonts ----------------------------------------------------------
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@400;600;700&family=Source+Code+Pro:wght@400&display=swap');
+
+// ---- Stern color tokens (from palettes.R) ---------------------------------
+$stern-bg-primary:    #FBF8F1;
+$stern-bg-secondary:  #F2EDDF;
+$stern-bg-surface:    #FFFFFF;
+$stern-text-primary:  #2B2A1F;
+$stern-text-body:     #4A4632;
+$stern-text-muted:    #6E6A55;
+$stern-border:        #C9C0A4;
+$stern-border-soft:   #E5DEC2;
+
+// Categorical palette (use order)
+$stern-olive:         #5A6B3A;
+$stern-navy:          #2A3A5C;
+$stern-mustard:       #C99B2A;
+$stern-rust:          #B5623C;
+$stern-walnut:        #6E5938;
+$stern-sage:          #8A9572;
+
+// ---- Bootstrap variable overrides (mirror stern_bs_theme) -----------------
+$body-bg:             $stern-bg-primary;
+$body-color:          $stern-text-body;
+$primary:             $stern-olive;
+$secondary:           $stern-navy;
+$success:             $stern-olive;
+$info:                $stern-navy;
+$warning:             $stern-mustard;
+$danger:              $stern-rust;
+
+$font-family-sans-serif: "Source Serif 4", Georgia, serif;
+$font-family-serif:      "Source Serif 4", Georgia, serif;
+$headings-font-family:   "Source Serif 4", Georgia, serif;
+$font-family-monospace:  "Source Code Pro", Menlo, monospace;
+$font-family-base:       "Source Serif 4", Georgia, serif;
+
+$font-size-base:      1rem;          // 16px
+$line-height-base:    1.6;
+$headings-font-weight: 600;
+$headings-color:      $stern-text-primary;
+
+$border-color:        $stern-border;
+$border-radius:       0;
+$border-radius-sm:    0;
+$border-radius-lg:    0;
+
+$card-border-radius:  0;
+$card-cap-bg:         $stern-bg-secondary;
+$card-cap-color:      $stern-text-muted;
+$card-bg:             $stern-bg-primary;
+$card-border-color:   $stern-border;
+
+$link-color:          $stern-olive;
+$link-hover-color:    $stern-text-primary;
+$link-decoration:     underline;
+
+$navbar-light-color:           $stern-text-muted;
+$navbar-light-hover-color:     $stern-text-primary;
+$navbar-light-active-color:    $stern-text-primary;
+$navbar-light-brand-color:     $stern-text-primary;
+$navbar-light-brand-hover-color: $stern-text-primary;
+
+// Quarto-specific tokens
+$navbar-bg:           $stern-bg-primary;
+$navbar-fg:           $stern-text-muted;
+$navbar-hl:           $stern-text-primary;
+$footer-bg:           $stern-bg-primary;
+$footer-fg:           $stern-text-muted;
+
+/*-- scss:rules --*/
+// ============================================================================
+// Custom rules (port of stern_custom_css() from R/theme-shiny.R, plus
+// page-level editorial defaults for the Quarto site).
+// ============================================================================
+
+body {
+  background-color: $stern-bg-primary;
+  color: $stern-text-body;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: "Source Serif 4", Georgia, serif;
+  color: $stern-text-primary;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0 0 1rem; }
+p strong { color: $stern-text-primary; font-weight: 600; }
+
+a {
+  color: $stern-olive;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+a:hover { color: $stern-text-primary; }
+
+// ---- Cards ---------------------------------------------------------------
+.card {
+  background-color: $stern-bg-primary;
+  border: 1px solid $stern-border;
+  border-radius: 0;
+  box-shadow: none;
+}
+.card-header {
+  background-color: $stern-bg-secondary;
+  border-bottom: 1px solid $stern-border;
+  border-radius: 0;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $stern-text-muted;
+  font-weight: 600;
+  padding: 10px 14px;
+}
+.card-body { padding: 16px 18px; }
+.card-footer {
+  background-color: $stern-bg-secondary;
+  border-top: 1px solid $stern-border;
+  border-radius: 0;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.72rem;
+  color: $stern-text-muted;
+  padding: 8px 14px;
+}
+
+// ---- Navbar (Quarto / Bootstrap) -----------------------------------------
+.navbar {
+  background-color: $stern-bg-primary !important;
+  border-bottom: 1px solid $stern-border;
+  padding: 12px 18px;
+  box-shadow: none;
+}
+.navbar-brand {
+  font-family: "Source Serif 4", serif !important;
+  font-weight: 600 !important;
+  color: $stern-text-primary !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 0.01em;
+}
+.navbar-nav .nav-link {
+  font-family: "Source Sans 3", sans-serif !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $stern-text-muted !important;
+  font-weight: 600 !important;
+  padding: 0.4rem 0.9rem !important;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: $stern-text-primary !important;
+}
+// Dropdown menus from the navbar (used by the "Menu" item in _quarto.yml)
+.navbar .dropdown-menu {
+  background-color: $stern-bg-primary;
+  border: 1px solid $stern-border;
+  border-radius: 0;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.82rem;
+  padding: 6px 0;
+}
+.navbar .dropdown-item {
+  color: $stern-text-body;
+  padding: 6px 14px;
+}
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+  background-color: $stern-bg-secondary;
+  color: $stern-text-primary;
+}
+
+// ---- Tabs ----------------------------------------------------------------
+.nav-tabs { border-bottom: 1px solid $stern-border; }
+.nav-tabs .nav-link {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $stern-text-muted;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 8px 14px;
+  font-weight: 600;
+}
+.nav-tabs .nav-link:hover {
+  color: $stern-text-body;
+  background-color: transparent;
+  border-bottom-color: $stern-border;
+}
+.nav-tabs .nav-link.active {
+  color: $stern-text-primary;
+  background-color: transparent;
+  border-bottom-color: $stern-olive;
+}
+
+.nav-pills .nav-link {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.82rem;
+  color: $stern-text-body;
+  border-radius: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+}
+.nav-pills .nav-link.active {
+  background-color: $stern-olive;
+  color: $stern-bg-primary !important;
+}
+
+// ---- Form inputs ---------------------------------------------------------
+label, .form-label, .control-label {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $stern-text-muted;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.form-control,
+.form-select,
+input[type='text'],
+input[type='number'],
+input[type='date'],
+input[type='search'] {
+  background-color: $stern-bg-surface;
+  border: 1px solid $stern-border;
+  border-radius: 0 !important;
+  color: $stern-text-primary;
+  font-family: "Source Serif 4", serif;
+  font-size: 0.92rem;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: $stern-olive;
+  box-shadow: 0 0 0 2px $stern-border-soft;
+  outline: none;
+}
+
+// ---- Buttons -------------------------------------------------------------
+.btn {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 0 !important;
+  font-weight: 600;
+  padding: 8px 16px;
+}
+.btn-primary {
+  background-color: $stern-olive;
+  border-color: $stern-olive;
+  color: $stern-bg-primary;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: $stern-text-primary;
+  border-color: $stern-text-primary;
+}
+.btn-secondary {
+  background-color: $stern-bg-primary;
+  border-color: $stern-border;
+  color: $stern-text-body;
+}
+.btn-secondary:hover {
+  background-color: $stern-bg-secondary;
+  border-color: $stern-olive;
+  color: $stern-text-primary;
+}
+
+// ---- Tables (incl. DT) ---------------------------------------------------
+table {
+  font-family: "Source Serif 4", serif;
+  font-size: 0.92rem;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid $stern-border-soft;
+  color: $stern-text-body;
+}
+th {
+  background-color: $stern-bg-secondary;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $stern-text-muted;
+  font-weight: 600;
+  border-bottom: 1px solid $stern-border;
+}
+
+table.dataTable {
+  font-family: "Source Serif 4", serif !important;
+  font-size: 0.88rem !important;
+  background-color: $stern-bg-surface !important;
+}
+table.dataTable thead th,
+table.dataTable thead td {
+  background-color: $stern-bg-secondary !important;
+  border-bottom: 1px solid $stern-border !important;
+  font-family: "Source Sans 3", sans-serif !important;
+  font-size: 0.7rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: $stern-text-muted !important;
+  font-weight: 600 !important;
+}
+table.dataTable tbody tr:hover { background-color: $stern-bg-secondary !important; }
+table.dataTable tbody td { border-bottom: 1px solid $stern-border-soft !important; }
+
+// ---- Code & pre ----------------------------------------------------------
+code, pre {
+  background-color: $stern-bg-secondary;
+  border: 1px solid $stern-border;
+  border-radius: 0;
+  color: $stern-text-primary;
+  font-family: "Source Code Pro", Menlo, monospace;
+}
+code {
+  font-size: 0.85em;
+  padding: 1px 6px;
+}
+pre {
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  overflow-x: auto;
+}
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+// ---- Blockquote ----------------------------------------------------------
+blockquote {
+  border-left: 3px solid $stern-olive;
+  background-color: $stern-bg-secondary;
+  padding: 14px 20px;
+  margin: 1.25rem 0;
+  font-style: italic;
+  color: $stern-text-body;
+}
+
+// ---- Misc ----------------------------------------------------------------
+hr { border-top: 1px solid $stern-border; }
+
+// ---- Tooltips ------------------------------------------------------------
+.tooltip-inner,
+.popover {
+  background-color: $stern-text-primary !important;
+  color: $stern-bg-primary !important;
+  border-radius: 0 !important;
+  font-family: "Source Sans 3", sans-serif !important;
+  font-size: 0.78rem !important;
+}
+
+// ---- <details>/<summary> (used heavily in your class pages) --------------
+details {
+  border: 1px solid $stern-border;
+  background-color: $stern-bg-surface;
+  margin: 14px 0;
+  padding: 0;
+}
+details > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 18px;
+  background-color: $stern-bg-secondary;
+  border-bottom: 1px solid $stern-border;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $stern-text-primary;
+  font-weight: 600;
+  position: relative;
+}
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after {
+  content: "+";
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  font-family: "Source Serif 4", serif;
+  color: $stern-olive;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+details[open] > summary { border-bottom: 1px solid $stern-border; }
+details[open] > summary::after { content: "\2013"; } // en-dash
+details > *:not(summary) { padding: 0 18px; }
+details > *:not(summary):first-of-type { padding-top: 14px; }
+details > *:not(summary):last-child { padding-bottom: 18px; }

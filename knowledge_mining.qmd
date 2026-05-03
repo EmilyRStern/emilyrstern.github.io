@@ -3,6 +3,15 @@ title: "EPPS 6323: Knowledge Mining"
 format: html
 ---
 
+```{r setup-stern, include=FALSE}
+# Load the stern visual language for any ggplots in this page.
+# Falls back gracefully if the package isn't installed yet.
+if (requireNamespace("stern", quietly = TRUE)) {
+  library(stern)
+  stern_setup_fonts()
+}
+```
+
 ## Labs
 
 - [Lab 01: R Programming Basics I](knowledge_mining/Lab01.html) — Object creation, matrix operations, descriptive statistics, and base R visualization.
@@ -10,6 +19,8 @@ format: html
 
 <details>
 <summary>Assignment 01: Brush up R and Quarto</summary>
+
+[Download the original assignment PDF](knowledge_mining/assignments/KM_Assignment01.pdf)
 
 <h3>Exploratory Data Analysis: TEDS2016 Dataset</h3>
 
@@ -90,10 +101,10 @@ kable(tondu_df)
 # Barchart
 ggplot(TEDS_2016 %>% filter(!is.na(Tondu_factor)),
        aes(x = Tondu_factor)) +
-  geom_bar(fill = "#B19CD9", color = "white") +
+  geom_bar(fill = stern::stern_palette[["olive"]], color = "white") +
   labs(title = "Distribution of Tondu (Unification-Independence Preference)",
        x = NULL, y = "Count") +
-  theme_minimal() +
+  stern::theme_stern() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 9))
 ```
 
@@ -127,10 +138,10 @@ TEDS_2016$age <- as.numeric(TEDS_2016$age)
 
 ggplot(TEDS_2016 %>% filter(!is.na(Tondu_factor) & !is.na(age)),
        aes(x = Tondu_factor, y = age)) +
-  geom_boxplot(fill = "#B19CD9", alpha = 0.7) +
+  geom_boxplot(fill = stern::stern_palette[["olive"]], alpha = 0.7) +
   labs(title = "Age Distribution by Tondu Preference",
        x = NULL, y = "Age") +
-  theme_minimal() +
+  stern::theme_stern() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 9))
 ```
 
@@ -163,11 +174,11 @@ if(ncol(tondu_vote_df) >= 2) {
   names(tondu_vote_df)[1:2] <- c("Did not vote Tsai", "Voted Tsai")
 
   ggplot(tondu_vote_df, aes(x = Response, y = `Voted Tsai`)) +
-    geom_col(fill = "#B19CD9", color = "white") +
+    geom_col(fill = stern::stern_palette[["mustard"]], color = "white") +
     scale_y_continuous(labels = scales::percent) +
     labs(title = "Proportion Voting for Tsai by Tondu Preference",
          x = NULL, y = "% Voted for Tsai") +
-    theme_minimal() +
+    stern::theme_stern() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 9))
 }
 ```
@@ -176,6 +187,8 @@ if(ncol(tondu_vote_df) >= 2) {
 
 <details>
 <summary>Assignment 02: Prompt Exercise</summary>
+
+[Download the original assignment PDF](knowledge_mining/assignments/KM_Assignment02.pdf)
 
 <h3>Systematic Literature Review: Prompt Engineering with Multiple AI Models</h3>
 

@@ -1,0 +1,295 @@
+/* ============================================================
+   Stern theme — editorial components
+   ============================================================
+   Site-wide bootstrap styling lives in theme-stern.scss.
+   This file holds the editorial-page components that aren't
+   part of the stern R package's Shiny CSS but are part of the
+   same visual language (eyebrow, brief title, sectioned cards,
+   stat callouts, link cards, skill tags, footer rule).
+   ============================================================ */
+
+:root {
+  --stern-bg-primary:    #FBF8F1;
+  --stern-bg-secondary:  #F2EDDF;
+  --stern-bg-surface:    #FFFFFF;
+  --stern-text-primary:  #2B2A1F;
+  --stern-text-body:     #4A4632;
+  --stern-text-muted:    #6E6A55;
+  --stern-border:        #C9C0A4;
+  --stern-border-soft:   #E5DEC2;
+  --stern-olive:         #5A6B3A;
+  --stern-navy:          #2A3A5C;
+  --stern-mustard:       #C99B2A;
+  --stern-rust:          #B5623C;
+  --stern-walnut:        #6E5938;
+  --stern-sage:          #8A9572;
+  --font-display:        "Source Serif 4", Georgia, serif;
+  --font-body:           "Source Serif 4", Georgia, serif;
+  --font-label:          "Source Sans 3", "Gill Sans", sans-serif;
+  --font-mono:           "Source Code Pro", Menlo, monospace;
+}
+
+/* Tighten Quarto's default content container so it reads like a brief */
+main.content,
+.quarto-container > main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 56px 32px 96px;
+}
+
+/* ============ Eyebrow line ============ */
+.eyebrow {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--stern-text-muted);
+  border-bottom: 1px solid var(--stern-border);
+  padding-bottom: 14px;
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.eyebrow span:first-child {
+  color: var(--stern-olive);
+  font-weight: 600;
+}
+
+/* ============ Display title block ============ */
+.brief-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.6rem;
+  line-height: 1.1;
+  color: var(--stern-text-primary);
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+.deck {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--stern-text-body);
+  margin: 0 0 8px;
+  max-width: 640px;
+}
+.byline {
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--stern-text-muted);
+  margin-bottom: 48px;
+}
+.byline strong {
+  color: var(--stern-text-primary);
+  font-weight: 600;
+}
+
+/* ============ Sectioned content ============ */
+.brief-section {
+  margin-bottom: 56px;
+}
+.section-num {
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--stern-olive);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+.brief-section h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  color: var(--stern-text-primary);
+  margin: 0 0 18px;
+  letter-spacing: -0.01em;
+  border: none;
+  padding: 0;
+}
+.brief-section h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--stern-text-primary);
+  margin: 24px 0 8px;
+  border: none;
+  padding: 0;
+}
+
+/* ============ Hero portrait (homepage) ============ */
+.hero-portrait {
+  float: right;
+  width: 200px;
+  margin: 0 0 18px 28px;
+  border: 1px solid var(--stern-border);
+  padding: 6px;
+  background: var(--stern-bg-surface);
+}
+
+/* ============ Stat callout ============ */
+.stat {
+  border: 1px solid var(--stern-border);
+  border-left: 3px solid var(--stern-olive);
+  background: var(--stern-bg-primary);
+  padding: 18px 22px;
+  margin: 22px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  color: var(--stern-text-primary);
+  line-height: 1;
+  font-weight: 700;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.stat-text {
+  font-family: var(--font-label);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--stern-text-muted);
+  line-height: 1.4;
+}
+
+/* ============ Case-study card ============ */
+.case {
+  border: 1px solid var(--stern-border);
+  background: var(--stern-bg-secondary);
+  padding: 24px 28px;
+  margin-top: 16px;
+}
+.case-tag {
+  font-family: var(--font-label);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--stern-mustard);
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+.case h3 { margin-top: 0; margin-bottom: 14px; }
+
+/* ============ Link cards (project list) ============ */
+.links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 18px;
+}
+.link-card {
+  border: 1px solid var(--stern-border);
+  background: var(--stern-bg-surface);
+  padding: 18px 20px;
+  text-decoration: none !important;
+  color: var(--stern-text-primary);
+  display: block;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.link-card:hover {
+  border-color: var(--stern-text-primary);
+  color: var(--stern-text-primary);
+  text-decoration: none !important;
+  transform: translateY(-1px);
+}
+.link-card .kind {
+  font-family: var(--font-label);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--stern-olive);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+.link-card .title-line {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--stern-text-primary);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.link-card .meta {
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  color: var(--stern-text-muted);
+  line-height: 1.45;
+}
+
+/* Placeholder card for forthcoming work — non-interactive, muted. */
+.link-card--coming-soon {
+  background: var(--stern-bg-secondary);
+  border-style: dashed;
+  cursor: default;
+  opacity: 0.85;
+}
+.link-card--coming-soon:hover {
+  border-color: var(--stern-border);
+  color: var(--stern-text-primary);
+  transform: none;
+}
+.link-card--coming-soon .kind {
+  color: var(--stern-text-muted);
+}
+.link-card--coming-soon .title-line {
+  color: var(--stern-text-muted);
+}
+
+/* ============ Skill tags (about page) ============ */
+.skill-tag {
+  display: inline-block;
+  background: var(--stern-bg-secondary);
+  color: var(--stern-text-primary);
+  border: 1px solid var(--stern-border);
+  padding: 4px 12px;
+  margin: 0.2rem 0.2rem 0.2rem 0;
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ============ Brief footer rule ============ */
+.brief-footer {
+  margin-top: 80px;
+  border-top: 1px solid var(--stern-border);
+  padding-top: 20px;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--stern-text-muted);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 720px) {
+  main.content,
+  .quarto-container > main { padding: 36px 20px 64px; }
+  .brief-title { font-size: 2rem; }
+  .brief-section h2 { font-size: 1.3rem; }
+  .links { grid-template-columns: 1fr; }
+  .hero-portrait { float: none; width: 160px; margin: 0 0 18px; }
+  .stat { flex-direction: column; gap: 6px; }
+  .eyebrow, .brief-footer { flex-direction: column; gap: 4px; }
+}
+
+/* ============ Print ============ */
+@media print {
+  body { background: white !important; }
+  main.content,
+  .quarto-container > main { padding: 24px !important; }
+  .navbar { display: none !important; }
+}

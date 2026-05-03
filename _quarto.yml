@@ -3,11 +3,16 @@ project:
   type: website
   output-dir: docs
 
+execute:
+  freeze: auto
+
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    theme: assets/css/theme-stern.scss
+    css: assets/css/styles.css
     toc: false
+    mainfont: "Source Serif 4"
+    monofont: "Source Code Pro"
 
 website:
   navbar:
@@ -23,12 +28,9 @@ website:
             - icon: card-text
               text: "About / CV"
               href: about.html
-            - icon: pin-map-fill
-              text: "UFO Sightings Project"
-              href: UFOs.html 
             - icon: bar-chart-fill
               text: "Data Collection and Production"
-              href: "assignment 01.html"
+              href: data-collection.html
             - icon: cpu-fill
               text: "EPPS 6323: Knowledge Mining"
               href: knowledge_mining.html

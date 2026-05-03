@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Federal Grant Disruption Database — ER Diagram</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 36px 44px 64px;
+      font-family: "Cambria", "Georgia", -apple-system, "Segoe UI", system-ui, serif;
+      color: #1f2933;
+      background: #fafafa;
+    }
+    header {
+      border-bottom: 2px solid #2E5FA3;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      font-weight: 600;
+      color: #1E2761;
+      letter-spacing: -0.005em;
+    }
+    .sub {
+      color: #52606d;
+      font-size: 13.5px;
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    }
+    .question {
+      background: #fffce7;
+      border-left: 4px solid #c9a227;
+      padding: 14px 18px;
+      margin: 16px 0 28px;
+      font-size: 14.5px;
+      color: #1E2761;
+      line-height: 1.5;
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    }
+    .question strong { color: #886100; }
+    .pane {
+      background: white;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      overflow-x: auto;
+    }
+    .pane svg { display: block; max-width: 100%; height: auto; }
+    .legend {
+      margin-top: 22px;
+      font-size: 13.5px;
+      color: #52606d;
+      line-height: 1.55;
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    }
+    .legend code {
+      background: #eef2f6;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 12.5px;
+      font-family: "Consolas", "SF Mono", monospace;
+    }
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px 24px;
+      margin-top: 14px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .legend-swatch {
+      width: 22px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1.2px solid;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Federal Grant Disruption Database — Entity-Relationship Diagram</h1>
+    <div class="sub">EPPS 6354 Information Management · Spring 2026 · Emily Stern · 6-table schema</div>
+  </header>
+
+  <div class="question">
+    <strong>Research question:</strong> How much federal grant funding has been disrupted since the 2025 administration change — either rescinded at the opportunity level (Grants.gov listing vanished) or terminated at the award level (per the five agency feeds) — and which agencies and recipients are most affected?
+  </div>
+
+  <div class="pane">
+    <svg viewBox="0 0 1240 720" xmlns="http://www.w3.org/2000/svg" font-family="Cambria, Georgia, serif">
+      <!-- subtle grid background -->
+      <defs>
+        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#eef0f2" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="1240" height="720" fill="url(#grid)"/>
+
+      <!-- ====== Connecting lines (drawn first so they sit behind boxes) ====== -->
+      <!-- agencies <-> opportunities (via "posts") -->
+      <line x1="260" y1="135" x2="340" y2="135" stroke="#666" stroke-width="1.5"/>
+      <line x1="420" y1="135" x2="500" y2="135" stroke="#666" stroke-width="1.5"/>
+
+      <!-- opportunities <-> change_log (via "tracks") -->
+      <line x1="700" y1="135" x2="780" y2="135" stroke="#666" stroke-width="1.5"/>
+      <line x1="860" y1="135" x2="940" y2="135" stroke="#666" stroke-width="1.5"/>
+
+      <!-- opportunities <-> awards (via "resolves to", vertical) -->
+      <line x1="600" y1="220" x2="600" y2="290" stroke="#666" stroke-width="1.5"/>
+      <line x1="600" y1="340" x2="600" y2="410" stroke="#666" stroke-width="1.5"/>
+
+      <!-- recipients <-> awards (via "receives") -->
+      <line x1="260" y1="495" x2="340" y2="495" stroke="#666" stroke-width="1.5"/>
+      <line x1="420" y1="495" x2="500" y2="495" stroke="#666" stroke-width="1.5"/>
+
+      <!-- awards <-> terminations (via "terminated as") -->
+      <line x1="700" y1="495" x2="780" y2="495" stroke="#666" stroke-width="1.5"/>
+      <line x1="860" y1="495" x2="940" y2="495" stroke="#666" stroke-width="1.5"/>
+
+      <!-- agencies self-loop (parent_of) -->
+      <path d="M 100 50 C 100 22, 160 22, 160 50" fill="none" stroke="#999" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="130" y="20" text-anchor="middle" font-size="10.5" fill="#666" font-style="italic">parent_of</text>
+
+      <!-- recipients self-loop (parent_of) -->
+      <path d="M 100 410 C 100 382, 160 382, 160 410" fill="none" stroke="#999" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="130" y="380" text-anchor="middle" font-size="10.5" fill="#666" font-style="italic">parent_of</text>
+
+      <!-- ====== Entity boxes ====== -->
+
+      <!-- agencies (cream) -->
+      <g>
+        <rect x="60" y="50" width="200" height="170" rx="6" fill="#F4EBDB" stroke="#A0875F" stroke-width="1.5"/>
+        <text x="160" y="76" text-anchor="middle" font-size="15" font-weight="bold" fill="#5C4720">agencies</text>
+        <line x1="72" y1="86" x2="248" y2="86" stroke="#A0875F" stroke-width="0.8"/>
+        <text x="80" y="110" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">agency_id</tspan>
+          <tspan font-size="11" fill="#777"> (PK)</tspan>
+        </text>
+        <text x="80" y="131" font-size="13" fill="#2a2a2a">agency_code</text>
+        <text x="80" y="152" font-size="13" fill="#2a2a2a">agency_name</text>
+        <text x="80" y="173" font-size="13" fill="#2a2a2a">agency_level</text>
+        <text x="80" y="194" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">parent_agency_id</tspan>
+          <tspan font-size="11" fill="#777"> (FK)</tspan>
+        </text>
+      </g>
+
+      <!-- opportunities (lavender) -->
+      <g>
+        <rect x="500" y="50" width="200" height="170" rx="6" fill="#E1E2FB" stroke="#5961A8" stroke-width="1.5"/>
+        <text x="600" y="76" text-anchor="middle" font-size="15" font-weight="bold" fill="#3D437B">opportunities</text>
+        <line x1="512" y1="86" x2="688" y2="86" stroke="#5961A8" stroke-width="0.8"/>
+        <text x="520" y="110" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">opportunity_id</tspan>
+          <tspan font-size="11" fill="#777"> (PK)</tspan>
+        </text>
+        <text x="520" y="131" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">agency_id</tspan>
+          <tspan font-size="11" fill="#777"> (FK)</tspan>
+        </text>
+        <text x="520" y="152" font-size="13" fill="#2a2a2a">title</text>
+        <text x="520" y="173" font-size="13" fill="#2a2a2a">cfda_number</text>
+        <text x="520" y="194" font-size="13" fill="#2a2a2a">post_date</text>
+        <text x="520" y="215" font-size="13" fill="#2a2a2a">estimated_total_funding</text>
+      </g>
+
+      <!-- change_log (gray, dashed border = audit/weak entity) -->
+      <g>
+        <rect x="940" y="50" width="200" height="170" rx="6" fill="#F1F1F1" stroke="#888" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="1040" y="76" text-anchor="middle" font-size="15" font-weight="bold" fill="#3a3a3a">change_log</text>
+        <line x1="952" y1="86" x2="1128" y2="86" stroke="#888" stroke-width="0.8"/>
+        <text x="960" y="110" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">change_id</tspan>
+          <tspan font-size="11" fill="#777"> (PK)</tspan>
+        </text>
+        <text x="960" y="131" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">opportunity_id</tspan>
+          <tspan font-size="11" fill="#777"> (FK)</tspan>
+        </text>
+        <text x="960" y="152" font-size="13" fill="#2a2a2a">snapshot_date</text>
+        <text x="960" y="173" font-size="13" fill="#2a2a2a">change_type</text>
+        <text x="960" y="194" font-size="13" fill="#2a2a2a">field_changed</text>
+        <text x="960" y="215" font-size="13" fill="#2a2a2a">old_value, new_value</text>
+      </g>
+
+      <!-- recipients (sky blue) -->
+      <g>
+        <rect x="60" y="410" width="200" height="170" rx="6" fill="#DCE8F5" stroke="#4A7AA0" stroke-width="1.5"/>
+        <text x="160" y="436" text-anchor="middle" font-size="15" font-weight="bold" fill="#2E5577">recipients</text>
+        <line x1="72" y1="446" x2="248" y2="446" stroke="#4A7AA0" stroke-width="0.8"/>
+        <text x="80" y="470" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">recipient_uei</tspan>
+          <tspan font-size="11" fill="#777"> (PK)</tspan>
+        </text>
+        <text x="80" y="491" font-size="13" fill="#2a2a2a">recipient_name</text>
+        <text x="80" y="512" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">parent_uei</tspan>
+          <tspan font-size="11" fill="#777"> (FK)</tspan>
+        </text>
+        <text x="80" y="533" font-size="13" fill="#2a2a2a">state_code</text>
+        <text x="80" y="554" font-size="13" fill="#2a2a2a">city_name</text>
+      </g>
+
+      <!-- awards (mint) -->
+      <g>
+        <rect x="500" y="410" width="200" height="170" rx="6" fill="#D8EDDF" stroke="#4A8C5F" stroke-width="1.5"/>
+        <text x="600" y="436" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D6A48">awards</text>
+        <line x1="512" y1="446" x2="688" y2="446" stroke="#4A8C5F" stroke-width="0.8"/>
+        <text x="520" y="470" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">award_unique_key</tspan>
+          <tspan font-size="11" fill="#777"> (PK)</tspan>
+        </text>
+        <text x="520" y="491" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">award_id_fain</tspan>
+          <tspan font-size="11" fill="#777"> (UK)</tspan>
+        </text>
+        <text x="520" y="512" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">recipient_uei</tspan>
+          <tspan font-size="11" fill="#777"> (FK)</tspan>
+        </text>
+        <text x="520" y="533" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">awarding_agency_id</tspan>
+          <tspan font-size="11" fill="#777"> (FK)</tspan>
+        </text>
+        <text x="520" y="554" font-size="13" fill="#2a2a2a">cfda_number</text>
+        <text x="520" y="575" font-size="13" fill="#2a2a2a">total_obligated_amount</text>
+      </g>
+
+      <!-- terminations (coral) -->
+      <g>
+        <rect x="940" y="410" width="200" height="170" rx="6" fill="#FBDBD7" stroke="#B05050" stroke-width="1.5"/>
+        <text x="1040" y="436" text-anchor="middle" font-size="15" font-weight="bold" fill="#8C3A35">terminations</text>
+        <line x1="952" y1="446" x2="1128" y2="446" stroke="#B05050" stroke-width="0.8"/>
+        <text x="960" y="470" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">termination_id</tspan>
+          <tspan font-size="11" fill="#777"> (PK)</tspan>
+        </text>
+        <text x="960" y="491" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">source_agency_id</tspan>
+          <tspan font-size="11" fill="#777"> (FK)</tspan>
+        </text>
+        <text x="960" y="512" font-size="13" fill="#2a2a2a">
+          <tspan font-style="italic">award_id_fain</tspan>
+          <tspan font-size="11" fill="#777"> (FK)</tspan>
+        </text>
+        <text x="960" y="533" font-size="13" fill="#2a2a2a">current_status</text>
+        <text x="960" y="554" font-size="13" fill="#2a2a2a">latest_termination_date</text>
+        <text x="960" y="575" font-size="13" fill="#2a2a2a">award_value</text>
+      </g>
+
+      <!-- ====== Relationship diamonds ====== -->
+
+      <!-- "posts" -->
+      <g>
+        <polygon points="340,135 380,108 420,135 380,162" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="380" y="139" text-anchor="middle" font-size="11.5" fill="#444" font-style="italic">posts</text>
+      </g>
+
+      <!-- "tracks" -->
+      <g>
+        <polygon points="780,135 820,108 860,135 820,162" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="820" y="139" text-anchor="middle" font-size="11.5" fill="#444" font-style="italic">tracks</text>
+      </g>
+
+      <!-- "resolves to" (vertical) -->
+      <g>
+        <polygon points="540,315 600,290 660,315 600,340" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="600" y="319" text-anchor="middle" font-size="11.5" fill="#444" font-style="italic">resolves to</text>
+      </g>
+
+      <!-- "receives" -->
+      <g>
+        <polygon points="340,495 380,468 420,495 380,522" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="380" y="499" text-anchor="middle" font-size="11.5" fill="#444" font-style="italic">receives</text>
+      </g>
+
+      <!-- "terminated as" -->
+      <g>
+        <polygon points="780,495 820,468 860,495 820,522" fill="#FFFFFF" stroke="#666" stroke-width="1"/>
+        <text x="820" y="492" text-anchor="middle" font-size="10.5" fill="#444" font-style="italic">terminated</text>
+        <text x="820" y="505" text-anchor="middle" font-size="10.5" fill="#444" font-style="italic">as</text>
+      </g>
+
+      <!-- footnote -->
+      <text x="620" y="660" text-anchor="middle" font-size="11.5" fill="#666" font-style="italic" font-family="-apple-system, system-ui, sans-serif">
+        agencies also FKs into awards (awarding agency) and terminations (source agency) — those lines omitted for clarity
+      </text>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <strong>How to read it.</strong> Each rectangle is a table; the column above the line is the table name, the columns below are its fields. <em>Italic</em> fields with <code>(PK)</code> are primary keys, <code>(FK)</code> are foreign keys, and <code>(UK)</code> is a unique constraint. Diamond shapes show what the relationship between two tables means in plain English. The dashed self-arrows on <strong>agencies</strong> and <strong>recipients</strong> mean those tables can reference themselves — a row can have a parent row in the same table (for example, NIH's parent is HHS; a campus's parent is the system office).
+
+    <div class="legend-grid">
+      <div class="legend-item"><span class="legend-swatch" style="background:#F4EBDB; border-color:#A0875F;"></span> Reference: agencies</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#DCE8F5; border-color:#4A7AA0;"></span> Reference: recipients</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#E1E2FB; border-color:#5961A8;"></span> Promise: opportunities</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#D8EDDF; border-color:#4A8C5F;"></span> Reality: awards</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#FBDBD7; border-color:#B05050;"></span> Disruption: terminations</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#F1F1F1; border-color:#888; border-style:dashed;"></span> Audit log: change_log</div>
+    </div>
+  </div>
+</body>
+</html>

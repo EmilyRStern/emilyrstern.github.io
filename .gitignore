@@ -1,3 +1,75 @@
+# ============================================================
+# Quarto / R working state
+# ============================================================
 /.quarto/
-.Rproj.user
+/_freeze/
+.Rproj.user/
 .Rhistory
+**/.Rhistory
+.RData
+.Rdata
+.positai
+*.Rcheck/
+.claude/
+# macOS metadata that ZIPs leave behind
+**/__MACOSX/
+
+# Old Quarto output dir (replaced by docs/ via output-dir in _quarto.yml)
+/_site/
+
+# ============================================================
+# Secrets / credentials
+# ============================================================
+.Renviron
+**/.Renviron
+*.env
+.env*
+**/credentials*
+**/secrets*
+
+# ============================================================
+# Large data — never commit raw or processed dataset files.
+# Source qmds/Rs reference these locally; site-rendered HTML
+# already includes everything readers need.
+# ============================================================
+
+# Final-project data tree (USASpending, Grants.gov, NIH/SAMHSA terminations, etc.)
+info_management/final_project/data/
+
+# Knowledge Mining hackathon raw data dump (TidyTuesday-style job ads)
+knowledge_mining/hackathon/jobads/
+knowledge_mining/hackathon/jobads.zip
+knowledge_mining/hackathon/job_data/
+
+# Common big-data extensions anywhere in the repo
+*.duckdb
+*.duckdb.wal
+*.parquet
+*.feather
+*.rds
+*.rdata
+*.RDS
+*.RData
+
+# Compressed archives
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+
+# Spatial scratch
+*.shp
+*.shx
+*.dbf
+*.gpkg
+
+# ============================================================
+# OS / editor
+# ============================================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.swp
+*~
