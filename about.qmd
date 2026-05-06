@@ -10,7 +10,9 @@ format: html
 
 <h1 class="brief-title">About Emily Stern</h1>
 
-<p class="deck">Three years of work with children and families, now applied to the data systems that make community-based programs measurable.</p>
+<p class="deck">Data analyst with three years of combined analytics, applied research, and direct service experience supporting low-income families and economically vulnerable households — two promotions in two years at the Child Poverty Action Lab.</p>
+
+<p class="byline"><strong>Plano, TX</strong></p>
 
 ::: {.brief-section}
 
@@ -18,19 +20,35 @@ format: html
 
 ## Roles
 
-**Data Analyst** — Child Poverty Action Lab — Aug 2025 – Present
+### Data Analyst — Child Poverty Action Lab
+*Dallas, TX · May 2024 – Present*
 
-**Junior Data Analyst** — Child Poverty Action Lab — Oct 2024 – Aug 2025
+- Redesigned a financial analytics system modeling revenue variation across service type, delivery channel, and payer mix, improving visibility across approximately $1.08M annually in managed cash flows and supporting operational and strategic decision-making for finance teams.
+- Built and maintained stakeholder-facing dashboards and analytical applications across six program areas, integrating multi-source datasets into real-time decision tools that reduced manual reporting overhead by 8–10 hours per week.
+- Designed a probabilistic record-linkage and evaluation pipeline analyzing how housing instability relates to long-term student outcomes, applying matched-sampling methods and ordinal logistic regression.
+- Developed scalable Databricks data pipelines with API integrations, schema design, and historical change tracking, creating clean and reliable datasets for downstream analytics and operational use cases.
+- Designed KPI-driven dashboards and analytical frameworks to monitor program performance, surface emerging trends, and support data-informed prioritization for public-sector partners.
+- Developed predictive spatial risk models identifying environmental patterns associated with violent crime risk, partnering with operational stakeholders to translate findings into targeted intervention strategies.
 
-**Project Intern** — VolunteerNow — Sep 2024 – Feb 2025
+### Impact Data Assistant — Girls Inc. of Metropolitan Dallas
+*Part-time · Dallas, TX · Jan 2024 – Aug 2024*
 
-**Data Analytics Intern** — Child Poverty Action Lab — May 2024 – Aug 2024
+- Analyzed program performance against logic-model outcomes for youth development programs serving underserved communities; established Compass 365 data collection protocols that improved reporting consistency across multiple program sites.
 
-**Impact Data Assistant** — Girls Inc. of Metropolitan Dallas — Jan 2024 – Aug 2024
+### Culturally Responsive Research in Developmental Science Fellow — National Science Foundation
+*Richardson, TX · Aug 2023 – Aug 2024*
 
-**NSF REU Fellow** — National Science Foundation — Aug 2023 – Aug 2024
+- Selected for a competitive national fellowship in developmental science; applied research design and systematic literature review to community-based research with a focus on culturally responsive methods.
 
-**Crisis Advocate** — Hope's Door New Beginning Center — Jan 2023 – Dec 2023
+### "Juega Conmigo" Program Facilitator — UT Dallas Center for Children and Families
+*Aug 2023 – May 2024*
+
+- Co-facilitated a bilingual playful-learning program for children 0–3 and their families, coaching parents on research-based strategies to support optimal child development.
+
+### Crisis Advocate — Hope's Door New Beginning Center
+*Full-time · Plano, TX · Jan 2023 – Dec 2023*
+
+- Served survivors of domestic violence and their families in emergency shelters; operated a 24-hour crisis hotline, conducted case management, and connected survivors to local resources as they navigated rebuilding financial and household stability.
 
 :::
 
@@ -40,9 +58,11 @@ format: html
 
 ## Degrees
 
-**Master's in Social Data Analytics and Research** — University of Texas at Dallas — *In Progress*
+### University of Texas at Dallas — May 2026
+M.S. Social Data Analytics and Research &nbsp;·&nbsp; Graduate Certificate in Program Evaluation
 
-**Bachelor's in Psychology** — University of Texas at Dallas
+### University of Texas at Dallas — August 2024
+B.S. Psychology
 
 :::
 
@@ -52,14 +72,45 @@ format: html
 
 ## Toolkit
 
-[R]{.skill-tag}
-[Quarto]{.skill-tag}
-[Shiny]{.skill-tag}
+### Programming & Data
 [SQL]{.skill-tag}
-[Databricks]{.skill-tag}
-[Data Analysis]{.skill-tag}
+[R]{.skill-tag}
+[Python]{.skill-tag}
+[Databricks (Spark)]{.skill-tag}
+[API Integration]{.skill-tag}
+[ETL / Pipelines]{.skill-tag}
+[Schema Design]{.skill-tag}
+
+### Analytics & Experimentation
+[Quasi-Experimental Design]{.skill-tag}
+[Matched Sampling]{.skill-tag}
+[Causal Inference]{.skill-tag}
+[GLMs]{.skill-tag}
+[Panel / Longitudinal]{.skill-tag}
+[Cohort & Retention]{.skill-tag}
+[Statistical Diagnostics]{.skill-tag}
+[Feature Engineering]{.skill-tag}
+[Clustering]{.skill-tag}
+[PCA]{.skill-tag}
+
+### Visualization
+[Shiny]{.skill-tag}
+[ggplot2]{.skill-tag}
+[Plotly]{.skill-tag}
+[Highcharter]{.skill-tag}
+[Mapbox]{.skill-tag}
+[Maplibre]{.skill-tag}
+[Tableau *(in progress)*]{.skill-tag}
+[Amplitude *(in progress)*]{.skill-tag}
+
+### Decision Support
+[Stakeholder-Facing Apps]{.skill-tag}
+[KPI Dashboarding]{.skill-tag}
+[Decision Systems]{.skill-tag}
+[Behavioral Analysis]{.skill-tag}
 [Program Evaluation]{.skill-tag}
-[Research Design]{.skill-tag}
+[Spatial Analysis]{.skill-tag}
+[Survey Research]{.skill-tag}
 
 :::
 
@@ -71,10 +122,10 @@ format: html
 
 ```{=html}
 <div class="links">
-<a class="link-card" href="cv/emily-stern-research-cv.pdf">
+<a class="link-card" href="cv/emily-stern-cv.pdf">
 <span class="kind">PDF</span>
-<div class="title-line">Research CV</div>
-<div class="meta">Full CV with publications, presentations, and project details.</div>
+<div class="title-line">Résumé</div>
+<div class="meta">PDF Version of this page.</div>
 </a>
 <a class="link-card" href="https://github.com/EmilyRStern/" target="_blank" rel="noopener">
 <span class="kind">Code</span>
@@ -92,6 +143,6 @@ format: html
 :::
 
 ::: {.brief-footer}
-[Emily Stern · stern.emily06@gmail.com]{}
+[Emily Stern]{}
 [Updated May 2026]{}
 :::

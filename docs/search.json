@@ -144,35 +144,35 @@
     "href": "about.html",
     "title": "\nAbout Emily Stern\n",
     "section": "",
-    "text": "About / CV Emily Stern\nThree years of work with children and families, now applied to the data systems that make community-based programs measurable."
+    "text": "About / CV Emily Stern\nData analyst with three years of combined analytics, applied research, and direct service experience supporting low-income families and economically vulnerable households — two promotions in two years at the Child Poverty Action Lab.\nPlano, TX"
   },
   {
     "objectID": "about.html#roles",
     "href": "about.html#roles",
     "title": "\nAbout Emily Stern\n",
     "section": "Roles",
-    "text": "Roles\nData Analyst — Child Poverty Action Lab — Aug 2025 – Present\nJunior Data Analyst — Child Poverty Action Lab — Oct 2024 – Aug 2025\nProject Intern — VolunteerNow — Sep 2024 – Feb 2025\nData Analytics Intern — Child Poverty Action Lab — May 2024 – Aug 2024\nImpact Data Assistant — Girls Inc. of Metropolitan Dallas — Jan 2024 – Aug 2024\nNSF REU Fellow — National Science Foundation — Aug 2023 – Aug 2024\nCrisis Advocate — Hope’s Door New Beginning Center — Jan 2023 – Dec 2023"
+    "text": "Roles\n\nData Analyst — Child Poverty Action Lab\nDallas, TX · May 2024 – Present\n\nRedesigned a financial analytics system modeling revenue variation across service type, delivery channel, and payer mix, improving visibility across approximately $1.08M annually in managed cash flows and supporting operational and strategic decision-making for finance teams.\nBuilt and maintained stakeholder-facing dashboards and analytical applications across six program areas, integrating multi-source datasets into real-time decision tools that reduced manual reporting overhead by 8–10 hours per week.\nDesigned a probabilistic record-linkage and evaluation pipeline analyzing how housing instability relates to long-term student outcomes, applying matched-sampling methods and ordinal logistic regression.\nDeveloped scalable Databricks data pipelines with API integrations, schema design, and historical change tracking, creating clean and reliable datasets for downstream analytics and operational use cases.\nDesigned KPI-driven dashboards and analytical frameworks to monitor program performance, surface emerging trends, and support data-informed prioritization for public-sector partners.\nDeveloped predictive spatial risk models identifying environmental patterns associated with violent crime risk, partnering with operational stakeholders to translate findings into targeted intervention strategies.\n\n\n\nImpact Data Assistant — Girls Inc. of Metropolitan Dallas\nPart-time · Dallas, TX · Jan 2024 – Aug 2024\n\nAnalyzed program performance against logic-model outcomes for youth development programs serving underserved communities; established Compass 365 data collection protocols that improved reporting consistency across multiple program sites.\n\n\n\nCulturally Responsive Research in Developmental Science Fellow — National Science Foundation\nRichardson, TX · Aug 2023 – Aug 2024\n\nSelected for a competitive national fellowship in developmental science; applied research design and systematic literature review to community-based research with a focus on culturally responsive methods.\n\n\n\n“Juega Conmigo” Program Facilitator — UT Dallas Center for Children and Families\nAug 2023 – May 2024\n\nCo-facilitated a bilingual playful-learning program for children 0–3 and their families, coaching parents on research-based strategies to support optimal child development.\n\n\n\nCrisis Advocate — Hope’s Door New Beginning Center\nFull-time · Plano, TX · Jan 2023 – Dec 2023\n\nServed survivors of domestic violence and their families in emergency shelters; operated a 24-hour crisis hotline, conducted case management, and connected survivors to local resources as they navigated rebuilding financial and household stability."
   },
   {
     "objectID": "about.html#degrees",
     "href": "about.html#degrees",
     "title": "\nAbout Emily Stern\n",
     "section": "Degrees",
-    "text": "Degrees\nMaster’s in Social Data Analytics and Research — University of Texas at Dallas — In Progress\nBachelor’s in Psychology — University of Texas at Dallas"
+    "text": "Degrees\n\nUniversity of Texas at Dallas — May 2026\nM.S. Social Data Analytics and Research  ·  Graduate Certificate in Program Evaluation\n\n\nUniversity of Texas at Dallas — August 2024\nB.S. Psychology"
   },
   {
     "objectID": "about.html#toolkit",
     "href": "about.html#toolkit",
     "title": "\nAbout Emily Stern\n",
     "section": "Toolkit",
-    "text": "Toolkit\nR Quarto Shiny SQL Databricks Data Analysis Program Evaluation Research Design"
+    "text": "Toolkit\n\nProgramming & Data\nSQL R Python Databricks (Spark) API Integration ETL / Pipelines Schema Design\n\n\nAnalytics & Experimentation\nQuasi-Experimental Design Matched Sampling Causal Inference GLMs Panel / Longitudinal Cohort & Retention Statistical Diagnostics Feature Engineering Clustering PCA\n\n\nVisualization\nShiny ggplot2 Plotly Highcharter Mapbox Maplibre Tableau (in progress) Amplitude (in progress)\n\n\nDecision Support\nStakeholder-Facing Apps KPI Dashboarding Decision Systems Behavioral Analysis Program Evaluation Spatial Analysis Survey Research"
   },
   {
     "objectID": "about.html#where-to-look",
     "href": "about.html#where-to-look",
     "title": "\nAbout Emily Stern\n",
     "section": "Where to look",
-    "text": "Where to look\n\n\nPDF\nResearch CV\nFull CV with publications, presentations, and project details.\n\n\nCode\nGitHub\nPersonal repos plus contributions to CPAL.\n\n\nProfile\nLinkedIn\nProfessional history and connections."
+    "text": "Where to look\n\n\nPDF\nRésumé\nPDF Version of this page.\n\n\nCode\nGitHub\nPersonal repos plus contributions to CPAL.\n\n\nProfile\nLinkedIn\nProfessional history and connections."
   },
   {
     "objectID": "index.html",
@@ -193,14 +193,14 @@
     "href": "index.html#things-ive-built",
     "title": "\nEmily Stern\n",
     "section": "Things I’ve built",
-    "text": "Things I’ve built\n\n\nDashboard · CPAL\nDICE Report\nData Informed Community Engagement dashboard. My 2024 Summer Internship project at Child Poverty Action Lab.\n\n\nDesign system · R package\nstern\nEditorial design system for civic-data work in R — ggplot themes, color scales, Shiny components, Highcharter palettes. The visual language powering this site."
+    "text": "Things I’ve built\n\n\nDashboard · CPAL\nDICE Report\nData Informed Community Engagement dashboard. My 2024 Summer Internship project at Child Poverty Action Lab.\n\n\nDesign system · R package\nstern\nEditorial design system for data work in R (the visual language powering this site).\n\n\nDashboard · Shiny app\nNSF Academic Funding Disruption\nDeployed interactive dashboard, backed by a Neon-hosted Postgres database."
   },
   {
     "objectID": "index.html#coursework-organized-by-class",
     "href": "index.html#coursework-organized-by-class",
     "title": "\nEmily Stern\n",
     "section": "Coursework, organized by class",
-    "text": "Coursework, organized by class\n\n\n\n  EPPS 6302\n  Methods of Data Collection & Production\n  \n    Assignments on data collection methodology, instrument design, and reproducible production workflows.\n  \n\n\n\n  EPPS 6323\n  Knowledge Mining\n  \n    R programming, exploratory analysis, prompt engineering for systematic literature review, and TEDS 2016 election data.\n  \n\n\n\n  EPPS 6354\n  Information Management\n  \n    Database design, SQL, E-R modeling, and the relational model — coursework plus an applied final project.\n  \n\n\n\n  EPPS 6354 · Project\n  Final Project\n  Open app."
+    "text": "Coursework, organized by class\n\n\n\n  EPPS 6302\n  Methods of Data Collection & Production\n  \n    Assignments on data collection methodology, instrument design, and reproducible production workflows.\n  \n\n\n\n  EPPS 6323\n  Knowledge Mining\n  \n    R programming, exploratory analysis, prompt engineering for systematic literature review, and TEDS 2016 election data.\n  \n\n\n\n  EPPS 6354\n  Information Management\n  \n    Database design, SQL, E-R modeling, and the relational model — coursework plus an applied final project."
   },
   {
     "objectID": "info_management/final_project/schema_design/schema_writeup.html",

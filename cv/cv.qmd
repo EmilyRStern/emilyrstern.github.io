@@ -1,0 +1,130 @@
+---
+format:
+  typst:
+    output-file: "emily-stern-cv.pdf"
+    margin:
+      x: 0.7in
+      y: 0.65in
+    fontsize: 10pt
+    mainfont: "Source Serif 4"
+    section-numbering: ""
+    keep-typ: false
+    shift-heading-level-by: 0
+---
+
+```{=typst}
+#set page(fill: rgb("#FBF8F1"))
+#set text(font: ("Source Serif 4", "Source Serif Pro", "Georgia"), fill: rgb("#4A4632"))
+#show heading: set text(fill: rgb("#2B2A1F"), weight: 600)
+#show heading.where(level: 1): h => block(below: 0.3em, above: 0.6em)[
+  #text(size: 22pt, weight: 700, fill: rgb("#2B2A1F"))[#h.body]
+]
+#show heading.where(level: 2): h => block(below: 0.45em, above: 1.1em)[
+  #stack(
+    spacing: 0.35em,
+    text(size: 8.5pt, weight: 600, fill: rgb("#6E6A55"), tracking: 1.2pt)[
+      #upper(h.body)
+    ],
+    line(length: 100%, stroke: 0.6pt + rgb("#C9C0A4"))
+  )
+]
+#show heading.where(level: 3): h => block(below: 0.15em, above: 0.6em)[
+  #text(size: 11pt, weight: 600, fill: rgb("#2B2A1F"))[#h.body]
+]
+#show link: set text(fill: rgb("#5A6B3A"))
+#set par(justify: false, leading: 0.55em)
+#set list(marker: text(fill: rgb("#5A6B3A"))[•], indent: 0.5em, body-indent: 0.5em)
+```
+
+```{=typst}
+#align(center)[
+  #text(size: 26pt, weight: 700, fill: rgb("#2B2A1F"))[Emily Stern] \
+  #v(0.2em)
+  #text(size: 9pt, fill: rgb("#6E6A55"), tracking: 0.6pt)[
+    Plano, TX  ·  214-886-2939  ·  stern.emily06\@gmail.com
+  ] \
+  #text(size: 9pt, fill: rgb("#5A6B3A"))[
+    #link("https://emilyrstern.github.io")[emilyrstern.github.io]
+    ·
+    #link("https://github.com/EmilyRStern")[github.com/EmilyRStern]
+    ·
+    #link("https://linkedin.com/in/emily-stern-83479b154/")[linkedin.com/in/emily-stern-83479b154]
+  ]
+]
+#v(0.6em)
+```
+
+## Professional Summary
+
+Data analyst with three years of combined analytics, applied research, and direct service experience supporting low-income families and economically vulnerable households. Two promotions in two years at the Child Poverty Action Lab. Strong in SQL, Databricks, statistical modeling, and quasi-experimental design. Uniquely positioned to provide insight into how real users decide and save.
+
+## Analytics Experience
+
+### Data Analyst — Child Poverty Action Lab (CPAL) {.unnumbered}
+
+```{=typst}
+#text(size: 9.5pt, fill: rgb("#6E6A55"), style: "italic")[Dallas, TX  ·  May 2024 – Present]
+```
+
+- Redesigned a financial analytics system modeling revenue variation across service type, delivery channel, and payer mix, improving visibility across approximately \$1.08M annually in managed cash flows and supporting operational and strategic decision-making for finance teams.
+- Built and maintained stakeholder-facing dashboards and analytical applications across six program areas, integrating multi-source datasets into real-time decision tools that reduced manual reporting overhead by 8–10 hours per week and improved cross-functional access to actionable insights.
+- Designed a probabilistic record linkage and evaluation pipeline analyzing how housing instability relates to long-term student outcomes, applying matched-sampling methods and ordinal logistic regression to support intervention-focused decision-making.
+- Developed scalable Databricks data pipelines with API integrations, schema design, and historical change tracking, creating clean and reliable datasets for downstream analytics, reporting, and operational use cases.
+- Designed KPI-driven dashboards and analytical frameworks to monitor program performance, surface emerging trends, and support data-informed prioritization for public-sector partners.
+- Developed predictive spatial risk models identifying environmental patterns associated with violent crime risk and partnered with operational stakeholders to translate analytical findings into targeted intervention strategies and resource allocation decisions.
+
+## Direct Service & Applied Research
+
+Three years of hands-on work with low-income families, working parents, immigrant households with young children, and individuals navigating financial and housing instability.
+
+### Impact Data Assistant — Girls Inc. of Metropolitan Dallas {.unnumbered}
+
+```{=typst}
+#text(size: 9.5pt, fill: rgb("#6E6A55"), style: "italic")[Part-time  ·  Dallas, TX  ·  Jan 2024 – Aug 2024]
+```
+
+- Analyzed program performance against logic-model outcomes for youth development programs serving underserved communities; established Compass 365 data collection protocols that improved reporting consistency across multiple program sites.
+
+### Culturally Responsive Research in Developmental Science Fellow {.unnumbered}
+
+```{=typst}
+#text(size: 9.5pt, fill: rgb("#6E6A55"), style: "italic")[National Science Foundation  ·  Richardson, TX  ·  Aug 2023 – Aug 2024]
+```
+
+- Selected for competitive national fellowship in developmental science; applied research design and systematic literature review to community-based research with a focus on culturally responsive methods.
+
+### "Juega Conmigo" Program Facilitator {.unnumbered}
+
+```{=typst}
+#text(size: 9.5pt, fill: rgb("#6E6A55"), style: "italic")[UT Dallas Center for Children and Families  ·  Aug 2023 – May 2024]
+```
+
+- Co-facilitated a bilingual playful-learning program for children 0–3 and their families, coaching parents on research-based strategies to support optimal child development.
+
+### Crisis Advocate — Hope's Door New Beginning Center {.unnumbered}
+
+```{=typst}
+#text(size: 9.5pt, fill: rgb("#6E6A55"), style: "italic")[Full-time  ·  Plano, TX  ·  Jan 2023 – Dec 2023]
+```
+
+- Served survivors of domestic violence and their families in emergency shelters; operated a 24-hour crisis hotline, conducted case management, and connected survivors to local resources as they navigated rebuilding financial and household stability.
+
+## Skills
+
+**Programming & Data** — SQL, R, Python, Databricks (Spark), API integration, ETL/pipeline development, schema design.
+
+**Analytics & Experimentation** — Quasi-experimental design, matched sampling, causal inference, GLMs, panel/longitudinal analysis, cohort and retention analysis, statistical diagnostics, feature engineering, clustering, PCA.
+
+**Visualization** — Shiny, ggplot2, Plotly, Highcharter, Mapbox, Maplibre. Currently building proficiency in Tableau and Amplitude.
+
+**Decision Support** — Stakeholder-facing analytical applications, KPI dashboarding, decision systems, behavioral analysis, program evaluation, spatial analysis, survey research.
+
+## Education
+
+### University of Texas at Dallas — May 2026 {.unnumbered}
+
+M.S. Social Data Analytics and Research  ·  Graduate Certificate in Program Evaluation
+
+### University of Texas at Dallas — August 2024 {.unnumbered}
+
+B.S. Psychology
